@@ -1,0 +1,196 @@
+# Copyright (C) 2022 laOlaWeb
+# This file is distributed under the GPL-2.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Product Swatches for WooCommerce Light 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/lw-product-"
+"swatches-light\n"
+"POT-Creation-Date: 2022-09-26T15:25:58+02:00\n"
+"PO-Revision-Date: 2022-09-26 15:27+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.1\n"
+"X-Domain: lw-product-swatches\n"
+
+#. Plugin Name of the plugin
+msgid "Product Swatches for WooCommerce Light"
+msgstr "Product Swatches für WooCommerce Light"
+
+#. Description of the plugin
+msgid "Provides product swatches for WooCommerce."
+msgstr "Stellt Produkt Swatches für WooCommerce bereit."
+
+#. Author of the plugin
+msgid "laOlaWeb"
+msgstr "laOlaWeb"
+
+#. Author URI of the plugin
+msgid "https://laolaweb.com"
+msgstr "https://laolaweb.com"
+
+#: classes/class-helper.php:208 classes/class-helper.php:211
+msgid "Color"
+msgstr "Farbe"
+
+#: classes/class-helper.php:212
+msgid "Choose a color."
+msgstr "Wähle eine Farbe."
+
+#: classes/class-helper.php:323
+msgid "black"
+msgstr "schwarz"
+
+#: classes/class-helper.php:324
+msgid "blue"
+msgstr "blau"
+
+#: classes/class-helper.php:325
+msgid "brown"
+msgstr "brown"
+
+#: classes/class-helper.php:326
+msgid "green"
+msgstr "grün"
+
+#: classes/class-helper.php:327
+msgid "red"
+msgstr "rot"
+
+#: classes/class-helper.php:328
+msgid "white"
+msgstr "weiß"
+
+#: classes/class-helper.php:329
+msgid "yellow"
+msgstr "gelb"
+
+#: classes/class-wc-settings-tab.php:64
+msgid "Settings for Product Swatches"
+msgstr "Einstellungen für Produkt Swatches"
+
+#: classes/class-wc-settings-tab.php:70
+msgid "Delete all plugin-data on uninstall"
+msgstr "Lösche alle Plugin-Daten bei Deinstallation"
+
+#: classes/class-wc-settings-tab.php:76
+msgid "Disable plugin-own caching of swatches"
+msgstr "Deaktiviere den Plugin-eigenen Cache bei Swatches"
+
+#: classes/class-wc-settings-tab.php:79
+msgid ""
+"Without this cache, the page will have a significantly higher load time "
+"depending on the number of products and expressions. It is not recommended "
+"to disable this cache."
+msgstr ""
+"Ohne diesen Cache wird die Seite je nach Anzahl der Produkte eine deutlich "
+"höhere Ladezeit haben. Es wird nicht empfohlen, diesen Cache zu deaktivieren."
+
+#: classes/class-wc-settings-tab.php:82
+msgid "Position in list"
+msgstr "Position innerhalb der Liste"
+
+#: classes/class-wc-settings-tab.php:85
+msgid "before price"
+msgstr "vor dem Preis"
+
+#: classes/class-wc-settings-tab.php:86
+msgid "after price"
+msgstr "nach dem Preis"
+
+#: classes/class-wc-settings-tab.php:87
+msgid "before cart"
+msgstr "vor dem Warenkorb-Link"
+
+#: classes/class-wc-settings-tab.php:88
+msgid "after cart"
+msgstr "nach dem Warenkorb-Link"
+
+#: classes/class-wc-settings-tab.php:94
+msgid "Regenerate Product Swatches"
+msgstr "Produkt Swatches neu generieren"
+
+#: inc/admin.php:35
+msgid "Generate now"
+msgstr "Jetzt generieren"
+
+#: inc/admin.php:36
+msgid "Update of swatches is running"
+msgstr "Aktualisierung der Swatches läuft aktuell"
+
+#: inc/admin.php:37
+msgid "Please wait"
+msgstr "Bitte warten"
+
+#: inc/admin.php:38
+msgid "Performing the update could take a few minutes."
+msgstr "Die Aktualisierung kann einige Minuten dauern."
+
+#: inc/admin.php:39
+msgid ""
+"<strong>The update has been run.</strong> Please check the product "
+"categories in frontend."
+msgstr ""
+"<strong>Die Aktualisierung wurde vorgenommen.</strong> Bitte prüfe die "
+"Ausgabe der Produktkategorien im Frontend."
+
+#: inc/admin.php:40
+msgid "OK"
+msgstr "OK"
+
+#: inc/transients.php:15
+msgid "Plugin not activated!"
+msgstr "Plugin wurde nicht aktiviert!"
+
+#: inc/transients.php:15
+msgid "Please activate WooCommerce first."
+msgstr "Bitte WooCommerce zuerst aktivieren."
+
+#: inc/transients.php:26
+msgid "At least one required field was not filled!"
+msgstr "Mindestens ein erforderliches Feld wurde nicht ausgefüllt."
+
+#: inc/transients.php:26
+msgid "Please fill out the form completely."
+msgstr "Bitte fülle das Formular komplett aus."
+
+#: inc/transients.php:36
+msgid "The swatches of the product have been updated."
+msgstr "Die Swatches am Produkt wurden aktualisiert."
+
+#: inc/transients.php:46
+msgid "The swatches of the selected products have been updated."
+msgstr "Die Swatches an den gewählten Produkten wurden aktualisiert."
+
+#: inc/woocommerce.php:64
+msgid "Regenerate all swatches"
+msgstr "Generiere alle Swatches neu"
+
+#: inc/woocommerce.php:64
+msgid "takes a moment"
+msgstr "Das dauert einen Moment"
+
+#: inc/woocommerce.php:186
+msgid "No product has been supplied!"
+msgstr "Es wurde keine Produkte übermittelt!"
+
+#. translators: %1$s is replaced with "string"
+#: inc/woocommerce.php:263
+msgid "<a href=\"%s\">Save swatches</a> of this product"
+msgstr "<a href=\"%s\">Speichere Swatches</a> für dieses Produkt neu"
+
+#~ msgid "Position in list in relation to shopping cart button"
+#~ msgstr "Position in Verhältnis zum Warenkorb-Button"
+
+#~ msgid "Before"
+#~ msgstr "davor"
+
+#~ msgid "After"
+#~ msgstr "danach"
+
+#~ msgid "Run import"
+#~ msgstr "Import durchführen"

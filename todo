@@ -1,0 +1,9 @@
+* wenn mehrere Eigenschaften angezeigt werden von denen nur eine Swatches nutzt, dann die andere normal anzeigen
+=> select wird derzeit per CSS ausgeblendet
+* nach Installation von Light den Nutzer zu seinen Attributes leiten und Vorgehen beschreiben
+* Einstellungen exportieren und importieren (als JSON)
+* wenn in Produktdetail nicht verfügbar, dann den Mouseover-Titel anpassen
+
+später:
+* Anleitung für Verwendung schreiben
+* Gestaltung für Swatches als Optionen anbieten (Rundung, Rahmenfarben, Abstände)

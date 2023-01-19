@@ -1,0 +1,19 @@
+.lw-swatches {
+    border: 1px solid #f2f2f2;
+    border-radius: 100%;
+    height: 32px;
+    width: 32px;
+}
+
+body .lw_product_swatches {
+    text-align: left;
+}
+
+
+.lw_product_swatches li:first-child {
+    margin-left: 0;
+}
+
+.woocommerce_attribute_data .lw_product_swatches li[data-selected="selected"] span, .woocommerce_variation .lw_product_swatches li[data-selected="selected"] span {
+    border-color: #000;
+}
