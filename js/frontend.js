@@ -28,13 +28,4 @@ jQuery(document).ready(function( $ ) {
             });
         }
     });
-    // sale change
-    $(".lw_product_swatches a[data-sale], .lw_product_swatches span[data-sale]").each(function() {
-        if( $(this).data("sale") === 1 ) {
-            console.log("aaaa");
-        }
-        else {
-            console.log("bbb");
-        }
-    });
 });
