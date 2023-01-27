@@ -26,6 +26,7 @@ class color implements attributeType
      * @param $images
      * @param $imagesSets
      * @param $values
+     * @param $onSales
      * @param $product
      * @return string
      */
@@ -33,7 +34,8 @@ class color implements attributeType
     {
         $html = '';
         $taxonomy = '';
-        foreach( $list as $color ) {
+        for( $l=0;$l<count($list);$l++ ) {
+            $color = $list[$l];
             // get color
             $color1 = $values[$color->slug][0];
 

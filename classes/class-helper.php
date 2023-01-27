@@ -40,9 +40,9 @@ trait helper {
         $progress = self::isCLI() ? \WP_CLI\Utils\make_progress_bar( 'Updating products', $countProducts ) : false;
 
         // loop through the products
-        foreach( $results->posts as $productId ) {
+        for( $p=0;$p<count($results->posts);$p++ ) {
             // Produkt initialisieren
-            $product = wc_get_product($productId);
+            $product = wc_get_product($results->posts[$p]);
             Product::update($product);
             // show progress
             update_option(LW_SWATCHES_OPTION_COUNT, ++$count);
@@ -86,9 +86,9 @@ trait helper {
 
             // create progress bar on cli
             $progress = self::isCLI() ? \WP_CLI\Utils\make_progress_bar( 'Updating products', $countProducts ) : false;
-            foreach ($results->posts as $productId) {
+            for( $p=0;$p<count($results->posts);$p++ ) {
                 // get product
-                $product = wc_get_product($productId);
+                $product = wc_get_product($results->posts[$p]);
 
                 // update product
                 Product::update($product);
@@ -160,10 +160,10 @@ trait helper {
         $variations = $product->get_available_variations();
         $image = '';
         $imageSrcset = '';
-        foreach ( $variations as $variation ) {
-            if( $variation['attributes']['attribute_' . $attribute] == $slug ) {
-                $image = $variation['image']['src'];
-                $imageSrcset = $variation['image']['srcset'];
+        for( $v=0;$v<count($variations);$v++ ) {
+            if( $variations[$v]['attributes']['attribute_' . $attribute] == $slug ) {
+                $image = $variations[$v]['image']['src'];
+                $imageSrcset = $variations[$v]['image']['srcset'];
                 break;
             }
         }
@@ -180,14 +180,15 @@ trait helper {
      * @param $attribute
      * @param $slug
      * @return false|\WC_Product
+     * @noinspection PhpMissingReturnTypeInspection
      */
     public static function getVariantFromArray( $product, $attribute, $slug )
     {
         $variations = $product->get_available_variations();
         $variant = false;
-        foreach ( $variations as $variation ) {
-            if( $variation['attributes']['attribute_' . $attribute] == $slug ) {
-                $variant = wc_get_product($variation['variation_id']);
+        for( $v=0;$v<count($variations);$v++ ) {
+            if( $variations[$v]['attributes']['attribute_' . $attribute] == $slug ) {
+                $variant = wc_get_product($variations[$v]['variation_id']);
                 break;
             }
         }
@@ -199,7 +200,8 @@ trait helper {
      *
      * @return void
      */
-    public static function deleteAllSwatchesOnProducts() {
+    public static function deleteAllSwatchesOnProducts(): void
+    {
         // get the products where a product swatch is set
         $query = [
             'post_type' => 'product',
@@ -218,8 +220,8 @@ trait helper {
         $progress = self::isCLI() ? \WP_CLI\Utils\make_progress_bar( 'Deleting product-swatches', $countProducts ) : false;
 
         // loop through the products
-        foreach( $results->posts as $productId ) {
-            Product::delete($productId);
+        for( $p=0;$p<count($results->posts);$p++ ) {
+            Product::delete($results->posts[$p]);
             // show progress
             !$progress ?: $progress->tick();
         }

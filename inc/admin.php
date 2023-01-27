@@ -57,7 +57,7 @@ add_action( 'admin_enqueue_scripts', 'lw_swatches_add_styles_and_js_admin', PHP_
  * Get all WooCommerce attributes and add actions to handle them.
  * Also add the processing of requests for attributes in the backend.
  *
- * This is the main function to start the plugin-magic.
+ * This is the main function to start the plugin-magic in admin.
  *
  * @return void
  * @noinspection PhpUnused
@@ -68,10 +68,11 @@ function lw_swatches_attribute_handling(): void
         // get all attributes and add action on them
         $attributes = wc_get_attribute_taxonomies();
         $attribute_types = helper::getAttributeTypes();
-        foreach ($attributes as $attribute) {
-            if (!empty($attribute_types[$attribute->attribute_type])) {
-                $fields = $attribute_types[$attribute->attribute_type]['fields'];
-                new LW_Swatches\Attribute($attribute, $fields);
+        $keys = array_keys($attributes);
+        for( $a=0;$a<count($attributes);$a++ ) {
+            if (!empty($attribute_types[$attributes[$keys[$a]]->attribute_type])) {
+                $fields = $attribute_types[$attributes[$keys[$a]]->attribute_type]['fields'];
+                new LW_Swatches\Attribute($attributes[$keys[$a]], $fields);
             }
         }
 

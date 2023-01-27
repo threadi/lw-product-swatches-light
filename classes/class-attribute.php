@@ -129,7 +129,9 @@ class Attribute {
             // check if it is required
             // and save the value of each if all necessary values are available
             $error = false;
-            foreach ($this->fields as $field) {
+            $keys = array_keys($this->fields);
+            for( $f=0;$f<count($this->fields);$f++ ) {
+                $field = $this->fields[$keys[$f]];
                 if( absint($field['required']) == 1 ) {
                     $fieldName = $this->getFieldName($field['id']);
                     if( array_key_exists($fieldName, $_POST) && empty($_POST[$fieldName]) ) {
@@ -143,7 +145,8 @@ class Attribute {
 
             // go further if no error was detected
             if( false === $error ) {
-                foreach ($this->fields as $field) {
+                for( $f=0;$f<count($this->fields);$f++ ) {
+                    $field = $this->fields[$keys[$f]];
                     $fieldName = $this->getFieldName($field['id']);
                     if (array_key_exists($fieldName, $_POST)) {
                         // secure the value depending on its type
@@ -183,7 +186,9 @@ class Attribute {
         if( empty($this->fields) ) {
             return;
         }
-        foreach( $this->fields as $field ) {
+        $keys = array_keys($this->fields);
+        for( $f=0;$f<count($this->fields);$f++ ) {
+            $field = $this->fields[$keys[$f]];
             // prepare each value
             $fieldId = empty($field['id']) ? 0 : $field['id'];
             $depends = empty($field['dependency']) ? '' : wp_json_encode($field['dependency']);
