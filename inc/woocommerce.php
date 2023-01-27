@@ -274,16 +274,3 @@ function lw_swatches_add_attribute_types( $attributeType ): array
     return $attributeType;
 }
 add_filter('product_attributes_type_selector', 'lw_swatches_add_attribute_types', 10, 1);
-
-/**
- * Load all variants of a product and not only 30.
- *
- * @param $limit
- * @param $product
- * @return int
- */
-function vlm_ajax_threshold( $limit, $product ): int
-{
-    return $product->get_children();
-}
-add_filter( 'woocommerce_ajax_variation_threshold', 'vlm_ajax_threshold', 10, 2);
