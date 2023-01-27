@@ -68,9 +68,11 @@ class Product {
             $imagesSets = [];
             $onSales = [];
             $attribute_types = helper::getAttributeTypes();
-            foreach( $product->get_children() as $child_id ) {
+            $children = $product->get_children();
+            $count_children = count($children);
+            for( $c=0;$c<$count_children;$c++ ) {
                 // get the child as object
-                $child = wc_get_product($child_id);
+                $child = wc_get_product($children[$c]);
 
                 // only if variant is purchasable
                 if( $child->is_purchasable() && apply_filters('lw_swatches_product_stockstatus', $child->get_stock_status() == 'instock', $child ) ) {
@@ -78,13 +80,16 @@ class Product {
                     $attributes = $child->get_attributes();
 
                     // loop through the attribute-types this plugin supports
-                    foreach( $attributes as $type => $slug ) {
+                    $keys = array_keys($attributes);
+                    for( $a=0;$a<count($attributes);$a++ ) {
+                        $type = $keys[$a];
+                        $slug = $attributes[$type];
                         $attributeId = wc_attribute_taxonomy_id_by_name($type);
                         if( apply_filters('lw_swatches_hide_attribute', $attributeId) && $attributeId > 0 ) {
                             $attributeObject = wc_get_attribute($attributeId);
                             if( !empty($attribute_types[$attributeObject->type]) ) {
                                 // get variant thumbnail and add it to list
-                                $attachment_id = get_post_thumbnail_id($child_id);
+                                $attachment_id = get_post_thumbnail_id($children[$c]);
                                 if ($attachment_id > 0) {
                                     $images[$slug] = wp_get_attachment_url($attachment_id);
                                     $imagesSets[$slug] = wp_get_attachment_image_srcset($attachment_id);
@@ -107,7 +112,10 @@ class Product {
             if( !empty($attributeTermsToDisplay) ) {
                 // create the HTML code for the category page from the determined terms
                 $html = '';
-                foreach( $attributeTermsToDisplay as $termName => $attributeTerm ) {
+                $keys = array_keys($attributeTermsToDisplay);
+                for( $a=0;$a<count($attributeTermsToDisplay);$a++ ) {
+                    $termName = $keys[$a];
+                    $attributeTerm = $attributeTermsToDisplay[$termName];
                     $attribute_type = apply_filters('lw_swatches_change_attribute_type_name', $termName);
 
                     // determine all available properties to find their names and values
@@ -115,7 +123,8 @@ class Product {
                     $list = [];
                     for( $t=0;$t<count($attributeTerm);$t++ ) {
                         $terms = get_terms(['taxonomy' => $attributeTerm[$t]['type'], 'hide_empty' => false]);
-                        foreach( $terms as $term ) {
+                        for( $t2=0;$t2<count($terms);$t2++ ) {
+                            $term = $terms[$t2];
                             // add only available terms to the resulting list
                             if( $attributeTerm[$t]['slug'] == $term->slug ) {
                                 $values[$term->slug] = [];
@@ -140,7 +149,8 @@ class Product {
                     );
                     // sort our own list accordingly
                     $resulting_list = [];
-                    foreach( $terms as $term ) {
+                    for( $t=0;$t<count($terms);$t++ ) {
+                        $term = $terms[$t];
                         if( !empty($list[$term->slug]) ) {
                             $resulting_list[] = $list[$term->slug];
                         }

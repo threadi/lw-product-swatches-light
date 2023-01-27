@@ -32,23 +32,25 @@ LW_Swatches\WC_Settings_Tab::init();
  * @noinspection PhpUnused
  */
 function lw_swatches_list_position() {
-    switch( get_option('wc_'.LW_SWATCH_WC_SETTING_NAME.'_position_in_list', 'afterprice') ) {
-        case 'beforecart':
-        case 'aftercart':
-            add_action( 'woocommerce_loop_add_to_cart_link', 'lw_swatches_add_product_swatches_in_loop', PHP_INT_MAX, 2);
-            break;
-        case 'beforeprice':
-            add_action( 'woocommerce_after_shop_loop_item_title', 'lw_swatches_add_product_swatches_in_loop_end', 5, 0);
-            break;
-        case 'afterprice':
-            add_action( 'woocommerce_after_shop_loop_item_title', 'lw_swatches_add_product_swatches_in_loop_after_prices', 20, 0);
-            break;
-        default:
-            add_action( 'woocommerce_loop_add_to_cart_link', 'lw_swatches_add_product_swatches_in_loop', 10, 2);
-            break;
+    if( !is_single() ) {
+        switch (get_option('wc_' . LW_SWATCH_WC_SETTING_NAME . '_position_in_list', 'afterprice')) {
+            case 'beforecart':
+            case 'aftercart':
+                add_action('woocommerce_loop_add_to_cart_link', 'lw_swatches_add_product_swatches_in_loop', PHP_INT_MAX, 2);
+                break;
+            case 'beforeprice':
+                add_action('woocommerce_after_shop_loop_item_title', 'lw_swatches_add_product_swatches_in_loop_end', 5, 0);
+                break;
+            case 'afterprice':
+                add_action('woocommerce_after_shop_loop_item_title', 'lw_swatches_add_product_swatches_in_loop_after_prices', 20, 0);
+                break;
+            default:
+                add_action('woocommerce_loop_add_to_cart_link', 'lw_swatches_add_product_swatches_in_loop', 10, 2);
+                break;
+        }
     }
 }
-add_action( 'init', 'lw_swatches_list_position', 10);
+add_action( 'wp', 'lw_swatches_list_position', 10);
 
 /**
  * Add "generate_product_swatches"-button in WooCommerce settings.
@@ -66,7 +68,7 @@ function lw_generate_product_swatches_button( $value ) {
         ],
         get_admin_url() . 'admin.php'
     );
-    echo '<a href="'.esc_url(wp_nonce_url($url, 'lws-generate')).'" class="button button-large lw-update-swatches">'.__('Regenerate all swatches', 'lw-product-swatches').'</a> (<i>'.__('takes a moment', 'lw-product-swatches').'</i>)';
+    ?><a href="<?php echo esc_url(wp_nonce_url($url, 'lws-generate')); ?>" class="button button-large lw-update-swatches"><?php _e('Regenerate all swatches', 'lw-product-swatches'); ?></a> (<i><?php _e('takes a moment', 'lw-product-swatches'); ?></i>)<?php
 }
 add_action( 'woocommerce_admin_field_generate_product_swatches', 'lw_generate_product_swatches_button' );
 
@@ -113,9 +115,12 @@ function lw_swatches_add_product_swatches_in_loop($add_to_cart_html, $product): 
  * @return void
  * @noinspection PhpUnused
  */
-function lw_swatches_add_product_swatches_in_loop_end() {
+function lw_swatches_add_product_swatches_in_loop_end(): void
+{
     $product = wc_get_product(get_the_ID());
-    echo lw_swatches_add_product_swatches_in_loop('', $product);
+    if($product instanceof WC_Product) {
+        echo lw_swatches_add_product_swatches_in_loop('', $product);
+    }
 }
 
 /**
@@ -124,9 +129,12 @@ function lw_swatches_add_product_swatches_in_loop_end() {
  * @return void
  * @noinspection PhpUnused
  */
-function lw_swatches_add_product_swatches_in_loop_after_prices() {
+function lw_swatches_add_product_swatches_in_loop_after_prices(): void
+{
     $product = wc_get_product(get_the_ID());
-    echo lw_swatches_add_product_swatches_in_loop('', $product);
+    if($product instanceof WC_Product) {
+        echo lw_swatches_add_product_swatches_in_loop('', $product);
+    }
 }
 
 /**
@@ -138,7 +146,8 @@ function lw_swatches_add_product_swatches_in_loop_after_prices() {
  * @return mixed|string
  * @noinspection PhpUnused
  */
-function lw_swatches_add_in_block( $html, $data, $product ) {
+function lw_swatches_add_in_block( $html, $data, $product )
+{
     if( $product->get_type() == 'variable' ) {
         if( get_option('wc_'.LW_SWATCH_WC_SETTING_NAME.'_disable_cache', 'no') == 'yes' ) {
             $productSwatches = Product::getSwatches( $product );
