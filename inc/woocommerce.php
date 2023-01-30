@@ -283,3 +283,64 @@ function lw_swatches_add_attribute_types( $attributeType ): array
     return $attributeType;
 }
 add_filter('product_attributes_type_selector', 'lw_swatches_add_attribute_types', 10, 1);
+
+/**
+ * Extend output of attributes in product-detail-edit-page with the additional types which are used by this plugin.
+ *
+ * @param $attribute_taxonomy
+ * @param $i
+ * @return void
+ * @noinspection PhpUnused
+ */
+function lw_swatches_product_option_terms( $attribute_taxonomy, $i ): void
+{
+    global $thepostid;
+
+    if( array_key_exists($attribute_taxonomy->attribute_type, helper::getAttributeTypes()) ) {
+
+        // get taxonomy name
+        $taxonomy = wc_attribute_taxonomy_name($attribute_taxonomy->attribute_name);
+
+        // get the product-id
+        $product_id = $thepostid;
+        if (is_null($thepostid) && isset($_POST['post_id'])) {
+            $product_id = absint($_POST['post_id']);
+        }
+
+        // create a select-box with the values of this attribute
+        $args = array(
+            'taxonomy' => $taxonomy,
+            'orderby'    => 'name',
+            'hide_empty' => 0,
+        );
+
+        // get all terms and loop through them
+        $all_terms = get_terms(apply_filters('woocommerce_product_attribute_terms', $args));
+
+        // generate output depending on the attribute-type
+        $attribute_type = apply_filters('lw_swatches_change_attribute_type_name', $attribute_taxonomy->attribute_type);
+        $className = '\LW_Swatches\AttributeType\\'.$attribute_type.'::getEditList';
+        if( class_exists("\LW_Swatches\AttributeType\\".$attribute_type)
+            && is_callable($className) ) {
+            echo call_user_func($className, $all_terms, $product_id);
+        }
+
+        ?>
+        <select multiple="multiple"
+                data-placeholder="<?php esc_attr_e('Select term(s)', 'lw-swatches'); ?>"
+                class="multiselect attribute_values lw-product-swatches"
+                data-type="<?php echo esc_attr($attribute_taxonomy->attribute_type); ?>"
+                name="attribute_values[<?php echo esc_attr($i); ?>][]">
+            <?php
+            // get all terms and loop through them
+            if( !empty($all_terms) ) {
+                foreach ($all_terms as $term) {
+                    echo '<option value="' . esc_attr($term->term_id) . '" ' . selected(has_term(absint($term->term_id), $taxonomy, $product_id), true, false) . '>' . esc_attr(apply_filters('woocommerce_product_attribute_term_name', $term->name, $term)) . '</option>';
+                }
+            }
+            ?>
+        </select>
+        <?php
+    }
+}
+add_action( 'woocommerce_product_option_terms', 'lw_swatches_product_option_terms', 20, 2);
