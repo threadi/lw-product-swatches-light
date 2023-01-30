@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: Product Swatches for WooCommerce Light 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/lw-product-"
 "swatches-light\n"
-"POT-Creation-Date: 2022-09-26T15:25:58+02:00\n"
-"PO-Revision-Date: 2022-09-26 15:27+0200\n"
+"POT-Creation-Date: 2023-01-30T13:57:19+01:00\n"
+"PO-Revision-Date: 2023-01-30 13:58+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -33,39 +33,39 @@ msgstr "laOlaWeb"
 msgid "https://laolaweb.com"
 msgstr "https://laolaweb.com"
 
-#: classes/class-helper.php:208 classes/class-helper.php:211
+#: classes/class-helper.php:245 classes/class-helper.php:248
 msgid "Color"
 msgstr "Farbe"
 
-#: classes/class-helper.php:212
+#: classes/class-helper.php:249
 msgid "Choose a color."
 msgstr "Wähle eine Farbe."
 
-#: classes/class-helper.php:323
+#: classes/class-helper.php:369
 msgid "black"
 msgstr "schwarz"
 
-#: classes/class-helper.php:324
+#: classes/class-helper.php:370
 msgid "blue"
 msgstr "blau"
 
-#: classes/class-helper.php:325
+#: classes/class-helper.php:371
 msgid "brown"
 msgstr "brown"
 
-#: classes/class-helper.php:326
+#: classes/class-helper.php:372
 msgid "green"
 msgstr "grün"
 
-#: classes/class-helper.php:327
+#: classes/class-helper.php:373
 msgid "red"
 msgstr "rot"
 
-#: classes/class-helper.php:328
+#: classes/class-helper.php:374
 msgid "white"
 msgstr "weiß"
 
-#: classes/class-helper.php:329
+#: classes/class-helper.php:375
 msgid "yellow"
 msgstr "gelb"
 
@@ -142,41 +142,51 @@ msgstr ""
 msgid "OK"
 msgstr "OK"
 
-#: inc/transients.php:15
+#: inc/admin.php:154
+msgid "Settings"
+msgstr ""
+
+#: inc/transients.php:25
 msgid "Plugin not activated!"
 msgstr "Plugin wurde nicht aktiviert!"
 
-#: inc/transients.php:15
-msgid "Please activate WooCommerce first."
-msgstr "Bitte WooCommerce zuerst aktivieren."
+#. translators: %1$s is replaced with "string"
+#: inc/transients.php:28
+msgid "Please <a href=\"%1$s\">install and activate WooCommerce</a> first."
+msgstr ""
+"Bitte zuerst <a href=\"%1$s\">WooCommerce aktivieren und installieren</a>."
 
-#: inc/transients.php:26
+#: inc/transients.php:41
 msgid "At least one required field was not filled!"
 msgstr "Mindestens ein erforderliches Feld wurde nicht ausgefüllt."
 
-#: inc/transients.php:26
+#: inc/transients.php:41
 msgid "Please fill out the form completely."
 msgstr "Bitte fülle das Formular komplett aus."
 
-#: inc/transients.php:36
+#: inc/transients.php:51
 msgid "The swatches of the product have been updated."
 msgstr "Die Swatches am Produkt wurden aktualisiert."
 
-#: inc/transients.php:46
+#: inc/transients.php:61
 msgid "The swatches of the selected products have been updated."
 msgstr "Die Swatches an den gewählten Produkten wurden aktualisiert."
 
-#: inc/woocommerce.php:64
+#: inc/woocommerce.php:71
 msgid "Regenerate all swatches"
 msgstr "Generiere alle Swatches neu"
 
-#: inc/woocommerce.php:64
+#: inc/woocommerce.php:71
 msgid "takes a moment"
 msgstr "Das dauert einen Moment"
 
 #: inc/woocommerce.php:186
 msgid "No product has been supplied!"
 msgstr "Es wurde keine Produkte übermittelt!"
+
+#: inc/woocommerce.php:218
+msgid "Swatches generieren"
+msgstr ""
 
 #. translators: %1$s is replaced with "string"
 #: inc/woocommerce.php:263

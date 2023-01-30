@@ -10,9 +10,24 @@ function lw_swatches_admin_notices() {
 
     // Show hint if WooCommerce is missing
     if( get_transient( 'lw_swatches_activation_error_woocommerce' ) ){
+        $url = add_query_arg(
+            [
+                's' => 'woocommerce',
+                'tab' => 'search',
+                'type' => 'term'
+            ],
+            'plugin-install.php'
+        );
+
         ?>
         <div class="updated error">
-            <p><strong><?php echo esc_html__('Plugin not activated!', 'lw-product-swatches'); ?></strong> <?php echo esc_html__('Please activate WooCommerce first.', 'lw-product-swatches'); ?></p>
+            <p>
+                <strong><?php echo esc_html__('Plugin not activated!', 'lw-product-swatches'); ?></strong>
+                <?php
+                    /* translators: %1$s is replaced with "string" */
+                    echo sprintf(__('Please <a href="%1$s">install and activate WooCommerce</a> first.', 'lw-product-swatches'), $url);
+                ?>
+            </p>
         </div>
         <?php
         delete_transient( 'lw_swatches_activation_error_woocommerce' );
