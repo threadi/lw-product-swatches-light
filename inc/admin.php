@@ -137,24 +137,27 @@ function lw_swatches_import_info() {
  * Add link to plugin-settings in plugin-list.
  *
  * @param $links
- * @return mixed
+ * @return array
  * @noinspection PhpUnused
  */
-function lw_swatches_admin_add_setting_link( $links ) {
-    // build and escape the URL
-    $url = add_query_arg(
-        [
-            'page' => 'wc-settings',
-            'tab' => 'lw_product_swatches'
-        ],
-        get_admin_url() . 'admin.php'
-    );
+function lw_swatches_admin_add_setting_link( $links ): array
+{
+    if( is_plugin_active( plugin_basename(LW_SWATCHES_PLUGIN) ) ) {
+        // build and escape the URL
+        $url = add_query_arg(
+            [
+                'page' => 'wc-settings',
+                'tab' => 'lw_product_swatches'
+            ],
+            get_admin_url() . 'admin.php'
+        );
 
-    // create the link
-    $settings_link = "<a href='".esc_url($url)."'>" . __( 'Settings', 'lw-product-swatches' ) . '</a>';
+        // create the link
+        $settings_link = "<a href='" . esc_url($url) . "'>" . __('Settings', 'lw-product-swatches') . '</a>';
 
-    // adds the link to the end of the array
-    $links[] = $settings_link;
+        // adds the link to the end of the array
+        $links[] = $settings_link;
+    }
 
     return $links;
 }
