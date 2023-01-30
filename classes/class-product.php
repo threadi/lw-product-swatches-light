@@ -96,7 +96,9 @@ class Product {
                                 }
 
                                 // get sales marker
-                                $onSales[$slug] = $child->is_on_sale() ? 1 : 0;
+                                if( empty($onSales[$slug]) || ($onSales[$slug] == 0) ) {
+                                    $onSales[$slug] = $child->is_on_sale() ? 1 : 0;
+                                }
 
                                 // add this attribute (e.g. a specific size) to the list
                                 $attributeTermsToDisplay[$attributeObject->type][] = [

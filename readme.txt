@@ -17,6 +17,7 @@ Use the fastest swatches for your WooCommerce products.
 - show swatches on product archives with respect the ordering
 - caching of swatches to optimize the loading-time of your shop
 - choose color as attribute-type for your attributes and set one of 12 colors for your attributes
+- mouseover-event to change product-images and sales-badge on archive-listing to the touched color
 - update the swatches-cache manual on product or every hour automatically if something on a product has been changed
 - automatically updates the swatches-cache of single products if their stock changes
 - product-thumbs will be change on hover
@@ -36,6 +37,7 @@ Use the fastest swatches for your WooCommerce products.
 - decide which attribute-type should be visible as swatches on archive or detail
 - also decide to use product-thumbs on hover or click or not
 - and also in backend if you edit your products
+- decide if sales-badge should be visible or not on archive listing
 - change the update interval of your swatches
 - define which stock status should be considered for the output of swatches
 

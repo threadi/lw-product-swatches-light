@@ -28,4 +28,38 @@ jQuery(document).ready(function( $ ) {
             });
         }
     });
+
+    // sale change
+    $(".lw_product_swatches a[data-sale], .lw_product_swatches span[data-sale]").each(function() {
+        $(this).on({
+            mouseenter: function() {
+                let onSaleEl = $(this).parents('.product, .wc-block-grid__product').first().find('span.onsale');
+                if( onSaleEl.length === 0 ) {
+                    // get elements
+                    let aEl = $(this).parents('.product, .wc-block-grid__product').first().find('a.woocommerce-loop-product__link');
+                    aEl.append('<span class="onsale">Sale!</span>');
+                    onSaleEl = $(this).parents('.product, .wc-block-grid__product').first().find('span.onsale');
+                }
+                if ($(this).data("sale") === 1) {
+                    onSaleEl.show();
+                } else {
+                    onSaleEl.hide();
+                }
+            },
+            mouseleave: function() {
+                let onSaleEl = $(this).parents('.product, .wc-block-grid__product').first().find('span.onsale');
+                if( onSaleEl.length === 0 ) {
+                    // get elements
+                    let aEl = $(this).parents('.product, .wc-block-grid__product').first().find('a.woocommerce-loop-product__link');
+                    aEl.append('<span class="onsale">Sale!</span>');
+                    onSaleEl = $(this).parents('.product, .wc-block-grid__product').first().find('span.onsale');
+                }
+                if ($(this).data("sale") === 1) {
+                    onSaleEl.show();
+                } else {
+                    onSaleEl.hide();
+                }
+            }
+        });
+    });
 });
