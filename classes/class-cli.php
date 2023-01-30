@@ -2,8 +2,6 @@
 
 namespace LW_Swatches;
 
-use WP_Query;
-
 /**
  * Helper for CLI-handling with data of this plugin.
  */
@@ -89,5 +87,18 @@ class cli
                 }
             }
         }
+    }
+
+    /**
+     * Resets all settings of this plugin.
+     *
+     * @param array $deleteData
+     * @return void
+     * @noinspection PhpUnused
+     */
+    public function resetPlugin( $deleteData = [] ): void
+    {
+        (new installer)->removeAllData( $deleteData );
+        installer::initializePlugin();
     }
 }
