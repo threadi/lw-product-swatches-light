@@ -14,6 +14,7 @@
 
 // Exit if accessed directly.
 use LW_Swatches\helper;
+use LW_Swatches\installer;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -34,31 +35,9 @@ if( is_admin() ) {
 /**
  * On plugin activation.
  */
-function lw_swatches_on_activation() {
-    $error = false;
-
-    // check if WooCommerce is installed
-    if( !lw_swatches_is_woocommerce_activated() ) {
-        set_transient( 'lw_swatches_activation_error_woocommerce', true );
-        $error = true;
-    }
-
-    if( false === $error ) {
-        // add scheduler for automatic swatches generation, if it does not exist already
-        if (!wp_next_scheduled('lw_swatches_run_tasks')) {
-            wp_schedule_event(time(), 'hourly', 'lw_swatches_run_tasks');
-        }
-
-        // add daily schedule to add a task to update all swatches during next scheduled run
-        if( !wp_next_scheduled('lw_swatches_add_regeneration_tasks')) {
-            wp_schedule_event(time(), get_option('wc_lw_product_swatches_regeneration_interval', 'daily'), 'lw_swatches_add_regeneration_tasks');
-        }
-
-        // set empty task list if not set
-        if( !get_option('lw_swatches_tasks', false) ) {
-            update_option('lw_swatches_tasks', []);
-        }
-    }
+function lw_swatches_on_activation(): void
+{
+    installer::initializePlugin();
 }
 register_activation_hook( LW_SWATCHES_PLUGIN, 'lw_swatches_on_activation' );
 
@@ -67,7 +46,8 @@ register_activation_hook( LW_SWATCHES_PLUGIN, 'lw_swatches_on_activation' );
  *
  * @return void
  */
-function lw_swatches_on_deactivation() {
+function lw_swatches_on_deactivation(): void
+{
     // remove schedules
     wp_clear_scheduled_hook('lw_swatches_run_tasks' );
     wp_clear_scheduled_hook('lw_swatches_add_regeneration_tasks');
@@ -83,7 +63,8 @@ register_deactivation_hook( LW_SWATCHES_PLUGIN, 'lw_swatches_on_deactivation' );
  * @noinspection PhpUnused
  * @noinspection PhpUnusedParameterInspection
  */
-function lw_swatches_on_update( $upgrader_object, $options ) {
+function lw_swatches_on_update( $upgrader_object, $options ): void
+{
     if ($options['action'] == 'update' && $options['type'] == 'plugin' ) {
         if( !empty($options['plugins']) ) {
             foreach ($options['plugins'] as $each_plugin) {
@@ -116,7 +97,7 @@ add_action( 'cli_init', 'lw_swatches_cli_register_commands' );
  * @return void
  * @noinspection PhpUnused
  */
-function lw_swatches_add_styles_and_js_frontend()
+function lw_swatches_add_styles_and_js_frontend(): void
 {
     wp_enqueue_style(
         'lw-swatches-styles',
@@ -139,7 +120,8 @@ add_action('wp_enqueue_scripts', 'lw_swatches_add_styles_and_js_frontend', PHP_I
  * @return void
  * @noinspection PhpUnused
  */
-function lw_swatches_init() {
+function lw_swatches_init(): void
+{
     load_plugin_textdomain( 'lw-product-swatches', false, dirname( plugin_basename( LW_SWATCHES_PLUGIN ) ) . '/languages' );
 }
 add_action( 'init', 'lw_swatches_init', -1 );
@@ -150,7 +132,8 @@ add_action( 'init', 'lw_swatches_init', -1 );
  * @return void
  * @noinspection PhpUnused
  */
-function lw_swatches_run_tasks_from_list() {
+function lw_swatches_run_tasks_from_list(): void
+{
     $taskList = get_option('lw_swatches_tasks', []);
 
     // loop through the tasks
