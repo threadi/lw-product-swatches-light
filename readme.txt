@@ -21,6 +21,7 @@ Use the fastest swatches for your WooCommerce products.
 - automatically updates the swatches-cache of single products if their stock changes
 - product-thumbs will be change on hover
 - provides some WP CLI commands to delete or update swatch-caches
+- migration of color-swatches from plugin "Variation Swatches for WooCommerce" from RadiusTheme
 
 #### Requirements
 
