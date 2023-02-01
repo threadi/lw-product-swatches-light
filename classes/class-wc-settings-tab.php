@@ -26,7 +26,7 @@ class WC_Settings_Tab {
      * @noinspection PhpUnused
      */
     public static function add_settings_tab( $settings_tabs ) {
-        $settings_tabs[LW_SWATCH_WC_SETTING_NAME] = 'Product Swatches';
+        $settings_tabs[LW_SWATCH_WC_SETTING_NAME] = __('Product Swatches', 'lw-product-swatches');
         return $settings_tabs;
     }
 
