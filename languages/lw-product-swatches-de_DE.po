@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: Product Swatches for WooCommerce Light 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/lw-product-"
 "swatches-light\n"
-"POT-Creation-Date: 2023-01-30T13:57:19+01:00\n"
-"PO-Revision-Date: 2023-01-30 13:58+0100\n"
+"POT-Creation-Date: 2023-02-01T10:40:17+01:00\n"
+"PO-Revision-Date: 2023-02-01 10:40+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -68,6 +68,10 @@ msgstr "weiß"
 #: classes/class-helper.php:375
 msgid "yellow"
 msgstr "gelb"
+
+#: classes/class-wc-settings-tab.php:29
+msgid "Product Swatches"
+msgstr "Produkt Swatches"
 
 #: classes/class-wc-settings-tab.php:64
 msgid "Settings for Product Swatches"
@@ -142,9 +146,9 @@ msgstr ""
 msgid "OK"
 msgstr "OK"
 
-#: inc/admin.php:154
+#: inc/admin.php:156
 msgid "Settings"
-msgstr ""
+msgstr "Einstellungen"
 
 #: inc/transients.php:25
 msgid "Plugin not activated!"
@@ -158,7 +162,7 @@ msgstr ""
 
 #: inc/transients.php:41
 msgid "At least one required field was not filled!"
-msgstr "Mindestens ein erforderliches Feld wurde nicht ausgefüllt."
+msgstr "Mindestens ein erforderliches Feld wurde nicht ausgefüllt!"
 
 #: inc/transients.php:41
 msgid "Please fill out the form completely."
@@ -186,7 +190,7 @@ msgstr "Es wurde keine Produkte übermittelt!"
 
 #: inc/woocommerce.php:218
 msgid "Swatches generieren"
-msgstr ""
+msgstr "Swatches generieren"
 
 #. translators: %1$s is replaced with "string"
 #: inc/woocommerce.php:263
