@@ -150,14 +150,13 @@ trait helper {
     /**
      * Get variant-image as data-attribute from array
      *
-     * @param $product
+     * @param $variations
      * @param $attribute
      * @param $slug
      * @return array
      */
-    public function getVariantThumbAsDataFromArray( $product, $attribute, $slug ): array
+    public function getVariantThumbAsDataFromArray( $variations, $attribute, $slug ): array
     {
-        $variations = $product->get_available_variations();
         $image = '';
         $imageSrcset = '';
         for( $v=0;$v<count($variations);$v++ ) {
@@ -180,7 +179,6 @@ trait helper {
      * @param $attribute
      * @param $slug
      * @return false|\WC_Product
-     * @noinspection PhpMissingReturnTypeInspection
      */
     public static function getVariantFromArray( $product, $attribute, $slug )
     {
