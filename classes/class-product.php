@@ -14,7 +14,7 @@ class Product {
      * @param $product
      * @return void
      */
-    public static function update($product) {
+    public static function update($product): void {
         // get the swatches code
         $html = self::getSwatches($product);
         if( empty($html) ) {
@@ -36,7 +36,7 @@ class Product {
      * @noinspection PhpUnused
      * @noinspection PhpUnusedParameterInspection
      */
-    public static function update2($product_id, $product) {
+    public static function update2($product_id, $product): void {
         self::update($product);
     }
 
@@ -46,7 +46,7 @@ class Product {
      * @param $productId
      * @return void
      */
-    public static function delete($productId) {
+    public static function delete($productId): void {
         delete_post_meta($productId, LW_SWATCH_CACHEKEY);
     }
 
@@ -162,7 +162,7 @@ class Product {
                     $className = '\LW_Swatches\AttributeType\\'.$attribute_type.'::getList';
                     if( class_exists("\LW_Swatches\AttributeType\\".$attribute_type)
                         && is_callable($className) ) {
-                        $html .= call_user_func($className, $resulting_list, $images, $imagesSets, $values, $onSales, $product);
+                        $html .= call_user_func($className, $resulting_list, $images, $imagesSets, $values, $onSales, $product->get_permalink(), $product->get_title());
                     }
                 }
                 return $html;

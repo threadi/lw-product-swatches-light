@@ -34,9 +34,9 @@ class Attribute {
      *
      * @return void
      */
-    private function addActions() {
+    private function addActions(): void {
         add_action( $this->getTaxonomyName().'_add_form_fields', [$this, 'add']);
-        add_action( $this->getTaxonomyName().'_edit_form_fields', [$this, 'edit'], 10);
+        add_action( $this->getTaxonomyName().'_edit_form_fields', [$this, 'edit']);
         add_action( 'created_term', [$this, 'save'], 10, 3);
         add_action( 'edit_term', [$this, 'save'], 10, 3);
         add_action( 'admin_enqueue_scripts', [$this, 'enqueue_scripts']);
@@ -44,8 +44,10 @@ class Attribute {
 
     /**
      * Add filter for this attribute.
+     *
+     * @return void
      */
-    private function addFilter() {
+    private function addFilter(): void {
         add_filter( 'manage_edit-'.$this->getTaxonomyName().'_columns', [$this, 'addTaxonomyColumns']);
         add_filter( 'manage_'.$this->getTaxonomyName().'_custom_column', [$this, 'addTaxonomyColumn'], 10, 3);
     }

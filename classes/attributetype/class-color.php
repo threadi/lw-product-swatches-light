@@ -27,10 +27,11 @@ class color implements attributeType
      * @param $imagesSets
      * @param $values
      * @param $onSales
-     * @param $product
+     * @param $product_link
+     * @param $product_title
      * @return string
      */
-    public static function getList( $list, $images, $imagesSets, $values, $onSales, $product ): string
+    public static function getList( $list, $images, $imagesSets, $values, $onSales, $product_link, $product_title ): string
     {
         $html = '';
         $taxonomy = '';
@@ -57,13 +58,13 @@ class color implements attributeType
             $class = apply_filters( 'lw_swatches_set_class', 'lw_swatches_'.self::_typeName.'_' . sanitize_text_field($color->slug), $taxonomy_id);
 
             // set link
-            $link = apply_filters( 'lw_swatches_set_link', '', $taxonomy_id, $color, $product);
+            $link = apply_filters( 'lw_swatches_set_link', '', $taxonomy_id, $color, $product_link);
 
             // set slug
             $slug = $color->slug;
 
             // set title
-            $title = $product->get_title().' '.$label.' '.$color->name;
+            $title = $product_title.' '.$label.' '.$color->name;
 
             // set CSS
             $css = 'background-color: ' . $color1;
