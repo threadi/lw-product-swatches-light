@@ -12,16 +12,17 @@ interface fieldType {
      * Return a secured variable for this field-content.
      *
      * @param $param
-     * @return mixed
+     *
+     * @return string
      */
-    public static function getSecuredValue( $param );
+    public static function getSecuredValue( $param ): string;
 
     /**
      * Return the html-code for editing this field in backend.
      *
      * @param $param
-     * @return mixed
+     * @return string
      */
-    public static function getField( ...$param );
+    public static function getField( ...$param ): string;
 
 }

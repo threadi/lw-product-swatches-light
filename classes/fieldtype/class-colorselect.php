@@ -18,7 +18,7 @@ class colorselect implements fieldtype {
      */
     public static function getSecuredValue($param): string
     {
-        return esc_html($param);
+        return sanitize_text_field($param);
     }
 
     /**

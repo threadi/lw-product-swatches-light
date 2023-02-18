@@ -14,10 +14,11 @@ interface attributeType {
      * @param $imagesSets
      * @param $values
      * @param $onSales
-     * @param $product
+     * @param $product_link
+     * @param $product_title
      * @return string
      */
-    public static function getList( $list, $images, $imagesSets, $values, $onSales, $product ): string;
+    public static function getList( $list, $images, $imagesSets, $values, $onSales, $product_link, $product_title ): string;
 
     /**
      * Output on taxonomy table in backend.

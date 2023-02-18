@@ -12,7 +12,7 @@ class WC_Settings_Tab {
      *
      * @return void
      */
-    public static function init() {
+    public static function init(): void {
         add_filter( 'woocommerce_settings_tabs_array', __CLASS__ . '::add_settings_tab', 50 );
         add_action( 'woocommerce_settings_tabs_'.LW_SWATCH_WC_SETTING_NAME, __CLASS__ . '::settings_tab' );
         add_action( 'woocommerce_update_options_'.LW_SWATCH_WC_SETTING_NAME, __CLASS__ . '::update_settings' );
@@ -22,10 +22,10 @@ class WC_Settings_Tab {
      * Add the tab
      *
      * @param $settings_tabs
-     * @return mixed
+     * @return array
      * @noinspection PhpUnused
      */
-    public static function add_settings_tab( $settings_tabs ) {
+    public static function add_settings_tab( $settings_tabs ): array {
         $settings_tabs[LW_SWATCH_WC_SETTING_NAME] = __('Product Swatches', 'lw-product-swatches');
         return $settings_tabs;
     }
@@ -37,7 +37,7 @@ class WC_Settings_Tab {
      * @uses self::get_settings()
      * @noinspection PhpUnused
      */
-    public static function settings_tab() {
+    public static function settings_tab(): void {
         woocommerce_admin_fields( self::get_settings() );
     }
 
@@ -47,7 +47,7 @@ class WC_Settings_Tab {
      * @uses woocommerce_update_options()
      * @uses self::get_settings()
      */
-    public static function update_settings() {
+    public static function update_settings(): void {
         woocommerce_update_options( self::get_settings() );
     }
 
