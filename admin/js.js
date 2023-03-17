@@ -3,8 +3,6 @@ jQuery( document ).ready( function ($) {
     $('a.lw-update-swatches').on('click', function (e) {
         e.preventDefault();
 
-        console.log(lwProductSwatchesVars);
-
         // create dialog if it does not exist atm
         let dialogEl = $('#lw-update-dialog');
         if( dialogEl.length === 0 ) {
