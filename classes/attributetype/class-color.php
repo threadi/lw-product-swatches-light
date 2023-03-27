@@ -87,7 +87,7 @@ class color implements attributeType
                 $html .= ob_get_clean();
             }
         }
-        return helper::getHTMList($html, self::_typeNames, self::_typeName, $taxonomy);
+        return helper::getHTMList($html, self::_typeNames, self::_typeName, $taxonomy, false);
     }
 
     /**

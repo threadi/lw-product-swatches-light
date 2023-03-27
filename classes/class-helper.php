@@ -332,11 +332,12 @@ trait helper {
      * @param $typenames
      * @param $typename
      * @param $taxonomy
+     * @param $changed_by_gallery
      * @return false|string
      * @noinspection PhpUnusedParameterInspection
      * @noinspection SpellCheckingInspection
      */
-    public static function getHTMList( $html, $typenames, $typename, $taxonomy ) {
+    public static function getHTMList( $html, $typenames, $typename, $taxonomy, $changed_by_gallery ) {
         if( empty($html) ) {
             return '';
         }
