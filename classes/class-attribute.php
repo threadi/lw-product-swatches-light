@@ -39,7 +39,6 @@ class Attribute {
         add_action( $this->getTaxonomyName().'_edit_form_fields', [$this, 'edit']);
         add_action( 'created_term', [$this, 'save'], 10, 3);
         add_action( 'edit_term', [$this, 'save'], 10, 3);
-        add_action( 'admin_enqueue_scripts', [$this, 'enqueue_scripts']);
     }
 
     /**
@@ -171,7 +170,10 @@ class Attribute {
             }
             else {
                 // show an error message
-                set_transient( 'lw_swatches_required_field_missing', true );
+                set_transient( 'lwSwatchesMessage', [
+                    'message' => __('<strong>At least one required field was not filled!</strong> Please fill out the form completely.', 'lw-product-swatches'),
+                    'state' => 'error'
+                ] );
             }
         }
     }
@@ -248,18 +250,6 @@ class Attribute {
                     <?php
                 }
             }
-        }
-    }
-
-    /**
-     * Enqueue Scripts and Styles needed for forms in backend.
-     *
-     * @return void
-     */
-    public function enqueue_scripts(): void
-    {
-        if ( ! did_action( 'wp_enqueue_media' ) ) {
-            wp_enqueue_media();
         }
     }
 

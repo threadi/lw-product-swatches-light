@@ -38,3 +38,10 @@ const LW_ATTRIBUTE_TYPES = [
 const LW_SWATCHES_OPTION_COUNT = 'lsImportCount';
 const LW_SWATCHES_OPTION_MAX = 'lsImportMax';
 const LW_SWATCHES_UPDATE_RUNNING = 'lsRunning';
+
+/**
+ * Define our transients
+ */
+const LW_SWATCHES_TRANSIENTS = [
+    'lwSwatchesMessage'
+];

@@ -2,7 +2,7 @@
 
 ## About
 
-This repository provides the features of the Light version of the WordPress plugin _Product Swatches_. The repository is used as basis for deploying the plugin to the WordPress repository. It is not intended to run as a plugin as it is, even if that is possible for development. 
+This repository provides the features of the Light version of the WordPress plugin _Product Swatches for WooCommerce_. The repository is used as basis for deploying the plugin to the WordPress repository. It is not intended to run as a plugin as it is, even if that is possible for development. 
 
 ## Usage
 

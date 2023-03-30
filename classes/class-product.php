@@ -124,7 +124,10 @@ class Product {
                     $values = [];
                     $list = [];
                     for( $t=0;$t<count($attributeTerm);$t++ ) {
-                        $terms = get_terms(['taxonomy' => $attributeTerm[$t]['type'], 'hide_empty' => false]);
+                        $terms = get_terms([
+                            'taxonomy' => $attributeTerm[$t]['type'],
+                            'hide_empty' => false
+                        ]);
                         for( $t2=0;$t2<count($terms);$t2++ ) {
                             $term = $terms[$t2];
                             // add only available terms to the resulting list

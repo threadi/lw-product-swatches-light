@@ -374,4 +374,14 @@ trait helper {
             'yellow' => __('yellow', 'lw-product-swatches')
         ];
     }
+
+    /**
+     * Check if WooCommerce is active and running.
+     *
+     * @return bool     true if WooCommerce is active and running
+     */
+    public static function lw_swatches_is_woocommerce_activated(): bool
+    {
+        return class_exists('woocommerce');
+    }
 }
