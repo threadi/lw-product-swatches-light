@@ -26,7 +26,6 @@ const LW_SWATCHES_PLUGIN = __FILE__;
 require_once 'inc/autoload.php';
 require_once 'inc/constants.php';
 require_once 'inc/woocommerce.php';
-require_once 'inc/functions.php';
 if( is_admin() ) {
     require_once 'inc/admin.php';
     require_once 'inc/transients.php';
@@ -35,11 +34,7 @@ if( is_admin() ) {
 /**
  * On plugin activation.
  */
-function lw_swatches_on_activation(): void
-{
-    installer::initializePlugin();
-}
-register_activation_hook( LW_SWATCHES_PLUGIN, 'lw_swatches_on_activation' );
+register_activation_hook( LW_SWATCHES_PLUGIN, 'LW_Swatches\installer::initializePlugin' );
 
 /**
  * On plugin deactivation.
@@ -50,7 +45,6 @@ function lw_swatches_on_deactivation(): void
 {
     // remove schedules
     wp_clear_scheduled_hook('lw_swatches_run_tasks' );
-    wp_clear_scheduled_hook('lw_swatches_add_regeneration_tasks');
 }
 register_deactivation_hook( LW_SWATCHES_PLUGIN, 'lw_swatches_on_deactivation' );
 
@@ -154,28 +148,3 @@ function lw_swatches_run_tasks_from_list(): void
     update_option('lw_swatches_tasks', $taskList);
 }
 add_action('lw_swatches_run_tasks', 'lw_swatches_run_tasks_from_list');
-
-/**
- * Nur für Entwicklung um Cronjob per http://v1.woocommercetest.de/shop/?the_cron_test=1 manuell auszuführen.
- *
- * TODO entfernen
- */
-add_action( 'init', function() {
-    if ( ! isset( $_GET['the_cron_test'] ) ) {
-        return;
-    }
-    error_reporting( 1 );
-    do_action( 'lw_swatches_run_tasks' );
-    die();
-} );
-
-/**
- * Add task to scheduler to update all swatches automatically
- *
- * @return void
- * @noinspection PhpUnused
- */
-function lw_swatches_add_regeneration_tasks() {
-    helper::addTaskForScheduler(['\LW_Swatches\helper::updateSwatchesOnProducts']);
-}
-add_action( 'lw_swatches_add_regeneration_tasks', 'lw_swatches_add_regeneration_tasks');

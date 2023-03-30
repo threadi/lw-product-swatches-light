@@ -64,7 +64,7 @@ add_action( 'admin_enqueue_scripts', 'lw_swatches_add_styles_and_js_admin', PHP_
  */
 function lw_swatches_attribute_handling(): void
 {
-    if( lw_swatches_is_woocommerce_activated() ) {
+    if( helper::lw_swatches_is_woocommerce_activated() ) {
         // get all attributes and add action on them
         $attributes = wc_get_attribute_taxonomies();
         $attribute_types = helper::getAttributeTypes();

@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: Product Swatches for WooCommerce Light 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/lw-product-"
 "swatches-light\n"
-"POT-Creation-Date: 2023-02-01T10:40:17+01:00\n"
-"PO-Revision-Date: 2023-02-01 10:40+0100\n"
+"POT-Creation-Date: 2023-03-30T14:50:46+02:00\n"
+"PO-Revision-Date: 2023-03-30 14:53+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -33,59 +33,89 @@ msgstr "laOlaWeb"
 msgid "https://laolaweb.com"
 msgstr "https://laolaweb.com"
 
-#: classes/class-helper.php:245 classes/class-helper.php:248
+#: classes/class-attribute.php:174
+msgid ""
+"<strong>At least one required field was not filled!</strong> Please fill out "
+"the form completely."
+msgstr ""
+"<strong>Mindestens ein erforderliches Feld wurde nicht ausgefüllt!</strong> "
+"Bitte das Formular vollständig ausfüllen."
+
+#: classes/class-helper.php:243 classes/class-helper.php:246
 msgid "Color"
 msgstr "Farbe"
 
-#: classes/class-helper.php:249
+#: classes/class-helper.php:247
 msgid "Choose a color."
 msgstr "Wähle eine Farbe."
 
-#: classes/class-helper.php:369
+#: classes/class-helper.php:368
 msgid "black"
 msgstr "schwarz"
 
-#: classes/class-helper.php:370
+#: classes/class-helper.php:369
 msgid "blue"
 msgstr "blau"
 
-#: classes/class-helper.php:371
+#: classes/class-helper.php:370
 msgid "brown"
-msgstr "brown"
+msgstr "braun"
 
-#: classes/class-helper.php:372
+#: classes/class-helper.php:371
 msgid "green"
 msgstr "grün"
 
-#: classes/class-helper.php:373
+#: classes/class-helper.php:372
 msgid "red"
 msgstr "rot"
 
-#: classes/class-helper.php:374
+#: classes/class-helper.php:373
 msgid "white"
 msgstr "weiß"
 
-#: classes/class-helper.php:375
+#: classes/class-helper.php:374
 msgid "yellow"
 msgstr "gelb"
+
+#. translators: %1$s is replaced with "string"
+#: classes/class-installer.php:28
+msgid ""
+"<strong>Product Swatches for WooCommerce Light could not be activated!</"
+"strong> Please <a href=\"%1$s\">install and activate WooCommerce</a> first."
+msgstr ""
+"<strong>Produkt Swatches für WooCommerce Light konnte nicht aktiviert werden!"
+"</strong> Bitte zuerst <a href=\"%1$s\">WooCommerce aktivieren und "
+"installieren</a>."
 
 #: classes/class-wc-settings-tab.php:29
 msgid "Product Swatches"
 msgstr "Produkt Swatches"
 
-#: classes/class-wc-settings-tab.php:64
+#: classes/class-wc-settings-tab.php:65
 msgid "Settings for Product Swatches"
 msgstr "Einstellungen für Produkt Swatches"
 
-#: classes/class-wc-settings-tab.php:70
+#: classes/class-wc-settings-tab.php:78
+msgid "List view"
+msgstr "Listen-Ansicht"
+
+#: classes/class-wc-settings-tab.php:91
+msgid "Detail view"
+msgstr "Detail-Ansicht"
+
+#: classes/class-wc-settings-tab.php:104
+msgid "Other settings"
+msgstr "Weitere Einstellungen"
+
+#: classes/class-wc-settings-tab.php:119
 msgid "Delete all plugin-data on uninstall"
 msgstr "Lösche alle Plugin-Daten bei Deinstallation"
 
-#: classes/class-wc-settings-tab.php:76
+#: classes/class-wc-settings-tab.php:125
 msgid "Disable plugin-own caching of swatches"
 msgstr "Deaktiviere den Plugin-eigenen Cache bei Swatches"
 
-#: classes/class-wc-settings-tab.php:79
+#: classes/class-wc-settings-tab.php:128
 msgid ""
 "Without this cache, the page will have a significantly higher load time "
 "depending on the number of products and expressions. It is not recommended "
@@ -94,29 +124,29 @@ msgstr ""
 "Ohne diesen Cache wird die Seite je nach Anzahl der Produkte eine deutlich "
 "höhere Ladezeit haben. Es wird nicht empfohlen, diesen Cache zu deaktivieren."
 
-#: classes/class-wc-settings-tab.php:82
+#: classes/class-wc-settings-tab.php:131
+msgid "Regenerate Product Swatches"
+msgstr "Produkt Swatches neu generieren"
+
+#: classes/class-wc-settings-tab.php:137
 msgid "Position in list"
 msgstr "Position innerhalb der Liste"
 
-#: classes/class-wc-settings-tab.php:85
+#: classes/class-wc-settings-tab.php:140
 msgid "before price"
 msgstr "vor dem Preis"
 
-#: classes/class-wc-settings-tab.php:86
+#: classes/class-wc-settings-tab.php:141
 msgid "after price"
 msgstr "nach dem Preis"
 
-#: classes/class-wc-settings-tab.php:87
+#: classes/class-wc-settings-tab.php:142
 msgid "before cart"
 msgstr "vor dem Warenkorb-Link"
 
-#: classes/class-wc-settings-tab.php:88
+#: classes/class-wc-settings-tab.php:143
 msgid "after cart"
 msgstr "nach dem Warenkorb-Link"
-
-#: classes/class-wc-settings-tab.php:94
-msgid "Regenerate Product Swatches"
-msgstr "Produkt Swatches neu generieren"
 
 #: inc/admin.php:35
 msgid "Generate now"
@@ -150,52 +180,43 @@ msgstr "OK"
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: inc/transients.php:25
-msgid "Plugin not activated!"
-msgstr "Plugin wurde nicht aktiviert!"
-
-#. translators: %1$s is replaced with "string"
-#: inc/transients.php:28
-msgid "Please <a href=\"%1$s\">install and activate WooCommerce</a> first."
-msgstr ""
-"Bitte zuerst <a href=\"%1$s\">WooCommerce aktivieren und installieren</a>."
-
-#: inc/transients.php:41
-msgid "At least one required field was not filled!"
-msgstr "Mindestens ein erforderliches Feld wurde nicht ausgefüllt!"
-
-#: inc/transients.php:41
-msgid "Please fill out the form completely."
-msgstr "Bitte fülle das Formular komplett aus."
-
-#: inc/transients.php:51
-msgid "The swatches of the product have been updated."
-msgstr "Die Swatches am Produkt wurden aktualisiert."
-
-#: inc/transients.php:61
-msgid "The swatches of the selected products have been updated."
-msgstr "Die Swatches an den gewählten Produkten wurden aktualisiert."
-
-#: inc/woocommerce.php:71
+#: inc/woocommerce.php:68
 msgid "Regenerate all swatches"
 msgstr "Generiere alle Swatches neu"
 
-#: inc/woocommerce.php:71
+#: inc/woocommerce.php:68
 msgid "takes a moment"
 msgstr "Das dauert einen Moment"
 
-#: inc/woocommerce.php:186
+#: inc/woocommerce.php:183
 msgid "No product has been supplied!"
 msgstr "Es wurde keine Produkte übermittelt!"
+
+#: inc/woocommerce.php:200
+msgid "<strong>The swatches of the product have been updated.</strong>"
+msgstr "<strong>Die Swatches am Produkt wurden aktualisiert.</strong>"
 
 #: inc/woocommerce.php:218
 msgid "Swatches generieren"
 msgstr "Swatches generieren"
 
+#: inc/woocommerce.php:241
+msgid "The swatches of the selected products have been updated."
+msgstr "Die Swatches an den gewählten Produkten wurden aktualisiert."
+
 #. translators: %1$s is replaced with "string"
-#: inc/woocommerce.php:263
-msgid "<a href=\"%s\">Save swatches</a> of this product"
+#: inc/woocommerce.php:266
+msgid "<a href=\"%1$s\">Save swatches</a> of this product"
 msgstr "<a href=\"%s\">Speichere Swatches</a> für dieses Produkt neu"
+
+#~ msgid "Product Swatches for WooCommerce Light not activated!"
+#~ msgstr "Produkt Swatches für WooCommerce Light wurde nicht aktiviert!"
+
+#~ msgid "Please fill out the form completely."
+#~ msgstr "Bitte fülle das Formular komplett aus."
+
+#~ msgid "Plugin not activated!"
+#~ msgstr "Plugin wurde nicht aktiviert!"
 
 #~ msgid "Position in list in relation to shopping cart button"
 #~ msgstr "Position in Verhältnis zum Warenkorb-Button"

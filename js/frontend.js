@@ -1,5 +1,5 @@
 jQuery(document).ready(function( $ ) {
-    // thumb-change
+    // change of thumb
     $(".lw_product_swatches a[data-image], .lw_product_swatches span[data-image]").each(function() {
         if( $(this).data("image").length > 0 ) {
             $(this).on({
@@ -29,7 +29,7 @@ jQuery(document).ready(function( $ ) {
         }
     });
 
-    // sale change
+    // change the sales-badge
     $(".lw_product_swatches a[data-sale], .lw_product_swatches span[data-sale]").each(function() {
         $(this).on({
             mouseenter: function() {

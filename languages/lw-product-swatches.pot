@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-02-01T10:40:17+01:00\n"
+"POT-Creation-Date: 2023-03-30T14:50:46+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: lw-product-swatches\n"
@@ -30,85 +30,106 @@ msgstr ""
 msgid "https://laolaweb.com"
 msgstr ""
 
-#: classes/class-helper.php:245
-#: classes/class-helper.php:248
+#: classes/class-attribute.php:174
+msgid "<strong>At least one required field was not filled!</strong> Please fill out the form completely."
+msgstr ""
+
+#: classes/class-helper.php:243
+#: classes/class-helper.php:246
 msgid "Color"
 msgstr ""
 
-#: classes/class-helper.php:249
+#: classes/class-helper.php:247
 msgid "Choose a color."
 msgstr ""
 
-#: classes/class-helper.php:369
+#: classes/class-helper.php:368
 msgid "black"
 msgstr ""
 
-#: classes/class-helper.php:370
+#: classes/class-helper.php:369
 msgid "blue"
 msgstr ""
 
-#: classes/class-helper.php:371
+#: classes/class-helper.php:370
 msgid "brown"
 msgstr ""
 
-#: classes/class-helper.php:372
+#: classes/class-helper.php:371
 msgid "green"
 msgstr ""
 
-#: classes/class-helper.php:373
+#: classes/class-helper.php:372
 msgid "red"
 msgstr ""
 
-#: classes/class-helper.php:374
+#: classes/class-helper.php:373
 msgid "white"
 msgstr ""
 
-#: classes/class-helper.php:375
+#: classes/class-helper.php:374
 msgid "yellow"
+msgstr ""
+
+#. translators: %1$s is replaced with "string"
+#: classes/class-installer.php:28
+msgid "<strong>Product Swatches for WooCommerce Light could not be activated!</strong> Please <a href=\"%1$s\">install and activate WooCommerce</a> first."
 msgstr ""
 
 #: classes/class-wc-settings-tab.php:29
 msgid "Product Swatches"
 msgstr ""
 
-#: classes/class-wc-settings-tab.php:64
+#: classes/class-wc-settings-tab.php:65
 msgid "Settings for Product Swatches"
 msgstr ""
 
-#: classes/class-wc-settings-tab.php:70
+#: classes/class-wc-settings-tab.php:78
+msgid "List view"
+msgstr ""
+
+#: classes/class-wc-settings-tab.php:91
+msgid "Detail view"
+msgstr ""
+
+#: classes/class-wc-settings-tab.php:104
+msgid "Other settings"
+msgstr ""
+
+#: classes/class-wc-settings-tab.php:119
 msgid "Delete all plugin-data on uninstall"
 msgstr ""
 
-#: classes/class-wc-settings-tab.php:76
+#: classes/class-wc-settings-tab.php:125
 msgid "Disable plugin-own caching of swatches"
 msgstr ""
 
-#: classes/class-wc-settings-tab.php:79
+#: classes/class-wc-settings-tab.php:128
 msgid "Without this cache, the page will have a significantly higher load time depending on the number of products and expressions. It is not recommended to disable this cache."
 msgstr ""
 
-#: classes/class-wc-settings-tab.php:82
+#: classes/class-wc-settings-tab.php:131
+msgid "Regenerate Product Swatches"
+msgstr ""
+
+#: classes/class-wc-settings-tab.php:137
 msgid "Position in list"
 msgstr ""
 
-#: classes/class-wc-settings-tab.php:85
+#: classes/class-wc-settings-tab.php:140
 msgid "before price"
 msgstr ""
 
-#: classes/class-wc-settings-tab.php:86
+#: classes/class-wc-settings-tab.php:141
 msgid "after price"
 msgstr ""
 
-#: classes/class-wc-settings-tab.php:87
+#: classes/class-wc-settings-tab.php:142
 msgid "before cart"
 msgstr ""
 
-#: classes/class-wc-settings-tab.php:88
+#: classes/class-wc-settings-tab.php:143
 msgid "after cart"
-msgstr ""
-
-#: classes/class-wc-settings-tab.php:94
-msgid "Regenerate Product Swatches"
 msgstr ""
 
 #: inc/admin.php:35
@@ -139,48 +160,31 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: inc/transients.php:25
-msgid "Plugin not activated!"
-msgstr ""
-
-#. translators: %1$s is replaced with "string"
-#: inc/transients.php:28
-msgid "Please <a href=\"%1$s\">install and activate WooCommerce</a> first."
-msgstr ""
-
-#: inc/transients.php:41
-msgid "At least one required field was not filled!"
-msgstr ""
-
-#: inc/transients.php:41
-msgid "Please fill out the form completely."
-msgstr ""
-
-#: inc/transients.php:51
-msgid "The swatches of the product have been updated."
-msgstr ""
-
-#: inc/transients.php:61
-msgid "The swatches of the selected products have been updated."
-msgstr ""
-
-#: inc/woocommerce.php:71
+#: inc/woocommerce.php:68
 msgid "Regenerate all swatches"
 msgstr ""
 
-#: inc/woocommerce.php:71
+#: inc/woocommerce.php:68
 msgid "takes a moment"
 msgstr ""
 
-#: inc/woocommerce.php:186
+#: inc/woocommerce.php:183
 msgid "No product has been supplied!"
+msgstr ""
+
+#: inc/woocommerce.php:200
+msgid "<strong>The swatches of the product have been updated.</strong>"
 msgstr ""
 
 #: inc/woocommerce.php:218
 msgid "Swatches generieren"
 msgstr ""
 
+#: inc/woocommerce.php:241
+msgid "The swatches of the selected products have been updated."
+msgstr ""
+
 #. translators: %1$s is replaced with "string"
-#: inc/woocommerce.php:263
-msgid "<a href=\"%s\">Save swatches</a> of this product"
+#: inc/woocommerce.php:266
+msgid "<a href=\"%1$s\">Save swatches</a> of this product"
 msgstr ""

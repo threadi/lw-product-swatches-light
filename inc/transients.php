@@ -1,67 +1,42 @@
 <?php
 
 /**
- * Show hints in Admin.
+ * Show transient-based hints in wp-admin.
  *
  * @return void
  * @noinspection PhpUnused
  */
 function lw_swatches_admin_notices() {
 
-    // Show hint if WooCommerce is missing
-    if( get_transient( 'lw_swatches_activation_error_woocommerce' ) ){
-        $url = add_query_arg(
-            [
-                's' => 'woocommerce',
-                'tab' => 'search',
-                'type' => 'term'
-            ],
-            'plugin-install.php'
-        );
+    // show transients
+    foreach( LW_SWATCHES_TRANSIENTS as $transient ) {
+        if( get_transient( $transient ) ) {
+            // get transient data
+            $transient_data = get_transient( $transient );
 
-        ?>
-        <div class="updated error">
-            <p>
-                <strong><?php echo esc_html__('Plugin not activated!', 'lw-product-swatches'); ?></strong>
-                <?php
-                    /* translators: %1$s is replaced with "string" */
-                    echo sprintf(__('Please <a href="%1$s">install and activate WooCommerce</a> first.', 'lw-product-swatches'), $url);
-                ?>
-            </p>
-        </div>
-        <?php
-        delete_transient( 'lw_swatches_activation_error_woocommerce' );
-        deactivate_plugins( plugin_basename( LW_SWATCHES_PLUGIN ) );
-    }
+            // set classes
+            $class = 'updated';
+            if( $transient_data['state'] == 'error' ) {
+                $class = 'notice notice-error';
+            }
+            ?>
+            <div class="lw-swatches-transient <?php echo esc_attr($class); ?>">
+                <p>
+                    <?php
+                        echo wp_kses_post($transient_data['message']);
+                    ?>
+                </p>
+            </div>
+            <?php
 
-    // Show hint if not all required fields are filled
-    if( get_transient( 'lw_swatches_required_field_missing' ) ){
-        ?>
-        <div class="updated error">
-            <p><strong><?php echo esc_html__('At least one required field was not filled!', 'lw-product-swatches'); ?></strong> <?php echo esc_html__('Please fill out the form completely.', 'lw-product-swatches'); ?></p>
-        </div>
-        <?php
-        delete_transient( 'lw_swatches_required_field_missing' );
-    }
+            // remove the transient
+            delete_transient( $transient );
 
-    // Show hint if not all required fields are filled
-    if( get_transient( 'lw_swatches_resetted' ) ){
-        ?>
-        <div class="updated success">
-            <p><strong><?php echo esc_html__('The swatches of the product have been updated.', 'lw-product-swatches'); ?></strong></p>
-        </div>
-        <?php
-        delete_transient( 'lw_swatches_resetted' );
-    }
-
-    // Show hint if bulk action has been done
-    if( get_transient( 'lw_swatches_bulk_done' ) ){
-        ?>
-        <div class="updated success">
-            <p><strong><?php echo esc_html__('The swatches of the selected products have been updated.', 'lw-product-swatches'); ?></strong></p>
-        </div>
-        <?php
-        delete_transient( 'lw_swatches_bulk_done' );
+            // disable plugin on request
+            if( !empty($transient_data['disable_plugin']) ) {
+                deactivate_plugins( plugin_basename( LW_SWATCHES_PLUGIN ) );
+            }
+        }
     }
 }
 add_action( 'admin_notices', 'lw_swatches_admin_notices' );
