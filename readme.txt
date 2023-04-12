@@ -1,4 +1,4 @@
-=== Product Swatches for WooCommerce Light ===
+=== Product Swatches Light ===
 Contributors: laolaweb, threadi
 Tags: woocommerce, product swatches, variant swatches, variation swatches
 Requires at least: 6.0
