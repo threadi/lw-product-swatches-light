@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       Product Swatches for WooCommerce Light
+ * Plugin Name:       Product Swatches Light
  * Description:       Provides product swatches for WooCommerce.
  * Requires at least: 6.0
  * Requires PHP:      7.4

@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: Product Swatches for WooCommerce Light 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/lw-product-"
 "swatches-light\n"
-"POT-Creation-Date: 2023-03-30T14:50:46+02:00\n"
-"PO-Revision-Date: 2023-03-30 14:53+0200\n"
+"POT-Creation-Date: 2023-04-12T15:12:57+02:00\n"
+"PO-Revision-Date: 2023-04-12 15:13+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -18,8 +18,8 @@ msgstr ""
 "X-Domain: lw-product-swatches\n"
 
 #. Plugin Name of the plugin
-msgid "Product Swatches for WooCommerce Light"
-msgstr "Product Swatches für WooCommerce Light"
+msgid "Product Swatches Light"
+msgstr "Produkt Swatches Light"
 
 #. Description of the plugin
 msgid "Provides product swatches for WooCommerce."
@@ -80,12 +80,11 @@ msgstr "gelb"
 #. translators: %1$s is replaced with "string"
 #: classes/class-installer.php:28
 msgid ""
-"<strong>Product Swatches for WooCommerce Light could not be activated!</"
-"strong> Please <a href=\"%1$s\">install and activate WooCommerce</a> first."
+"<strong>Product Swatches Light could not be activated!</strong> Please <a "
+"href=\"%1$s\">install and activate WooCommerce</a> first."
 msgstr ""
-"<strong>Produkt Swatches für WooCommerce Light konnte nicht aktiviert werden!"
-"</strong> Bitte zuerst <a href=\"%1$s\">WooCommerce aktivieren und "
-"installieren</a>."
+"<strong>Produkt Swatches Light konnte nicht aktiviert werden!</strong> Bitte "
+"zuerst <a href=\"%1$s\">WooCommerce aktivieren und installieren</a>."
 
 #: classes/class-wc-settings-tab.php:29
 msgid "Product Swatches"
@@ -208,6 +207,9 @@ msgstr "Die Swatches an den gewählten Produkten wurden aktualisiert."
 #: inc/woocommerce.php:266
 msgid "<a href=\"%1$s\">Save swatches</a> of this product"
 msgstr "<a href=\"%s\">Speichere Swatches</a> für dieses Produkt neu"
+
+#~ msgid "Product Swatches for WooCommerce Light"
+#~ msgstr "Product Swatches für WooCommerce Light"
 
 #~ msgid "Product Swatches for WooCommerce Light not activated!"
 #~ msgstr "Produkt Swatches für WooCommerce Light wurde nicht aktiviert!"
