@@ -352,7 +352,7 @@ trait helper {
          * Output starting and ending list template surrounding the given html-code.
          */
         include helper::getTemplate('parts/list-start.php');
-        echo $html;
+        echo wp_kses_post($html);
         include helper::getTemplate('parts/list-end.php');
         return ob_get_clean();
     }
