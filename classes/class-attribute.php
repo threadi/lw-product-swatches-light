@@ -214,13 +214,16 @@ class Attribute {
                 $html = call_user_func($className, $this->getFieldName($fieldId), $value, $field['size'], $required, $placeholder, $field['name']);
             }
 
+            // set allowed html for field-output
+            $allowed_html = ['select' => ['id' => [],'name' => [],'required' => []], 'option' => ['value' => [],'selected' => []]];
+
             if( !empty($html) ) {
                 if (!$term) {
                     ?>
                     <div class="form-field term-<?php echo esc_attr($fieldId) ?>-wrap" data-lsw-dependency="<?php echo esc_attr($depends); ?>">
                         <label for="tag-<?php echo esc_attr($fieldId) ?>"><?php echo esc_html($field['label']); ?></label>
                         <?php
-                        echo $html;
+                        echo wp_kses($html, $allowed_html);
                         if( !empty($field['desc']) ) {
                             ?>
                             <p class="description"><?php echo wp_kses_post($field['desc']); ?></p>
@@ -238,7 +241,7 @@ class Attribute {
                                 for="<?php echo esc_attr($fieldId) ?>"><?php echo esc_html($field['label']); ?></label></th>
                             <td>
                                 <?php
-                                echo $html;
+                                echo wp_kses($html, $allowed_html);
                                 if( !empty($field['desc']) ) {
                                     ?>
                                         <p class="description"><?php echo wp_kses_post($field['desc']); ?></p>
