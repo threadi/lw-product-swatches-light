@@ -74,7 +74,7 @@ class cli
                         // set our own fields
                         $ourFields = $attribute_types[$product_attr_type]['fields'];
 
-                        // Daten eigenes Plugin
+                        // data from own plugin
                         $terms = get_terms(['taxonomy' => $taxonomy, 'hide_empty' => false]);
                         foreach ($terms as $term) {
                             $_POST['lws1'] = get_term_meta($term->term_id, $fields[$product_attr_type][0]['id'], true);

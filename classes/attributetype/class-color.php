@@ -55,7 +55,7 @@ class color implements attributeType
             }
 
             // set class
-            $class = apply_filters( 'lw_swatches_set_class', 'lw_swatches_'.self::_typeName.'_' . sanitize_text_field($color->slug), $taxonomy_id);
+            $class = apply_filters( 'lw_swatches_set_class', 'lw_swatches_'.self::_typeName.'_' . $color->slug, $taxonomy_id);
 
             // set link
             $link = apply_filters( 'lw_swatches_set_link', '', $taxonomy_id, $color, $product_link);
@@ -127,7 +127,7 @@ class color implements attributeType
             $termName = helper::getAttributeTypes()[$termName]['fields'];
         }
 
-        $color = sanitize_text_field(get_term_meta($term_id, $termName['color']['name'], true));
+        $color = get_term_meta($term_id, $termName['color']['name'], true);
 
         // check if value is an allowed value
         // --> if not set $color to nothing to prevent output
