@@ -59,7 +59,12 @@ With [Product Swatches for WooCommerce Pro](https://laolaweb.com/plugins/woocomm
 
 == Screenshots ==
 
-1.
+1. Possible list view in frontend.
+2. Settings on single color-attribute.
+3. Listing of color-attributes in backend.
+4. Settings for single color-attribute in backend.
+5. General settings with Pro-version.
+6. Detail-view of product with Pro-Version.
 
 == Changelog ==
 
