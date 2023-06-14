@@ -215,7 +215,7 @@ class Attribute {
             }
 
             // set allowed html for field-output
-            $allowed_html = ['select' => ['id' => [],'name' => [],'required' => []], 'option' => ['value' => [],'selected' => []]];
+            $allowed_html = apply_filters( 'lw_swatches_allowed_html', ['select' => ['id' => [],'name' => [],'required' => []], 'option' => ['value' => [],'selected' => []]] );
 
             if( !empty($html) ) {
                 if (!$term) {
