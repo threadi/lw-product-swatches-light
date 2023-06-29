@@ -161,4 +161,4 @@ function lw_swatches_admin_add_setting_link( $links ): array
 
     return $links;
 }
-add_filter( 'plugin_action_links_lw-product-swatches-light/lw-product-swatches-light.php', 'lw_swatches_admin_add_setting_link' );
+add_filter( 'plugin_action_links_product-swatches-light/product-swatches-light.php', 'lw_swatches_admin_add_setting_link' );
