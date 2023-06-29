@@ -2,11 +2,11 @@
 Contributors: laolaweb, threadi
 Tags: woocommerce, product swatches, variant swatches, variation swatches
 Requires at least: 6.0
-Tested up to: 6.2
+Tested up to: 6.3
 Requires PHP: 7.4
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 
 == Description ==
 
@@ -70,3 +70,7 @@ With [Product Swatches for WooCommerce Pro](https://laolaweb.com/plugins/woocomm
 
 = 1.0.0 =
 * Initial release
+
+= 1.0.1 =
+* Add filter for HTML-codes used in backend
+* Compatibility with WordPress 6.3
