@@ -73,4 +73,5 @@ With [Product Swatches for WooCommerce Pro](https://laolaweb.com/plugins/woocomm
 
 = 1.0.1 =
 * Add filter for HTML-codes used in backend
+* Updated styling for TwentyTwentyThree theme
 * Compatibility with WordPress 6.3

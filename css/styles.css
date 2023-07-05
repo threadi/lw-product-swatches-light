@@ -5,6 +5,10 @@
     text-align: center;
 }
 
+body.theme-twentytwentyttwo .lw_product_swatches { margin: 0 auto; }
+
+body.theme-twentytwentythree .lw_product_swatches { margin: 0 auto; }
+
 .lw_product_swatches li:first-child { margin-left: 0 }
 
 table.variations .lw_product_swatches, .woocommerce-cart-form .lw_product_swatches, .shop_table .lw_product_swatches { text-align: left; }
