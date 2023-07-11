@@ -6,7 +6,7 @@ Tested up to: 6.3
 Requires PHP: 7.4
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 
 == Description ==
 
@@ -75,3 +75,6 @@ With [Product Swatches for WooCommerce Pro](https://laolaweb.com/plugins/woocomm
 * Add filter for HTML-codes used in backend
 * Updated styling for TwentyTwentyThree theme
 * Compatibility with WordPress 6.3
+
+= 1.0.2 =
+* Fixed SVN issue
