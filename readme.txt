@@ -83,3 +83,6 @@ With [Product Swatches for WooCommerce Pro](https://laolaweb.com/plugins/woocomm
 * Changed text domain to match WordPress requirements
 * Compatibility with WordPress 6.4
 * Fixed uninstaller
+
+= 1.0.4 =
+* Fixed missing translation files
