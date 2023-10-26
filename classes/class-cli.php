@@ -14,8 +14,7 @@ class cli
      * @since  1.0.0
      * @author Thomas Zwirner
      */
-    public function update($args)
-    {
+    public function update($args): void {
         if (empty($args)) {
             helper::updateSwatchesOnProducts();
         }
@@ -30,8 +29,7 @@ class cli
      * @since  1.0.0
      * @author Thomas Zwirner
      */
-    public function delete()
-    {
+    public function delete(): void {
         helper::deleteAllSwatchesOnProducts();
     }
 
@@ -40,8 +38,7 @@ class cli
      *
      * @return void
      */
-    public function migrate()
-    {
+    public function migrate(): void {
         /**
          * Migration from "Variation Swatches for WooCommerce" from "RadiusTheme"
          */
@@ -65,7 +62,6 @@ class cli
             $attribute_taxonomies = wc_get_attribute_taxonomies();
             if ($attribute_taxonomies) {
                 foreach ($attribute_taxonomies as $tax) {
-                    $product_attr = wc_attribute_taxonomy_name($tax->attribute_name);
                     $product_attr_type = $tax->attribute_type;
                     if (in_array($product_attr_type, $meta_added_for)) {
                         // secure taxonomy
@@ -96,7 +92,7 @@ class cli
      * @return void
      * @noinspection PhpUnused
      */
-    public function resetPlugin( $deleteData = [] ): void
+    public function resetPlugin( $deleteData = array() ): void
     {
         (new installer)->removeAllData( $deleteData );
         installer::initializePlugin();

@@ -240,11 +240,11 @@ trait helper {
         $attribute_types = apply_filters('lw_swatches_types', LW_ATTRIBUTE_TYPES);
         $attribute_types_label = [
             'color' => [
-                'label' => __('Color', 'lw-product-swatches'),
+                'label' => __('Color', 'product-swatches-light'),
                 'fields' => [
                     'color' => [
-                        'label' => __('Color', 'lw-product-swatches'),
-                        'desc' => __('Choose a color.', 'lw-product-swatches')
+                        'label' => __('Color', 'product-swatches-light'),
+                        'desc' => __('Choose a color.', 'product-swatches-light')
                     ]
                 ]
             ]
@@ -365,13 +365,13 @@ trait helper {
     public static function getAllowedColors(): array
     {
         return [
-            'black' => __('black', 'lw-product-swatches'),
-            'blue' => __('blue', 'lw-product-swatches'),
-            'brown' => __('brown', 'lw-product-swatches'),
-            'green' => __('green', 'lw-product-swatches'),
-            'red' => __('red', 'lw-product-swatches'),
-            'white' => __('white', 'lw-product-swatches'),
-            'yellow' => __('yellow', 'lw-product-swatches')
+            'black' => __('black', 'product-swatches-light'),
+            'blue' => __('blue', 'product-swatches-light'),
+            'brown' => __('brown', 'product-swatches-light'),
+            'green' => __('green', 'product-swatches-light'),
+            'red' => __('red', 'product-swatches-light'),
+            'white' => __('white', 'product-swatches-light'),
+            'yellow' => __('yellow', 'product-swatches-light')
         ];
     }
 

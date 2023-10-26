@@ -25,7 +25,7 @@ class installer
             );
             set_transient('lwSwatchesMessage', [
                 /* translators: %1$s is replaced with "string" */
-                'message' => sprintf(__('<strong>Product Swatches Light could not be activated!</strong> Please <a href="%1$s">install and activate WooCommerce</a> first.', 'lw-product-swatches'), $url),
+                'message' => sprintf(__('<strong>Product Swatches Light could not be activated!</strong> Please <a href="%1$s">install and activate WooCommerce</a> first.', 'product-swatches-light'), $url),
                 'state' => 'error',
                 'disable_plugin' => true
             ]);

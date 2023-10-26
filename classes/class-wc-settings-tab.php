@@ -26,7 +26,7 @@ class WC_Settings_Tab {
      * @noinspection PhpUnused
      */
     public static function add_settings_tab( $settings_tabs ): array {
-        $settings_tabs[LW_SWATCH_WC_SETTING_NAME] = __('Product Swatches', 'lw-product-swatches');
+        $settings_tabs[LW_SWATCH_WC_SETTING_NAME] = __('Product Swatches', 'product-swatches-light');
         return $settings_tabs;
     }
 
@@ -62,7 +62,7 @@ class WC_Settings_Tab {
         $sections = [
             'general' => [
                 'start' => [
-                    'name'     => __('Settings for Product Swatches', 'lw-product-swatches'),
+                    'name'     => __('Settings for Product Swatches', 'product-swatches-light'),
                     'type'     => 'title',
                     'desc'     => '',
                     'id'       => 'wc_'.LW_SWATCH_WC_SETTING_NAME.'_section_title'
@@ -75,7 +75,7 @@ class WC_Settings_Tab {
             ],
             'list' => [
                 'start' => [
-                    'name'     => __('List view', 'lw-product-swatches'),
+                    'name'     => __('List view', 'product-swatches-light'),
                     'type'     => 'title',
                     'desc'     => '',
                     'id'       => 'wc_'.LW_SWATCH_WC_SETTING_NAME.'_section_list_title'
@@ -88,7 +88,7 @@ class WC_Settings_Tab {
             ],
             'detail' => [
                 'start' => [
-                    'name'     => __('Detail view', 'lw-product-swatches'),
+                    'name'     => __('Detail view', 'product-swatches-light'),
                     'type'     => 'title',
                     'desc'     => '',
                     'id'       => 'wc_'.LW_SWATCH_WC_SETTING_NAME.'_section_detail_title'
@@ -101,7 +101,7 @@ class WC_Settings_Tab {
             ],
             'other' => [
                 'start' => [
-                    'name'     => __('Other settings', 'lw-product-swatches'),
+                    'name'     => __('Other settings', 'product-swatches-light'),
                     'type'     => 'title',
                     'desc'     => '',
                     'id'       => 'wc_'.LW_SWATCH_WC_SETTING_NAME.'_section_other_title'
@@ -116,31 +116,31 @@ class WC_Settings_Tab {
 
         // add our settings to the sections
         $sections['general']['settings']['deleteOnUninstall'] = [
-            'name' => __('Delete all plugin-data on uninstall', 'lw-product-swatches'),
+            'name' => __('Delete all plugin-data on uninstall', 'product-swatches-light'),
             'type' => 'checkbox',
             'desc' => '',
             'id'   => 'wc_'.LW_SWATCH_WC_SETTING_NAME.'_delete_on_uninstall'
         ];
         $sections['general']['settings']['disableCache'] = [
-            'name' => __('Disable plugin-own caching of swatches', 'lw-product-swatches'),
+            'name' => __('Disable plugin-own caching of swatches', 'product-swatches-light'),
             'type' => 'checkbox',
             'id'   => 'wc_'.LW_SWATCH_WC_SETTING_NAME.'_disable_cache',
-            'desc' => __('Without this cache, the page will have a significantly higher load time depending on the number of products and expressions. It is not recommended to disable this cache.', 'lw-product-swatches')
+            'desc' => __('Without this cache, the page will have a significantly higher load time depending on the number of products and expressions. It is not recommended to disable this cache.', 'product-swatches-light')
         ];
         $sections['general']['settings']['regenerateSwatches'] = [
-            'name' => __('Regenerate Product Swatches', 'lw-product-swatches'),
+            'name' => __('Regenerate Product Swatches', 'product-swatches-light'),
             'type' => 'generate_product_swatches',
             'desc' => '',
             'id'   => 'wc_'.LW_SWATCH_WC_SETTING_NAME.'_generate_product_swatches'
         ];
         $sections['list']['settings']['swatchesPositionInList'] = [
-            'name' => __('Position in list', 'lw-product-swatches'),
+            'name' => __('Position in list', 'product-swatches-light'),
             'type' => 'select',
             'options' => [
-                'beforeprice' => __('before price', 'lw-product-swatches'),
-                'afterprice' => __('after price', 'lw-product-swatches'),
-                'beforecart' => __('before cart', 'lw-product-swatches'),
-                'aftercart' => __('after cart', 'lw-product-swatches'),
+                'beforeprice' => __('before price', 'product-swatches-light'),
+                'afterprice' => __('after price', 'product-swatches-light'),
+                'beforecart' => __('before cart', 'product-swatches-light'),
+                'aftercart' => __('after cart', 'product-swatches-light'),
             ],
             'desc' => '',
             'id'   => 'wc_'.LW_SWATCH_WC_SETTING_NAME.'_position_in_list'

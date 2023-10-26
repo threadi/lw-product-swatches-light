@@ -65,7 +65,7 @@ function lw_generate_product_swatches_button() {
         ],
         get_admin_url() . 'admin.php'
     );
-    ?><a href="<?php echo esc_url(wp_nonce_url($url, 'lws-generate')); ?>" class="button button-large lw-update-swatches"><?php _e('Regenerate all swatches', 'lw-product-swatches'); ?></a> (<i><?php _e('takes a moment', 'lw-product-swatches'); ?></i>)<?php
+    ?><a href="<?php echo esc_url(wp_nonce_url($url, 'lws-generate')); ?>" class="button button-large lw-update-swatches"><?php _e('Regenerate all swatches', 'product-swatches-light'); ?></a> (<i><?php _e('takes a moment', 'product-swatches-light'); ?></i>)<?php
 }
 add_action( 'woocommerce_admin_field_generate_product_swatches', 'lw_generate_product_swatches_button', 10, 0 );
 
@@ -180,7 +180,7 @@ add_filter( 'woocommerce_blocks_product_grid_item_html', 'lw_swatches_add_in_blo
  */
 function lw_swatches_run_product_action() {
     if ( empty( $_REQUEST['post'] ) ) {
-        wp_die( esc_html__( 'No product has been supplied!', 'lw-product-swatches' ) );
+        wp_die( esc_html__( 'No product has been supplied!', 'product-swatches-light' ) );
     }
 
     // get product id
@@ -197,7 +197,7 @@ function lw_swatches_run_product_action() {
 
     // show success-message
     set_transient( 'lwSwatchesMessage', [
-        'message' => __('<strong>The swatches of the product have been updated.</strong>', 'lw-product-swatches'),
+        'message' => __('<strong>The swatches of the product have been updated.</strong>', 'product-swatches-light'),
         'state' => 'success'
     ] );
 
@@ -215,7 +215,7 @@ add_action( 'admin_action_lws_resetswatches', 'lw_swatches_run_product_action');
  * @noinspection PhpUnused
  */
 function lw_swatches_add_bulk_actions( $actions ) {
-    $actions['lws-generate-swatches'] = __( 'Swatches generieren', 'lw-product-swatches' );
+    $actions['lws-generate-swatches'] = __( 'Swatches generieren', 'product-swatches-light' );
     return $actions;
 }
 add_filter( 'bulk_actions-edit-product', 'lw_swatches_add_bulk_actions', 20, 1 );
@@ -238,7 +238,7 @@ function lw_swatches_run_bulk_actions( $redirect_to, $action, $post_ids ) {
 
     // set transient to show success
     set_transient( 'lwSwatchesMessage', [
-        'message' => __('The swatches of the selected products have been updated.', 'lw-product-swatches'),
+        'message' => __('The swatches of the selected products have been updated.', 'product-swatches-light'),
         'state' => 'success'
     ] );
 
@@ -263,7 +263,7 @@ function lw_swatches_add_product_action( $post ) {
     if( $product->get_type() == 'variable' ) {
         $url = wp_nonce_url( admin_url( 'edit.php?post_type=product&action=lws_resetswatches&post=' . absint( $post->ID ) ), 'woocommerce-lws-resetswatches_' . $post->ID );
         /* translators: %1$s is replaced with "string" */
-        ?><div class="misc-pub-section"><?php echo sprintf(__('<a href="%1$s">Save swatches</a> of this product', 'lw-product-swatches'), esc_url($url)); ?></div><?php
+        ?><div class="misc-pub-section"><?php echo sprintf(__('<a href="%1$s">Save swatches</a> of this product', 'product-swatches-light'), esc_url($url)); ?></div><?php
     }
 }
 add_filter( 'post_submitbox_misc_actions', 'lw_swatches_add_product_action', 10, 1);

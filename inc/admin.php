@@ -32,12 +32,12 @@ function lw_swatches_add_styles_and_js_admin() {
                 'ajax_url' => admin_url( 'admin-ajax.php' ),
                 'run_update_nonce' => wp_create_nonce( 'lw-swatches-update-run' ),
                 'get_update_nonce' => wp_create_nonce( 'lw-swatches-update-info' ),
-                'label_run_update' => __('Generate now', 'lw-product-swatches'),
-                'label_update_is_running' => __('Update of swatches is running', 'lw-product-swatches'),
-                'txt_please_wait' => __('Please wait', 'lw-product-swatches'),
-                'txt_update_hint' => __('Performing the update could take a few minutes.', 'lw-product-swatches'),
-                'txt_update_has_been_run' => __('<strong>The update has been run.</strong> Please check the product categories in frontend.', 'lw-product-swatches'),
-                'label_ok' => __('OK', 'lw-product-swatches')
+                'label_run_update' => __('Generate now', 'product-swatches-light'),
+                'label_update_is_running' => __('Update of swatches is running', 'product-swatches-light'),
+                'txt_please_wait' => __('Please wait', 'product-swatches-light'),
+                'txt_update_hint' => __('Performing the update could take a few minutes.', 'product-swatches-light'),
+                'txt_update_has_been_run' => __('<strong>The update has been run.</strong> Please check the product categories in frontend.', 'product-swatches-light'),
+                'label_ok' => __('OK', 'product-swatches-light')
             ]
         );
         wp_enqueue_script('jquery-ui-progressbar');
@@ -153,7 +153,7 @@ function lw_swatches_admin_add_setting_link( $links ): array
         );
 
         // create the link
-        $settings_link = "<a href='" . esc_url($url) . "'>" . __('Settings', 'lw-product-swatches') . '</a>';
+        $settings_link = "<a href='" . esc_url($url) . "'>" . __('Settings', 'product-swatches-light') . '</a>';
 
         // adds the link to the end of the array
         $links[] = $settings_link;

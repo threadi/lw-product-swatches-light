@@ -171,7 +171,7 @@ class Attribute {
             else {
                 // show an error message
                 set_transient( 'lwSwatchesMessage', [
-                    'message' => __('<strong>At least one required field was not filled!</strong> Please fill out the form completely.', 'lw-product-swatches'),
+                    'message' => __('<strong>At least one required field was not filled!</strong> Please fill out the form completely.', 'product-swatches-light'),
                     'state' => 'error'
                 ] );
             }

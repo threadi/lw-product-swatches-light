@@ -2,11 +2,11 @@
 Contributors: laolaweb, threadi
 Tags: woocommerce, product swatches, variant swatches, variation swatches
 Requires at least: 6.0
-Tested up to: 6.3
+Tested up to: 6.4
 Requires PHP: 7.4
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 
 == Description ==
 
@@ -51,7 +51,7 @@ With [Product Swatches for WooCommerce Pro](https://laolaweb.com/plugins/woocomm
 
 == Installation ==
 
-1. Upload "lw-product-swatches-light" to the "/wp-content/plugins/" directory.
+1. Upload "product-swatches-light" to the "/wp-content/plugins/" directory.
 2. Activate the plugin through the "Plugins" menu in WordPress.
 3. Configure your product attributes under Products > Attributes. Check the [Quickstart](https://github.com/threadi/lw-product-swatches-light/tree/master/docs/quickstart.md).
 
@@ -78,3 +78,8 @@ With [Product Swatches for WooCommerce Pro](https://laolaweb.com/plugins/woocomm
 
 = 1.0.2 =
 * Fixed SVN issue
+
+= 1.0.3 =
+* Changed text domain to match WordPress requirements
+* Compatibility with WordPress 6.4
+* Fixed uninstaller
