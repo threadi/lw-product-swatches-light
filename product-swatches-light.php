@@ -9,7 +9,7 @@
  * Author URI:		  https://laolaweb.com
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       lw-product-swatches
+ * Text Domain:       product-swatches-light
  */
 
 // Exit if accessed directly.
@@ -116,7 +116,7 @@ add_action('wp_enqueue_scripts', 'lw_swatches_add_styles_and_js_frontend', PHP_I
  */
 function lw_swatches_init(): void
 {
-    load_plugin_textdomain( 'lw-product-swatches', false, dirname( plugin_basename( LW_SWATCHES_PLUGIN ) ) . '/languages' );
+    load_plugin_textdomain( 'product-swatches-light', false, dirname( plugin_basename( LW_SWATCHES_PLUGIN ) ) . '/languages' );
 }
 add_action( 'init', 'lw_swatches_init', -1 );
 
