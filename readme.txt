@@ -91,3 +91,4 @@ With [Product Swatches for WooCommerce Pro](https://laolaweb.com/plugins/woocomm
 * Compatibility with PHP from 8.0 to 8.3
 * Compatibility with WordPress 6.5.2
 * Remove compatibility with PHP 7.4 or older
+* Compatible with WordPress Coding Standards 3.0

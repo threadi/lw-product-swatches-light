@@ -6,12 +6,12 @@
 
 // if uninstall.php is not called by WordPress, die.
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
-    exit;
+	exit;
 }
 
 // prevent also other direct access.
 if ( ! defined( 'ABSPATH' ) ) {
-    exit;
+	exit;
 }
 
 // get the constants
@@ -21,4 +21,4 @@ require_once 'inc/autoload.php';
 require_once 'inc/constants.php';
 require_once 'inc/woocommerce.php';
 
-(new installer)->removeAllData( array( get_option('wc_'.LW_SWATCH_WC_SETTING_NAME.'_delete_on_uninstall', 0) ) );
+( new installer() )->removeAllData( array( get_option( 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_delete_on_uninstall', 0 ) ) );

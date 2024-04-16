@@ -22,15 +22,14 @@ class swatches {
 	 */
 	public function getVariantThumbAsData( $images, $imagesSets, $slug ): array {
 		// bail if no image set.
-		if( empty($images[$slug]) ) {
+		if ( empty( $images[ $slug ] ) ) {
 			return array();
 		}
 
 		// return image data.
 		return array(
-			'image' => $images[$slug],
-			'srcset' => $imagesSets[$slug]
+			'image'  => $images[ $slug ],
+			'srcset' => $imagesSets[ $slug ],
 		);
 	}
-
 }

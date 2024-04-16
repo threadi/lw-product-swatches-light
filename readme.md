@@ -40,3 +40,17 @@ Run in main directory:
 1. Open .po-file of the language in PoEdit.
 2. Go to File > Save.
 3. Upload the generated .mo-file and the .po-file to the plugin-folder languages/
+
+## Check for WordPress Coding Standards
+
+### Initialize
+
+`composer install`
+
+### Run
+
+`vendor/bin/phpcs --extensions=php --ignore=*/vendor/*,*/svn/* --standard=ruleset.xml .`
+
+### Repair
+
+`vendor/bin/phpcbf --extensions=php --ignore=*/vendor/*,*/svn/* --standard=ruleset.xml .`

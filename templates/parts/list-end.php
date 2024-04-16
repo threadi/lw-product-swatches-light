@@ -1,6 +1,7 @@
 <?php
-
 /**
- * Outout of ending swatch-list
+ * Output of ending swatch-list
+ *
+ * @package product-swatches-light
  */
 echo '</ul>';
