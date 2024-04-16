@@ -1,4 +1,9 @@
 <?php
+/**
+ * File to handle attributes.
+ *
+ * @package product-swatches-light
+ */
 
 namespace LW_Swatches;
 
@@ -6,12 +11,11 @@ namespace LW_Swatches;
  * Handling for a single attribute in this wp-project, e.g. sizes.
  */
 class Attribute {
-
-    // taxonomy
+    // taxonomy.
     protected object $taxonomy;
 
-    // fields
-    protected array $fields = [];
+    // fields.
+    protected array $fields = array();
 
     /**
      * Constructor for this object.

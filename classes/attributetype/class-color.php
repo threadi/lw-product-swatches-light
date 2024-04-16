@@ -1,22 +1,29 @@
 <?php
+/**
+ * File to handle color swatches.
+ *
+ * @package product-swatches-light
+ */
 
 namespace LW_Swatches\AttributeType;
 
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use LW_Swatches\attributeType;
 use LW_Swatches\helper;
+use LW_Swatches\swatches;
 
 /**
  * Object to handle attribute-type color.
  */
-class color implements attributeType
-{
-
-    use helper;
-
-    // set type name singular
+class color extends swatches implements attributeType {
+    // set type name singular.
     const _typeName = 'color';
 
-    // set type name plural
+    // set type name plural.
     const _typeNames = 'colors';
 
     /**
@@ -31,16 +38,15 @@ class color implements attributeType
      * @param $product_title
      * @return string
      */
-    public static function getList( $list, $images, $imagesSets, $values, $onSales, $product_link, $product_title ): string
-    {
+    public static function getList( $list, $images, $imagesSets, $values, $onSales, $product_link, $product_title ): string {
         $html = '';
         $taxonomy = '';
         for( $l=0;$l<count($list);$l++ ) {
             $color = $list[$l];
-            // get color
+            // get color.
             $color1 = $values[$color->slug][0];
 
-            // get taxonomy-id
+            // get taxonomy-id.
             $taxonomy_id = wc_attribute_taxonomy_id_by_name( $color->taxonomy );
             $taxonomy = $color->taxonomy;
             $label = get_taxonomy_labels(get_taxonomy($taxonomy))->singular_name;
@@ -121,8 +127,7 @@ class color implements attributeType
      * @param $termName
      * @return array
      */
-    public static function getValues( $term_id, $termName ): array
-    {
+    public static function getValues( $term_id, $termName ): array {
         if( !is_array($termName) ) {
             $termName = helper::getAttributeTypes()[$termName]['fields'];
         }
@@ -136,8 +141,8 @@ class color implements attributeType
         }
 
         // return as array
-        return [
+        return array(
             $color
-        ];
+		);
     }
 }

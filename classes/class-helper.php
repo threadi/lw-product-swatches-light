@@ -1,19 +1,32 @@
 <?php
+/**
+ * File with helper functions.
+ *
+ * @package product-swatches-light
+ */
 
 namespace LW_Swatches;
 
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+use WC_Product;
 use WC_Product_Attribute;
 use WP_Query;
 
-trait helper {
+/**
+ * Object with helper functions for this plugin.
+ */
+class helper {
 
     /**
      * Updates the swatches on all products.
      *
      * @return void
      */
-    public static function updateSwatchesOnProducts()
-    {
+    public static function updateSwatchesOnProducts(): void {
         // do not import if it is already running in another process
         if( get_option(LW_SWATCHES_UPDATE_RUNNING, 0) == 1 ) {
             return;
@@ -65,7 +78,7 @@ trait helper {
      * @param $name - the name of the type
      * @return void
      */
-    public static function updateSwatchesOnProductsByType( $type, $name ) {
+    public static function updateSwatchesOnProductsByType( $type, $name ): void {
         if( $type == "attribute" && !empty($name) ) {
             // update all swatch-caches on products using this attribute
             $query = [
@@ -108,8 +121,7 @@ trait helper {
      * @param array $function
      * @return void
      */
-    public static function addTaskForScheduler(array $function)
-    {
+    public static function addTaskForScheduler(array $function): void {
         if( !empty($function) ) {
             $md5 = md5(serialize($function));
             $task_list = array_merge(get_option('lw_swatches_tasks', []), [$md5 => $function]);
@@ -123,28 +135,8 @@ trait helper {
      * @param $string
      * @return string
      */
-    public static function removeOwnHomeFromString($string): string
-    {
+    public static function removeOwnHomeFromString($string): string {
         return str_replace(get_option('home'), '', $string);
-    }
-
-    /**
-     * Get variant-image as data-attribute
-     *
-     * @param $images
-     * @param $imagesSets
-     * @param $slug
-     * @return array
-     */
-    public function getVariantThumbAsData( $images, $imagesSets, $slug ): array
-    {
-        if( empty($images[$slug]) ) {
-            return [];
-        }
-        return [
-            'image' => $images[$slug],
-            'srcset' => $imagesSets[$slug]
-        ];
     }
 
     /**
@@ -155,8 +147,7 @@ trait helper {
      * @param $slug
      * @return array
      */
-    public function getVariantThumbAsDataFromArray( $variations, $attribute, $slug ): array
-    {
+    public function getVariantThumbAsDataFromArray( $variations, $attribute, $slug ): array {
         $image = '';
         $imageSrcset = '';
         for( $v=0;$v<count($variations);$v++ ) {
@@ -169,7 +160,7 @@ trait helper {
         if( !empty($image) && !empty($imageSrcset) ) {
             return $this->getVariantThumbAsData([0 => $image], [0 => $imageSrcset], 0);
         }
-        return [];
+        return array();
     }
 
     /**
@@ -178,10 +169,9 @@ trait helper {
      * @param $product
      * @param $attribute
      * @param $slug
-     * @return false|\WC_Product
+     * @return false|WC_Product
      */
-    public static function getVariantFromArray( $product, $attribute, $slug )
-    {
+    public static function getVariantFromArray( $product, $attribute, $slug ): false|WC_Product {
         $variations = $product->get_available_variations();
         $variant = false;
         for( $v=0;$v<count($variations);$v++ ) {
@@ -198,8 +188,7 @@ trait helper {
      *
      * @return void
      */
-    public static function deleteAllSwatchesOnProducts(): void
-    {
+    public static function deleteAllSwatchesOnProducts(): void {
         // get the products where a product swatch is set
         $query = [
             'post_type' => 'product',
@@ -235,8 +224,7 @@ trait helper {
      *
      * @return array[]
      */
-    public static function getAttributeTypes(): array
-    {
+    public static function getAttributeTypes(): array {
         $attribute_types = apply_filters('lw_swatches_types', LW_ATTRIBUTE_TYPES);
         $attribute_types_label = [
             'color' => [
@@ -258,8 +246,7 @@ trait helper {
      *
      * @return bool
      */
-    public static function isCLI(): bool
-    {
+    public static function isCLI(): bool {
         return defined( 'WP_CLI' ) && \WP_CLI;
     }
 
@@ -270,8 +257,7 @@ trait helper {
      * @param $taxonomy
      * @return string
      */
-    public static function getAttributeTypeByTaxonomyName( $taxonomy ): string
-    {
+    public static function getAttributeTypeByTaxonomyName( $taxonomy ): string {
         $attribute = new WC_Product_Attribute();
         $attribute->set_id( wc_attribute_taxonomy_id_by_name( sanitize_text_field( $taxonomy ) ) );
         $attribute->set_name( sanitize_text_field( $taxonomy ) );
@@ -310,10 +296,9 @@ trait helper {
      * Also load the requested file if is located in the /wp-content/themes/xy/lw-product-swatches/ directory.
      *
      * @param $template
-     * @return mixed|string
+     * @return string
      */
-    public static function getTemplate( $template )
-    {
+    public static function getTemplate( $template ): string {
         if( is_embed() ) {
             return $template;
         }
@@ -333,12 +318,11 @@ trait helper {
      * @param $typename
      * @param $taxonomy
      * @param $changed_by_gallery
-     * @return false|string
+     * @return string
      * @noinspection PhpUnusedParameterInspection
      * @noinspection SpellCheckingInspection
      */
-    public static function getHTMList( $html, $typenames, $typename, $taxonomy, $changed_by_gallery ) {
-        if( empty($html) ) {
+    public static function getHTMList( $html, $typenames, $typename, $taxonomy, $changed_by_gallery ): string {        if( empty($html) ) {
             return '';
         }
         ob_start();
@@ -362,9 +346,8 @@ trait helper {
      *
      * @return array
      */
-    public static function getAllowedColors(): array
-    {
-        return [
+    public static function getAllowedColors(): array {
+        return array(
             'black' => __('black', 'product-swatches-light'),
             'blue' => __('blue', 'product-swatches-light'),
             'brown' => __('brown', 'product-swatches-light'),
@@ -372,7 +355,7 @@ trait helper {
             'red' => __('red', 'product-swatches-light'),
             'white' => __('white', 'product-swatches-light'),
             'yellow' => __('yellow', 'product-swatches-light')
-        ];
+		);
     }
 
     /**
@@ -380,8 +363,7 @@ trait helper {
      *
      * @return bool     true if WooCommerce is active and running
      */
-    public static function lw_swatches_is_woocommerce_activated(): bool
-    {
+    public static function lw_swatches_is_woocommerce_activated(): bool {
         return class_exists('woocommerce');
     }
 }

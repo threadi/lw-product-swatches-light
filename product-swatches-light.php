@@ -13,12 +13,11 @@
  */
 
 // Exit if accessed directly.
-use LW_Swatches\helper;
-use LW_Swatches\installer;
-
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
+
+use LW_Swatches\helper;
 
 const LW_SWATCHES_PLUGIN = __FILE__;
 
@@ -91,17 +90,16 @@ add_action( 'cli_init', 'lw_swatches_cli_register_commands' );
  * @return void
  * @noinspection PhpUnused
  */
-function lw_swatches_add_styles_and_js_frontend(): void
-{
+function lw_swatches_add_styles_and_js_frontend(): void {
     wp_enqueue_style(
         'lw-swatches-styles',
         plugin_dir_url(LW_SWATCHES_PLUGIN) . '/css/styles.css',
-        [],
+        array(),
         filemtime(plugin_dir_path(LW_SWATCHES_PLUGIN) . '/css/styles.css')
     );
     wp_enqueue_script( 'lw-swatches-script',
         plugins_url( '/js/frontend.js' , LW_SWATCHES_PLUGIN ),
-        ['jquery'],
+        array( 'jquery' ),
         filemtime(plugin_dir_path(LW_SWATCHES_PLUGIN) . '/js/frontend.js'),
         true
     );
@@ -114,8 +112,7 @@ add_action('wp_enqueue_scripts', 'lw_swatches_add_styles_and_js_frontend', PHP_I
  * @return void
  * @noinspection PhpUnused
  */
-function lw_swatches_init(): void
-{
+function lw_swatches_init(): void {
     load_plugin_textdomain( 'product-swatches-light', false, dirname( plugin_basename( LW_SWATCHES_PLUGIN ) ) . '/languages' );
 }
 add_action( 'init', 'lw_swatches_init', -1 );
@@ -126,9 +123,8 @@ add_action( 'init', 'lw_swatches_init', -1 );
  * @return void
  * @noinspection PhpUnused
  */
-function lw_swatches_run_tasks_from_list(): void
-{
-    $taskList = get_option('lw_swatches_tasks', []);
+function lw_swatches_run_tasks_from_list(): void {
+    $taskList = get_option( 'lw_swatches_tasks', array() );
 
     // loop through the tasks
     foreach( $taskList as $i => $task ) {
