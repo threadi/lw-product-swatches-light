@@ -1,27 +1,31 @@
 <?php
+/**
+ * File to handle base functions for field types.
+ *
+ * @package product-swatches-light
+ */
 
 namespace LW_Swatches;
 
 /**
  * Interface for each field-type this plugin supports.
- * E.g. color, image, text ..
+ * E.g. color, image, text etc.
  */
-interface fieldType {
-
+interface FieldType {
 	/**
 	 * Return a secured variable for this field-content.
 	 *
-	 * @param $param
+	 * @param string $param Value to secure.
 	 *
 	 * @return string
 	 */
-	public static function getSecuredValue( $param ): string;
+	public static function get_secured_value( string $param ): string;
 
 	/**
 	 * Return the html-code for editing this field in backend.
 	 *
-	 * @param $param
+	 * @param array ...$params List of params.
 	 * @return string
 	 */
-	public static function getField( ...$param ): string;
+	public static function get_field( ...$params ): string;
 }

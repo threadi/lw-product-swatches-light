@@ -31,7 +31,7 @@ const LW_ATTRIBUTE_TYPES = array(
 				'required'    => 1, // set field as required (1) or not (0).
 				'placeholder' => '#000000', // optional placeholder for field.
 				'dependency'  => array(), // optional dependency for this field.
-				'type'        => 'colorselect', // field-type in backend, possible values: color, image, checkbox, angle.
+				'type'        => 'colorselect', // field-type in backend, possible values: colorselect, image, checkbox, angle.
 			),
 		),
 	),

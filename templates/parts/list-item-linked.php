@@ -2,6 +2,7 @@
 /**
  * Output of single linked swatch item in list.
  *
+ * @version 1.1.0
  * @package product-swatches-light
  */
 

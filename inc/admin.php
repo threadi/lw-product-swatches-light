@@ -34,7 +34,8 @@ function lw_swatches_add_styles_and_js_admin(): void {
 	);
 
 	// embed necessary scripts for progressbar only in settings-page.
-	if ( ! empty( $_GET['tab'] ) && 'lw_product_swatches' === $_GET['tab'] ) {
+	$tab = filter_input( INPUT_GET, 'tab', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+	if ( 'lw_product_swatches' === $tab ) {
 		// add php-vars to our js-script.
 		wp_localize_script(
 			'lw-swatches-admin-js',
@@ -77,9 +78,10 @@ function lw_swatches_attribute_handling(): void {
 	if ( helper::lw_swatches_is_woocommerce_activated() && apply_filters( 'lw_swatches_admin_init', true ) ) {
 		// get all attributes and add action on them.
 		$attributes      = wc_get_attribute_taxonomies();
-		$attribute_types = helper::getAttributeTypes();
+		$attribute_types = helper::get_attribute_types();
 		$keys            = array_keys( $attributes );
-		for ( $a = 0;$a < count( $attributes );$a++ ) {
+		$attribute_count = count( $attributes );
+		for ( $a = 0;$a < $attribute_count;$a++ ) {
 			if ( ! empty( $attribute_types[ $attributes[ $keys[ $a ] ]->attribute_type ] ) ) {
 				$fields = $attribute_types[ $attributes[ $keys[ $a ] ]->attribute_type ]['fields'];
 				new LW_Swatches\Attribute( $attributes[ $keys[ $a ] ], $fields );
@@ -87,9 +89,10 @@ function lw_swatches_attribute_handling(): void {
 		}
 
 		// generate all swatches on request.
-		if ( ! empty( $_GET['generateLWSwatches'] ) && 1 === absint( $_GET['generateLWSwatches'] ) && check_admin_referer( 'lws-generate' ) ) {
+		$generate_swatches = filter_input( INPUT_GET, 'generateLWSwatches', FILTER_SANITIZE_NUMBER_INT );
+		if ( 1 === absint( $generate_swatches ) && check_admin_referer( 'lws-generate' ) ) {
 			// update them.
-			helper::updateSwatchesOnProducts();
+			helper::update_swatches_on_products();
 
 			// redirect user.
 			wp_safe_redirect( isset( $_SERVER['HTTP_REFERER'] ) ? wp_unslash( $_SERVER['HTTP_REFERER'] ) : '' );
@@ -124,7 +127,7 @@ function lw_swatches_import_run(): void {
 	check_ajax_referer( 'lw-swatches-update-run', 'nonce' );
 
 	// run import.
-	helper::updateSwatchesOnProducts();
+	helper::update_swatches_on_products();
 
 	// return nothing.
 	wp_die();
@@ -151,11 +154,11 @@ function lw_swatches_import_info(): void {
 /**
  * Add link to plugin-settings in plugin-list.
  *
- * @param $links
+ * @param array $links List of links.
  * @return array
  * @noinspection PhpUnused
  */
-function lw_swatches_admin_add_setting_link( $links ): array {
+function lw_swatches_admin_add_setting_link( array $links ): array {
 	if ( is_plugin_active( plugin_basename( LW_SWATCHES_PLUGIN ) ) ) {
 		// build and escape the URL.
 		$url = add_query_arg(
@@ -175,4 +178,4 @@ function lw_swatches_admin_add_setting_link( $links ): array {
 
 	return $links;
 }
-add_filter( 'plugin_action_links_product-swatches-light/product-swatches-light.php', 'lw_swatches_admin_add_setting_link' );
+add_filter( 'plugin_action_links_' . plugin_basename( LW_SWATCHES_PLUGIN ), 'lw_swatches_admin_add_setting_link' );

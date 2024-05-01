@@ -1,7 +1,8 @@
 <?php
-
 /**
  * Tasks to run during plugin uninstallation.
+ *
+ * @package product-swatches-light
  */
 
 // if uninstall.php is not called by WordPress, die.
@@ -14,11 +15,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// get the constants
+// do nothing if PHP-version is not 8.0 or newer.
+if ( version_compare( PHP_VERSION, '8.0', '<' ) ) {
+	return;
+}
+
+// get the constants.
 use LW_Swatches\installer;
 
 require_once 'inc/autoload.php';
 require_once 'inc/constants.php';
 require_once 'inc/woocommerce.php';
 
-( new installer() )->removeAllData( array( get_option( 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_delete_on_uninstall', 0 ) ) );
+( new installer() )->remove_all_data( array( get_option( 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_delete_on_uninstall', 0 ) ) );

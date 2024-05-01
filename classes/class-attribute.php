@@ -7,29 +7,39 @@
 
 namespace LW_Swatches;
 
+use WP_Term;
+
 /**
  * Handling for a single attribute in this wp-project, e.g. sizes.
  */
 class Attribute {
-	// taxonomy.
+	/**
+	 * The taxonomy as object.
+	 *
+	 * @var object
+	 */
 	protected object $taxonomy;
 
-	// fields.
+	/**
+	 * List of fields.
+	 *
+	 * @var array
+	 */
 	protected array $fields = array();
 
 	/**
 	 * Constructor for this object.
 	 *
-	 * @param $taxonomy
-	 * @param $fields
+	 * @param object $taxonomy The term object.
+	 * @param array  $fields List of fields.
 	 */
-	public function __construct( $taxonomy, $fields ) {
+	public function __construct( object $taxonomy, array $fields ) {
 		$this->taxonomy = $taxonomy;
 		$this->fields   = $fields;
 
 		if ( ! empty( $taxonomy ) ) {
-			$this->addActions();
-			$this->addFilter();
+			$this->add_actions();
+			$this->add_filter();
 		}
 	}
 
@@ -38,9 +48,9 @@ class Attribute {
 	 *
 	 * @return void
 	 */
-	private function addActions(): void {
-		add_action( $this->getTaxonomyName() . '_add_form_fields', array( $this, 'add' ) );
-		add_action( $this->getTaxonomyName() . '_edit_form_fields', array( $this, 'edit' ) );
+	private function add_actions(): void {
+		add_action( $this->get_taxonomy_name() . '_add_form_fields', array( $this, 'add' ) );
+		add_action( $this->get_taxonomy_name() . '_edit_form_fields', array( $this, 'edit' ) );
 		add_action( 'created_term', array( $this, 'save' ), 10, 3 );
 		add_action( 'edit_term', array( $this, 'save' ), 10, 3 );
 	}
@@ -50,28 +60,28 @@ class Attribute {
 	 *
 	 * @return void
 	 */
-	private function addFilter(): void {
-		add_filter( 'manage_edit-' . $this->getTaxonomyName() . '_columns', array( $this, 'addTaxonomyColumns' ) );
-		add_filter( 'manage_' . $this->getTaxonomyName() . '_custom_column', array( $this, 'addTaxonomyColumn' ), 10, 3 );
+	private function add_filter(): void {
+		add_filter( 'manage_edit-' . $this->get_taxonomy_name() . '_columns', array( $this, 'add_taxonomy_columns' ) );
+		add_filter( 'manage_' . $this->get_taxonomy_name() . '_custom_column', array( $this, 'add_taxonomy_column' ), 10, 3 );
 	}
 
 	/**
 	 * Add the Column for this Attribute in the backend-tables.
 	 *
-	 * @param $columns
+	 * @param array $columns List of columns.
 	 * @return array
 	 */
-	public function addTaxonomyColumns( $columns ): array {
+	public function add_taxonomy_columns( array $columns ): array {
 		$new_columns = array();
 
-		// move checkbox-field in first row
+		// move checkbox-field in first row.
 		if ( isset( $columns['cb'] ) ) {
 			$new_columns['cb'] = $columns['cb'];
 			unset( $columns['cb'] );
 		}
 
-		// add column with empty title
-		$new_columns[ 'lw-swatches-' . $this->getTaxonomyName() ] = '';
+		// add column with empty title.
+		$new_columns[ 'lw-swatches-' . $this->get_taxonomy_name() ] = '';
 
 		return array_merge( $new_columns, $columns );
 	}
@@ -79,18 +89,18 @@ class Attribute {
 	/**
 	 * Add the content of this column for this attribute in the backend-tables.
 	 *
-	 * @param $columns
-	 * @param $column
-	 * @param $term_id
+	 * @param array  $columns List of columns.
+	 * @param string $column The column.
+	 * @param int    $term_id The term ID.
 	 * @return void
 	 * @noinspection PhpUnusedParameterInspection
 	 */
-	public function addTaxonomyColumn( $columns, $column, $term_id ): void {
+	public function add_taxonomy_column( array $columns, string $column, int $term_id ): void {
 		$attribute_type = apply_filters( 'lw_swatches_change_attribute_type_name', $this->taxonomy->attribute_type );
-		$className      = '\LW_Swatches\AttributeType\\' . $attribute_type . '::getTaxonomyColumn';
+		$class_name     = '\LW_Swatches\AttributeType\\' . $attribute_type . '::get_taxonomy_column';
 		if ( class_exists( '\LW_Swatches\AttributeType\\' . $attribute_type )
-			&& is_callable( $className ) ) {
-			echo call_user_func( $className, $term_id, $this->fields );
+			&& is_callable( $class_name ) ) {
+			echo wp_kses_post( call_user_func( $class_name, $term_id, $this->fields ) );
 		}
 	}
 
@@ -100,74 +110,74 @@ class Attribute {
 	 * @return void
 	 */
 	public function add(): void {
-		$this->getFields();
+		$this->get_fields();
 	}
 
 	/**
 	 * Run on edit-a-taxonomy-form in backend.
 	 *
-	 * @param $term
+	 * @param WP_Term $term The term as object.
 	 * @return void
 	 */
-	public function edit( $term ): void {
-		$this->getFields( $term );
+	public function edit( WP_Term $term ): void {
+		$this->get_fields( $term );
 	}
 
 	/**
 	 * Save individual settings for a term in backend.
 	 *
-	 * @param $term_id
-	 * @param $tt_id
-	 * @param $taxonomy
+	 * @param int    $term_id The term ID.
+	 * @param string $tt_id The taxonomy ID.
+	 * @param string $taxonomy The taxonomy name.
 	 * @return void
-	 * @noinspection PhpMissingParamTypeInspection
 	 * @noinspection PhpUnusedParameterInspection
 	 */
-	public function save( $term_id, $tt_id = '', $taxonomy = '' ): void {
-		if ( $taxonomy == $this->getTaxonomyName() ) {
+	public function save( int $term_id, string $tt_id = '', string $taxonomy = '' ): void {
+		if ( $taxonomy === $this->get_taxonomy_name() ) {
 			// loop through the fields of this attribute,
 			// check if it is required
-			// and save the value of each if all necessary values are available
-			$error = false;
-			$keys  = array_keys( $this->fields );
-			for ( $f = 0;$f < count( $this->fields );$f++ ) {
+			// and save the value of each if all necessary values are available.
+			$error       = false;
+			$keys        = array_keys( $this->fields );
+			$field_count = count( $this->fields );
+			for ( $f = 0;$f < $field_count;$f++ ) {
 				$field = $this->fields[ $keys[ $f ] ];
-				if ( absint( $field['required'] ) == 1 ) {
-					$fieldName = $this->getFieldName( $field['id'] );
-					if ( array_key_exists( $fieldName, $_POST ) && empty( $_POST[ $fieldName ] ) ) {
+				if ( 1 === absint( $field['required'] ) ) {
+					$field_name = $this->get_field_name( $field['id'] );
+					if ( array_key_exists( $field_name, $_POST ) && empty( $_POST[ $field_name ] ) ) {
 						$error = true;
 					}
-					if ( ! array_key_exists( $fieldName, $_POST ) ) {
+					if ( ! array_key_exists( $field_name, $_POST ) ) {
 						$error = true;
 					}
 				}
 			}
 
-			// go further if no error was detected
+			// go further if no error was detected.
 			if ( false === $error ) {
-				for ( $f = 0;$f < count( $this->fields );$f++ ) {
-					$field     = $this->fields[ $keys[ $f ] ];
-					$fieldName = $this->getFieldName( $field['id'] );
-					if ( array_key_exists( $fieldName, $_POST ) ) {
-						// secure the value depending on its type
-						$className = '\LW_Swatches\FieldType\\' . $field['type'] . '::getSecuredValue';
+				for ( $f = 0;$f < $field_count;$f++ ) {
+					$field      = $this->fields[ $keys[ $f ] ];
+					$field_name = $this->get_field_name( $field['id'] );
+					if ( array_key_exists( $field_name, $_POST ) ) {
+						// secure the value depending on its type.
+						$class_name = '\LW_Swatches\FieldType\\' . $field['type'] . '::get_secured_value';
 						if ( class_exists( '\LW_Swatches\FieldType\\' . $field['type'] )
-							&& is_callable( $className ) ) {
-							$post_value = call_user_func( $className, $_POST[ $fieldName ] );
+							&& is_callable( $class_name ) ) {
+							$post_value = call_user_func( $class_name, $_POST[ $field_name ] );
 
-							// save the value of this field
+							// save the value of this field.
 							update_term_meta( $term_id, $field['name'], $post_value );
 						}
 					} else {
-						// remove the value if it does not exist in request
+						// remove the value if it does not exist in request.
 						delete_term_meta( $term_id, $field['name'] );
 					}
 				}
 
-				// add task to update all swatch-caches on products using this attribute
-				helper::addTaskForScheduler( array( '\LW_Swatches\helper::updateSwatchesOnProductsByType', 'attribute', $taxonomy ) );
+				// add task to update all swatch-caches on products using this attribute.
+				helper::add_task_for_scheduler( array( '\LW_Swatches\helper::update_swatches_on_products_by_type', 'attribute', $taxonomy ) );
 			} else {
-				// show an error message
+				// show an error message.
 				set_transient(
 					'lwSwatchesMessage',
 					array(
@@ -182,19 +192,19 @@ class Attribute {
 	/**
 	 * Add fields for the form in backend for this taxonomy.
 	 *
-	 * @param $term
+	 * @param WP_Term|false $term The term.
 	 * @return void
-	 * @noinspection PhpMissingParamTypeInspection
 	 */
-	private function getFields( $term = false ): void {
+	private function get_fields( WP_Term|false $term = false ): void {
 		if ( empty( $this->fields ) ) {
 			return;
 		}
-		$keys = array_keys( $this->fields );
-		for ( $f = 0;$f < count( $this->fields );$f++ ) {
+		$keys        = array_keys( $this->fields );
+		$field_count = count( $this->fields );
+		for ( $f = 0;$f < $field_count;$f++ ) {
 			$field = $this->fields[ $keys[ $f ] ];
-			// prepare each value
-			$fieldId     = empty( $field['id'] ) ? 0 : $field['id'];
+			// prepare each value.
+			$field_id    = empty( $field['id'] ) ? 0 : $field['id'];
 			$depends     = empty( $field['dependency'] ) ? '' : wp_json_encode( $field['dependency'] );
 			$placeholder = empty( $field['placeholder'] ) ? '' : $field['placeholder'];
 			$required    = ! empty( $field['required'] );
@@ -206,15 +216,15 @@ class Attribute {
 				}
 			}
 
-			// get the html-output for this field depending on its type
-			$className = '\LW_Swatches\FieldType\\' . $field['type'] . '::getField';
-			$html      = '';
+			// get the html-output for this field depending on its type.
+			$class_name = '\LW_Swatches\FieldType\\' . $field['type'] . '::getField';
+			$html       = '';
 			if ( class_exists( '\LW_Swatches\FieldType\\' . $field['type'] )
-				&& is_callable( $className ) ) {
-				$html = call_user_func( $className, $this->getFieldName( $fieldId ), $value, $field['size'], $required, $placeholder, $field['name'] );
+				&& is_callable( $class_name ) ) {
+				$html = call_user_func( $class_name, $this->get_field_name( $field_id ), $value, $field['size'], $required, $placeholder, $field['name'] );
 			}
 
-			// set allowed html for field-output
+			// set allowed html for field-output.
 			$allowed_html = apply_filters(
 				'lw_swatches_allowed_html',
 				array(
@@ -233,8 +243,8 @@ class Attribute {
 			if ( ! empty( $html ) ) {
 				if ( ! $term ) {
 					?>
-					<div class="form-field term-<?php echo esc_attr( $fieldId ); ?>-wrap" data-lsw-dependency="<?php echo esc_attr( $depends ); ?>">
-						<label for="tag-<?php echo esc_attr( $fieldId ); ?>"><?php echo esc_html( $field['label'] ); ?></label>
+					<div class="form-field term-<?php echo esc_attr( $field_id ); ?>-wrap" data-lsw-dependency="<?php echo esc_attr( $depends ); ?>">
+						<label for="tag-<?php echo esc_attr( $field_id ); ?>"><?php echo esc_html( $field['label'] ); ?></label>
 						<?php
 						echo wp_kses( $html, $allowed_html );
 						if ( ! empty( $field['desc'] ) ) {
@@ -246,11 +256,10 @@ class Attribute {
 					</div>
 					<?php
 				} else {
-					// prepare output
 					?>
-						<tr data-lsw-dependency="<?php echo esc_attr( $depends ); ?>" class="form-field <?php echo esc_attr( $fieldId ); ?> <?php echo empty( $field['required'] ) ? '' : 'form-required'; ?>">
+						<tr data-lsw-dependency="<?php echo esc_attr( $depends ); ?>" class="form-field <?php echo esc_attr( $field_id ); ?> <?php echo empty( $field['required'] ) ? '' : 'form-required'; ?>">
 							<th scope="row"><label
-								for="<?php echo esc_attr( $fieldId ); ?>"><?php echo esc_html( $field['label'] ); ?></label></th>
+								for="<?php echo esc_attr( $field_id ); ?>"><?php echo esc_html( $field['label'] ); ?></label></th>
 							<td>
 								<?php
 								echo wp_kses( $html, $allowed_html );
@@ -273,17 +282,17 @@ class Attribute {
 	 *
 	 * @return string
 	 */
-	public function getTaxonomyName(): string {
+	public function get_taxonomy_name(): string {
 		return wc_attribute_taxonomy_name( $this->taxonomy->attribute_name );
 	}
 
 	/**
 	 * Generate the name of a field in backend from given field-Id.
 	 *
-	 * @param $fieldId
+	 * @param string $field_id The field ID.
 	 * @return string
 	 */
-	private function getFieldName( $fieldId ): string {
-		return 'lws' . $fieldId;
+	private function get_field_name( string $field_id ): string {
+		return 'lws' . $field_id;
 	}
 }

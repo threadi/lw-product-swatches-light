@@ -1,13 +1,26 @@
 <?php
+/**
+ * File for autoloader of this plugin.
+ *
+ * @package product-swatches-light
+ */
 
 /**
  * Add autoloader for each php-class in this plugin.
  */
-spl_autoload_register( 'LW_Swatches_Autoloader' );
-function LW_Swatches_Autoloader( $class_name ) {
+spl_autoload_register( 'lw_swatches_autoloader' );
+
+/**
+ * Handler for Autoloader.
+ *
+ * @param string $class_name The requested class-name.
+ *
+ * @return void
+ */
+function lw_swatches_autoloader( string $class_name ): void {
 
 	// If the specified $class_name does not include our namespace, duck out.
-	if ( false === strpos( $class_name, 'LW_Swatches' ) ) {
+	if ( ! str_contains( $class_name, 'LW_Swatches' ) ) {
 		return;
 	}
 
@@ -29,13 +42,14 @@ function LW_Swatches_Autoloader( $class_name ) {
 			$file_names[] = 'class-' . $current . '.php';
 			$file_names[] = 'interface-' . $current . '.php';
 		} else {
-			// otherwise we are at a preceding folder
+			// otherwise we are at a preceding folder.
 			$namespace = '/' . $current . $namespace;
 		}
 	}
 
 	// If the file exists in the specified path, then include it.
-	for ( $f = 0; $f < count( $file_names ); $f++ ) {
+	$file_names_count = count( $file_names );
+	for ( $f = 0; $f < $file_names_count; $f++ ) {
 		// Now build a path to the file using mapping to the file location.
 		$filepath  = trailingslashit( dirname( __DIR__, 1 ) . '/classes/' . $namespace );
 		$filepath .= $file_names[ $f ];

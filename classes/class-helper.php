@@ -12,76 +12,73 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use WC_Product;
-use WC_Product_Attribute;
 use WP_Query;
 
 /**
  * Object with helper functions for this plugin.
  */
-class helper {
+class Helper {
 
 	/**
 	 * Updates the swatches on all products.
 	 *
 	 * @return void
 	 */
-	public static function updateSwatchesOnProducts(): void {
-		// do not import if it is already running in another process
-		if ( get_option( LW_SWATCHES_UPDATE_RUNNING, 0 ) == 1 ) {
+	public static function update_swatches_on_products(): void {
+		// do not import if it is already running in another process.
+		if ( 1 === absint( get_option( LW_SWATCHES_UPDATE_RUNNING, 0 ) ) ) {
 			return;
 		}
 
-		// mark import as running
+		// mark import as running.
 		update_option( LW_SWATCHES_UPDATE_RUNNING, 1 );
 
-		// get the products
-		$query         = array(
+		// get the products.
+		$query   = array(
 			'post_type'      => 'product',
 			'posts_per_page' => -1,
 			'fields'         => 'ids',
 			'post_status'    => 'any',
 		);
-		$results       = new WP_Query( $query );
-		$countProducts = count( $results->posts );
+		$results = new WP_Query( $query );
 
-		// set counter for progressbar in backend
-		update_option( LW_SWATCHES_OPTION_MAX, $countProducts );
+		// set counter for progressbar in backend.
+		update_option( LW_SWATCHES_OPTION_MAX, $results->post_count );
 		update_option( LW_SWATCHES_OPTION_COUNT, 0 );
 		$count = 0;
 
-		$progress = self::isCLI() ? \WP_CLI\Utils\make_progress_bar( 'Updating products', $countProducts ) : false;
+		$progress = self::is_cli() ? \WP_CLI\Utils\make_progress_bar( 'Updating products', $results->post_count ) : false;
 
-		// loop through the products
-		for ( $p = 0;$p < count( $results->posts );$p++ ) {
-			// Produkt initialisieren
+		// loop through the products.
+		for ( $p = 0;$p < $results->post_count;$p++ ) {
+			// Produkt initialisieren.
 			$product = wc_get_product( $results->posts[ $p ] );
 			Product::update( $product );
-			// show progress
+			// show progress.
 			update_option( LW_SWATCHES_OPTION_COUNT, ++$count );
-			! $progress ?: $progress->tick();
+			$progress ? $progress->tick() : false;
 		}
-		// show finished progress
-		! $progress ?: $progress->finish();
+		// show finished progress.
+		$progress ? $progress->finish() : false;
 
-		// output success-message
-		! $progress ?: \WP_CLI::success( $countProducts . ' products were updated.' );
+		// output success-message.
+		$progress ? \WP_CLI::success( $results->post_count . ' products were updated.' ) : false;
 
-		// remove running flag
+		// remove running flag.
 		delete_option( LW_SWATCHES_UPDATE_RUNNING );
 	}
 
 	/**
 	 * Update swatches on selected attribute.
 	 *
-	 * @param $type - the type to search for, e.g. "attribute"
-	 * @param $name - the name of the type
+	 * @param string $type The type to search for, e.g. "attribute".
+	 * @param string $name The name of the type.
 	 * @return void
 	 */
-	public static function updateSwatchesOnProductsByType( $type, $name ): void {
-		if ( $type == 'attribute' && ! empty( $name ) ) {
-			// update all swatch-caches on products using this attribute
-			$query         = array(
+	public static function update_swatches_on_products_by_type( string $type, string $name ): void {
+		if ( 'attribute' === $type && ! empty( $name ) ) {
+			// update all swatch-caches on products using this attribute.
+			$query   = array(
 				'post_type'      => 'product',
 				'posts_per_page' => -1,
 				'fields'         => 'ids',
@@ -99,93 +96,38 @@ class helper {
 					),
 				),
 			);
-			$results       = new WP_Query( $query );
-			$countProducts = $results->post_count;
+			$results = new WP_Query( $query );
 
-			// create progress bar on cli
-			$progress = self::isCLI() ? \WP_CLI\Utils\make_progress_bar( 'Updating products', $countProducts ) : false;
-			for ( $p = 0;$p < count( $results->posts );$p++ ) {
-				// get product
+			// create progress bar on cli.
+			$progress = self::is_cli() ? \WP_CLI\Utils\make_progress_bar( 'Updating products', $results->post_count ) : false;
+			for ( $p = 0;$p < $results->post_count;$p++ ) {
+				// get product.
 				$product = wc_get_product( $results->posts[ $p ] );
 
-				// update product
+				// update product.
 				Product::update( $product );
 
-				// show progress
-				! $progress ?: $progress->tick();
+				// show progress.
+				$progress ? $progress->tick() : false;
 			}
 
-			// show finished progress
-			! $progress ?: $progress->finish();
+			// show finished progress.
+			$progress ? $progress->finish() : false;
 		}
 	}
 
 	/**
 	 * Add given callback to task list for scheduler.
 	 *
-	 * @param array $function
+	 * @param array $tasks List of tasks.
 	 * @return void
 	 */
-	public static function addTaskForScheduler( array $function ): void {
-		if ( ! empty( $function ) ) {
-			$md5       = md5( serialize( $function ) );
-			$task_list = array_merge( get_option( 'lw_swatches_tasks', array() ), array( $md5 => $function ) );
+	public static function add_task_for_scheduler( array $tasks ): void {
+		if ( ! empty( $tasks ) ) {
+			$md5       = md5( serialize( $tasks ) );
+			$task_list = array_merge( get_option( 'lw_swatches_tasks', array() ), array( $md5 => $tasks ) );
 			update_option( 'lw_swatches_tasks', $task_list );
 		}
-	}
-
-	/**
-	 * Remove the Wordpress-homeUrl from given string.
-	 *
-	 * @param $string
-	 * @return string
-	 */
-	public static function removeOwnHomeFromString( $string ): string {
-		return str_replace( get_option( 'home' ), '', $string );
-	}
-
-	/**
-	 * Get variant-image as data-attribute from array
-	 *
-	 * @param $variations
-	 * @param $attribute
-	 * @param $slug
-	 * @return array
-	 */
-	public function getVariantThumbAsDataFromArray( $variations, $attribute, $slug ): array {
-		$image       = '';
-		$imageSrcset = '';
-		for ( $v = 0;$v < count( $variations );$v++ ) {
-			if ( $variations[ $v ]['attributes'][ 'attribute_' . $attribute ] == $slug ) {
-				$image       = $variations[ $v ]['image']['src'];
-				$imageSrcset = $variations[ $v ]['image']['srcset'];
-				break;
-			}
-		}
-		if ( ! empty( $image ) && ! empty( $imageSrcset ) ) {
-			return $this->getVariantThumbAsData( array( 0 => $image ), array( 0 => $imageSrcset ), 0 );
-		}
-		return array();
-	}
-
-	/**
-	 * Get variant by given attribute and slug.
-	 *
-	 * @param $product
-	 * @param $attribute
-	 * @param $slug
-	 * @return false|WC_Product
-	 */
-	public static function getVariantFromArray( $product, $attribute, $slug ): false|WC_Product {
-		$variations = $product->get_available_variations();
-		$variant    = false;
-		for ( $v = 0;$v < count( $variations );$v++ ) {
-			if ( $variations[ $v ]['attributes'][ 'attribute_' . $attribute ] == $slug ) {
-				$variant = wc_get_product( $variations[ $v ]['variation_id'] );
-				break;
-			}
-		}
-		return $variant;
 	}
 
 	/**
@@ -193,9 +135,9 @@ class helper {
 	 *
 	 * @return void
 	 */
-	public static function deleteAllSwatchesOnProducts(): void {
-		// get the products where a product swatch is set
-		$query         = array(
+	public static function delete_all_swatches_on_products(): void {
+		// get the products where a product swatch is set.
+		$query    = array(
 			'post_type'      => 'product',
 			'posts_per_page' => -1,
 			'fields'         => 'ids',
@@ -207,21 +149,20 @@ class helper {
 				),
 			),
 		);
-		$results       = new WP_Query( $query );
-		$countProducts = count( $results->posts );
-		$progress      = self::isCLI() ? \WP_CLI\Utils\make_progress_bar( 'Deleting product-swatches', $countProducts ) : false;
+		$results  = new WP_Query( $query );
+		$progress = self::is_cli() ? \WP_CLI\Utils\make_progress_bar( 'Deleting product-swatches', $results->post_count ) : false;
 
-		// loop through the products
-		for ( $p = 0;$p < count( $results->posts );$p++ ) {
+		// loop through the products.
+		for ( $p = 0;$p < $results->post_count;$p++ ) {
 			Product::delete( $results->posts[ $p ] );
-			// show progress
-			! $progress ?: $progress->tick();
+			// show progress.
+			$progress ? $progress->tick() : false;
 		}
-		// show finished progress
-		! $progress ?: $progress->finish();
+		// show finished progress.
+		$progress ? $progress->finish() : false;
 
-		// output success-message
-		! $progress ?: \WP_CLI::success( $countProducts . ' product-swatches were deleted.' );
+		// output success-message.
+		$progress ? \WP_CLI::success( $results->post_count . ' product-swatches were deleted.' ) : false;
 	}
 
 	/**
@@ -229,7 +170,7 @@ class helper {
 	 *
 	 * @return array[]
 	 */
-	public static function getAttributeTypes(): array {
+	public static function get_attribute_types(): array {
 		$attribute_types       = apply_filters( 'lw_swatches_types', LW_ATTRIBUTE_TYPES );
 		$attribute_types_label = array(
 			'color' => array(
@@ -251,67 +192,25 @@ class helper {
 	 *
 	 * @return bool
 	 */
-	public static function isCLI(): bool {
+	private static function is_cli(): bool {
 		return defined( 'WP_CLI' ) && \WP_CLI;
-	}
-
-	/**
-	 * get attribute name to get the taxonomy-object to get the attribute-type
-	 *
-	 * @source WooCommerce class-wc-ajax.php:586
-	 *
-	 * @param $taxonomy
-	 * @return string
-	 */
-	public static function getAttributeTypeByTaxonomyName( $taxonomy ): string {
-		$attribute = new WC_Product_Attribute();
-		$attribute->set_id( wc_attribute_taxonomy_id_by_name( sanitize_text_field( $taxonomy ) ) );
-		$attribute->set_name( sanitize_text_field( $taxonomy ) );
-		$attribute->set_visible( apply_filters( 'woocommerce_attribute_default_visibility', 1 ) );
-		$attribute->set_variation( apply_filters( 'woocommerce_attribute_default_is_variation', 0 ) );
-		$attribute_taxonomy = $attribute->get_taxonomy_object();
-		if ( null !== $attribute_taxonomy ) {
-			return $attribute_taxonomy->attribute_type;
-		}
-		return '';
-	}
-
-	/**
-	 * get attribute id to get the taxonomy-object to get the attribute-type
-	 *
-	 * @source WooCommerce class-wc-ajax.php:586
-	 *
-	 * @param $taxonomy
-	 * @return int
-	 */
-	public static function getAttributeTypeIdByTaxonomyName( $taxonomy ): int {
-		$attribute = new WC_Product_Attribute();
-		$attribute->set_id( wc_attribute_taxonomy_id_by_name( sanitize_text_field( $taxonomy ) ) );
-		$attribute->set_name( sanitize_text_field( $taxonomy ) );
-		$attribute->set_visible( apply_filters( 'woocommerce_attribute_default_visibility', 1 ) );
-		$attribute->set_variation( apply_filters( 'woocommerce_attribute_default_is_variation', 0 ) );
-		$attribute_taxonomy = $attribute->get_taxonomy_object();
-		if ( null !== $attribute_taxonomy ) {
-			return $attribute_taxonomy->attribute_id;
-		}
-		return 0;
 	}
 
 	/**
 	 * Load a template if it exists.
 	 * Also load the requested file if is located in the /wp-content/themes/xy/lw-product-swatches/ directory.
 	 *
-	 * @param $template
+	 * @param string $template The requested template.
 	 * @return string
 	 */
-	public static function getTemplate( $template ): string {
+	public static function get_template( string $template ): string {
 		if ( is_embed() ) {
 			return $template;
 		}
 
-		$themeTemplate = locate_template( trailingslashit( basename( dirname( LW_SWATCHES_PLUGIN ) ) ) . $template );
-		if ( $themeTemplate ) {
-			return $themeTemplate;
+		$theme_template = locate_template( trailingslashit( basename( dirname( LW_SWATCHES_PLUGIN ) ) ) . $template );
+		if ( $theme_template ) {
+			return $theme_template;
 		}
 		return plugin_dir_path( apply_filters( 'lw_product_swatches_set_template_directory', LW_SWATCHES_PLUGIN ) ) . 'templates/' . $template;
 	}
@@ -319,19 +218,26 @@ class helper {
 	/**
 	 * Get the resulting HTML-list.
 	 *
-	 * @param $html
-	 * @param $typenames
-	 * @param $typename
-	 * @param $taxonomy
-	 * @param $changed_by_gallery
+	 * @param string $html The HTML to output.
+	 * @param string $type_names The type name plural.
+	 * @param string $typename The type name singular.
+	 * @param string $taxonomy Used taxonomy.
+	 * @param bool   $changed_by_gallery Changed by gallery.
 	 * @return string
-	 * @noinspection PhpUnusedParameterInspection
-	 * @noinspection SpellCheckingInspection
 	 */
-	public static function getHTMList( $html, $typenames, $typename, $taxonomy, $changed_by_gallery ): string {
+	public static function get_html_list( string $html, string $type_names, string $typename, string $taxonomy, bool $changed_by_gallery ): string {
 		if ( empty( $html ) ) {
 			return '';
 		}
+
+		if ( empty( $type_names ) ) {
+			return '';
+		}
+
+		if ( empty( $typename ) && empty( $taxonomy ) && empty( $changed_by_gallery ) ) {
+			return '';
+		}
+
 		ob_start();
 		/**
 		 * Close surrounding link if it has been run.
@@ -342,9 +248,9 @@ class helper {
 		/**
 		 * Output starting and ending list template surrounding the given html-code.
 		 */
-		include self::getTemplate( 'parts/list-start.php' );
+		include self::get_template( 'parts/list-start.php' );
 		echo wp_kses_post( $html );
-		include self::getTemplate( 'parts/list-end.php' );
+		include self::get_template( 'parts/list-end.php' );
 		return ob_get_clean();
 	}
 
@@ -353,7 +259,7 @@ class helper {
 	 *
 	 * @return array
 	 */
-	public static function getAllowedColors(): array {
+	public static function get_allowed_colors(): array {
 		return array(
 			'black'  => __( 'black', 'product-swatches-light' ),
 			'blue'   => __( 'blue', 'product-swatches-light' ),

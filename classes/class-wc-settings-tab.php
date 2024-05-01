@@ -1,4 +1,9 @@
 <?php
+/**
+ * File to handle the woocommerce setting tab in backend.
+ *
+ * @package product-swatches-light
+ */
 
 namespace LW_Swatches;
 
@@ -21,11 +26,11 @@ class WC_Settings_Tab {
 	/**
 	 * Add the tab
 	 *
-	 * @param $settings_tabs
+	 * @param array $settings_tabs List of tabs.
 	 * @return array
 	 * @noinspection PhpUnused
 	 */
-	public static function add_settings_tab( $settings_tabs ): array {
+	public static function add_settings_tab( array $settings_tabs ): array {
 		$settings_tabs[ LW_SWATCH_WC_SETTING_NAME ] = __( 'Product Swatches', 'product-swatches-light' );
 		return $settings_tabs;
 	}
@@ -57,7 +62,7 @@ class WC_Settings_Tab {
 	 * @return array Array of settings for @see woocommerce_admin_fields() function.
 	 */
 	public static function get_settings(): array {
-		// array with sections
+		// array with sections.
 		$sections = array(
 			'general' => array(
 				'start'    => array(
@@ -113,7 +118,7 @@ class WC_Settings_Tab {
 			),
 		);
 
-		// add our settings to the sections
+		// add our settings to the sections.
 		$sections['general']['settings']['deleteOnUninstall']   = array(
 			'name' => __( 'Delete all plugin-data on uninstall', 'product-swatches-light' ),
 			'type' => 'checkbox',
@@ -145,10 +150,10 @@ class WC_Settings_Tab {
 			'id'      => 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_position_in_list',
 		);
 
-		// add additional or remove settings by filter
+		// add additional or remove settings by filter.
 		$sections = apply_filters( 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_settings', $sections );
 
-		// generate settings-array for wc
+		// generate settings-array for wc.
 		$settings = array();
 		foreach ( $sections as $section_name => $section ) {
 			if ( ! empty( $section['settings'] ) ) {
@@ -160,7 +165,7 @@ class WC_Settings_Tab {
 			}
 		}
 
-		// return settings
+		// return settings.
 		return $settings;
 	}
 }

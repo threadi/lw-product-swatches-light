@@ -3,13 +3,16 @@
  * Plugin Name:       Product Swatches Light
  * Description:       Provides product swatches for WooCommerce.
  * Requires at least: 6.0
- * Requires PHP:      7.4
+ * Requires PHP:      8.0
+ * Requires Plugins:  woocommerce
  * Version:           @@VersionNumber@@
  * Author:            laOlaWeb
  * Author URI:        https://laolaweb.com
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       product-swatches-light
+ *
+ * @package product-swatches-light
  */
 
 // Exit if accessed directly.
@@ -17,11 +20,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// do nothing if PHP-version is not 8.0 or newer.
+if ( version_compare( PHP_VERSION, '8.0', '<' ) ) {
+	return;
+}
+
 use LW_Swatches\helper;
 
+// save plugin path.
 const LW_SWATCHES_PLUGIN = __FILE__;
 
-// embed necessary files
+// embed necessary files.
 require_once 'inc/autoload.php';
 require_once 'inc/constants.php';
 require_once 'inc/woocommerce.php';
@@ -33,7 +42,7 @@ if ( is_admin() ) {
 /**
  * On plugin activation.
  */
-register_activation_hook( LW_SWATCHES_PLUGIN, 'LW_Swatches\installer::initializePlugin' );
+register_activation_hook( LW_SWATCHES_PLUGIN, 'LW_Swatches\installer::activation' );
 
 /**
  * On plugin deactivation.
@@ -41,7 +50,7 @@ register_activation_hook( LW_SWATCHES_PLUGIN, 'LW_Swatches\installer::initialize
  * @return void
  */
 function lw_swatches_on_deactivation(): void {
-	// remove schedules
+	// remove our own schedule.
 	wp_clear_scheduled_hook( 'lw_swatches_run_tasks' );
 }
 register_deactivation_hook( LW_SWATCHES_PLUGIN, 'lw_swatches_on_deactivation' );
@@ -49,18 +58,19 @@ register_deactivation_hook( LW_SWATCHES_PLUGIN, 'lw_swatches_on_deactivation' );
 /**
  * Add task to update all swatches after plugin-update.
  *
- * @param $upgrader_object
- * @param $options
+ * @param mixed $upgrader_object Upgrader-object.
+ * @param array $options List of options.
  * @return void
+ *
  * @noinspection PhpUnused
  * @noinspection PhpUnusedParameterInspection
  */
 function lw_swatches_on_update( $upgrader_object, $options ): void {
-	if ( $options['action'] == 'update' && $options['type'] == 'plugin' ) {
+	if ( 'update' === $options['action'] && 'plugin' === $options['type'] ) {
 		if ( ! empty( $options['plugins'] ) ) {
 			foreach ( $options['plugins'] as $each_plugin ) {
-				if ( $each_plugin == LW_SWATCHES_PLUGIN ) {
-					helper::addTaskForScheduler( array( '\LW_Swatches\helper::updateSwatchesOnProducts' ) );
+				if ( LW_SWATCHES_PLUGIN === $each_plugin ) {
+					helper::add_task_for_scheduler( array( '\LW_Swatches\helper::update_swatches_on_products' ) );
 				}
 			}
 		}
@@ -75,7 +85,7 @@ add_action( 'upgrader_process_complete', 'lw_swatches_on_update', 10, 2 );
  * @author Thomas Zwirner
  * @noinspection PhpUnused
  */
-function lw_swatches_cli_register_commands() {
+function lw_swatches_cli_register_commands(): void {
 	if ( function_exists( 'wc_get_product' ) ) {
 		WP_CLI::add_command( 'lw-product-swatches', 'LW_Swatches\cli' );
 	}
@@ -123,23 +133,23 @@ add_action( 'init', 'lw_swatches_init', -1 );
  * @noinspection PhpUnused
  */
 function lw_swatches_run_tasks_from_list(): void {
-	$taskList = get_option( 'lw_swatches_tasks', array() );
+	$task_list = get_option( 'lw_swatches_tasks', array() );
 
-	// loop through the tasks
-	foreach ( $taskList as $i => $task ) {
-		// check if first entry is a callable
+	// loop through the tasks.
+	foreach ( $task_list as $i => $task ) {
+		// check if first entry is a callable.
 		if ( is_callable( $task[0] ) ) {
-			// get the parameter as array
+			// get the parameter as array.
 			$params = $task;
 			unset( $params[0] );
 
-			// call the function
+			// call the function.
 			call_user_func_array( $task[0], $params );
 
-			// remove the task from list
-			unset( $taskList[ $i ] );
+			// remove the task from list.
+			unset( $task_list[ $i ] );
 		}
 	}
-	update_option( 'lw_swatches_tasks', $taskList );
+	update_option( 'lw_swatches_tasks', $task_list );
 }
 add_action( 'lw_swatches_run_tasks', 'lw_swatches_run_tasks_from_list' );

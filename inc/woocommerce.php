@@ -87,7 +87,7 @@ function lw_swatches_add_product_swatches_in_loop( string $add_to_cart_html, WC_
 
 	// get the code depending on cache-setting.
 	if ( 'yes' === get_option( 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_disable_cache', 'no' ) ) {
-		$code = Product::getSwatches( $product );
+		$code = Product::get_swatches( $product );
 	} else {
 		$code = get_post_meta( $product->get_id(), LW_SWATCH_CACHEKEY, true );
 	}
@@ -143,7 +143,7 @@ function lw_swatches_add_product_swatches_in_loop_after_prices(): void {
 function lw_swatches_add_in_block( string $html, object $data, WC_Product $product ): string {
 	if ( 'variable' === $product->get_type() ) {
 		if ( 'yes' === get_option( 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_disable_cache', 'no' ) ) {
-			$product_swatches = Product::getSwatches( $product );
+			$product_swatches = Product::get_swatches( $product );
 		} else {
 			$product_swatches = get_post_meta( $product->get_id(), LW_SWATCH_CACHEKEY, true );
 		}
@@ -277,7 +277,7 @@ add_filter( 'post_submitbox_misc_actions', 'lw_swatches_add_product_action', 10,
  * @noinspection PhpUnused
  */
 function lw_swatches_add_attribute_types( array $attribute_types ): array {
-	foreach ( Helper::getAttributeTypes() as $key => $attribute ) {
+	foreach ( Helper::get_attribute_types() as $key => $attribute ) {
 		if ( empty( $attribute_types[ $key ] ) ) {
 			$attribute_types[ $key ] = $attribute['label'];
 		}
@@ -297,7 +297,7 @@ add_filter( 'product_attributes_type_selector', 'lw_swatches_add_attribute_types
 function lw_swatches_product_option_terms( object $attribute_taxonomy, int $i ): void {
 	global $thepostid;
 
-	if ( array_key_exists( $attribute_taxonomy->attribute_type, helper::getAttributeTypes() ) ) {
+	if ( array_key_exists( $attribute_taxonomy->attribute_type, helper::get_attribute_types() ) ) {
 
 		// get taxonomy name.
 		$taxonomy = wc_attribute_taxonomy_name( $attribute_taxonomy->attribute_name );

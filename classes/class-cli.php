@@ -1,25 +1,29 @@
 <?php
+/**
+ * File with cli functions for this plugin.
+ *
+ * @package product-swatches-light
+ */
 
 namespace LW_Swatches;
 
 /**
  * Helper for CLI-handling with data of this plugin.
  */
-class cli {
-
-
+class Cli {
 	/**
 	 * Updates the Swatches on all products or on given attributes.
 	 *
-	 * @since  1.0.0
-	 * @author Thomas Zwirner
+	 * @param array $args List of arguments.
+	 *
+	 * @return void
 	 */
-	public function update( $args ): void {
+	public function update( array $args = array() ): void {
 		if ( empty( $args ) ) {
-			helper::updateSwatchesOnProducts();
+			helper::update_swatches_on_products();
 		}
 		if ( ! empty( $args ) && isset( $args[0] ) && isset( $args[1] ) ) {
-			helper::updateSwatchesOnProductsByType( $args[0], $args[1] );
+			helper::update_swatches_on_products_by_type( $args[0], $args[1] );
 		}
 	}
 
@@ -30,7 +34,7 @@ class cli {
 	 * @author Thomas Zwirner
 	 */
 	public function delete(): void {
-		helper::deleteAllSwatchesOnProducts();
+		helper::delete_all_swatches_on_products();
 	}
 
 	/**
@@ -40,7 +44,7 @@ class cli {
 	 */
 	public function migrate(): void {
 		/**
-		 * Migration from "Variation Swatches for WooCommerce" from "RadiusTheme"
+		 * Migration from plugin "Variation Swatches for WooCommerce" (by "RadiusTheme").
 		 */
 		if ( is_plugin_active( 'woo-product-variation-swatches/woo-product-variation-swatches.php' ) ) {
 			$fields          = array();
@@ -60,21 +64,21 @@ class cli {
 			);
 			$meta_added_for  = apply_filters( 'rtwpvs_product_taxonomy_meta_for', array_keys( $fields ) );
 
-			$attribute_types = helper::getAttributeTypes();
+			$attribute_types = helper::get_attribute_types();
 
-			// get all attribute-taxonomies
+			// get all attribute-taxonomies.
 			$attribute_taxonomies = wc_get_attribute_taxonomies();
 			if ( $attribute_taxonomies ) {
 				foreach ( $attribute_taxonomies as $tax ) {
 					$product_attr_type = $tax->attribute_type;
-					if ( in_array( $product_attr_type, $meta_added_for ) ) {
-						// secure taxonomy
+					if ( in_array( $product_attr_type, $meta_added_for, true ) ) {
+						// secure taxonomy.
 						$taxonomy = wc_attribute_taxonomy_name( $tax->attribute_name );
 
-						// set our own fields
-						$ourFields = $attribute_types[ $product_attr_type ]['fields'];
+						// set our own fields.
+						$our_fields = $attribute_types[ $product_attr_type ]['fields'];
 
-						// data from own plugin
+						// data from own plugin.
 						$terms = get_terms(
 							array(
 								'taxonomy'   => $taxonomy,
@@ -83,9 +87,9 @@ class cli {
 						);
 						foreach ( $terms as $term ) {
 							$_POST['lws1'] = get_term_meta( $term->term_id, $fields[ $product_attr_type ][0]['id'], true );
-							$_POST['lws2'] = get_term_meta( $term->term_id, $fields[ $product_attr_type ][1]['id'], true ) == 'yes' ? 1 : 0;
+							$_POST['lws2'] = 'yes' === get_term_meta( $term->term_id, $fields[ $product_attr_type ][1]['id'], true ) ? 1 : 0;
 							$_POST['lws3'] = get_term_meta( $term->term_id, $fields[ $product_attr_type ][2]['id'], true );
-							$obj           = new Attribute( $tax, $ourFields );
+							$obj           = new Attribute( $tax, $our_fields );
 							$obj->save( $term->term_id, '', $taxonomy );
 						}
 					}
@@ -97,12 +101,12 @@ class cli {
 	/**
 	 * Resets all settings of this plugin.
 	 *
-	 * @param array $deleteData
+	 * @param array $delete_data List of arguments.
 	 * @return void
 	 * @noinspection PhpUnused
 	 */
-	public function resetPlugin( $deleteData = array() ): void {
-		( new installer() )->removeAllData( $deleteData );
-		installer::initializePlugin();
+	public function reset_plugin( array $delete_data = array() ): void {
+		( new installer() )->remove_all_data( $delete_data );
+		installer::activation();
 	}
 }
