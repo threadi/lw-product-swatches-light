@@ -1,0 +1,44 @@
+{
+	"name": "threadi/product-swatches-light",
+	"version": "1.1.0",
+	"description": "This plugin adds swatches for WooCommerce products.",
+	"authors": [
+		{
+			"name": "Thomas Zwirner",
+			"email": "tz@laolaweb.com"
+		}
+	],
+	"type": "wordpress-plugin",
+	"homepage": "https://laolaweb.com",
+	"minimum-stability": "stable",
+	"scripts": {
+		"post-install-cmd": [
+			"\"vendor/bin/phpcs\" --config-set installed_paths vendor/wp-coding-standards/wpcs,vendor/phpcsstandards/phpcsutils,vendor/phpcsstandards/phpcsextra,vendor/sirbrillig/phpcs-variable-analysis,vendor/automattic/vipwpcs"
+		],
+		"post-update-cmd": [
+			"\"vendor/bin/phpcs\" --config-set installed_paths vendor/wp-coding-standards/wpcs,vendor/phpcsstandards/phpcsutils,vendor/phpcsstandards/phpcsextra,vendor/sirbrillig/phpcs-variable-analysis,vendor/automattic/vipwpcs"
+		]
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		},
+		"optimize-autoloader": true,
+		"classmap-authoritative": true,
+		"apcu-autoloader": true,
+		"prepend-autoloader": false
+	},
+	"autoload": {
+		"psr-4": {
+			"ProductSwatches\\": "app/"
+		}
+	},
+	"require": {
+		"php": "^8.0"
+	},
+	"require-dev": {
+		"wp-coding-standards/wpcs": "^3.1.0",
+		"pronamic/wp-documentor": "^1.3",
+		"automattic/vipwpcs": "^3.0"
+	}
+}

@@ -1,0 +1,5 @@
+* Text Domain auf Plugin Slug ändern
+* Sprachdateien entfernen
+* Klassen per composer laden
+* Transient-Klasse verwenden
+* WCS erfüllen
