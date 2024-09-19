@@ -5,7 +5,7 @@
  * @package product-swatches-light
  */
 
-namespace ProductSwatches;
+namespace ProductSwatchesLight\Swatches;
 
 /**
  * Interface for each attribute-type this plugin supports.
@@ -28,19 +28,19 @@ interface AttributeType {
 	/**
 	 * Output on taxonomy table in backend.
 	 *
-	 * @param int    $term_id The term id.
-	 * @param string $fields The fields.
+	 * @param int   $term_id The term id.
+	 * @param array $fields The fields.
 	 *
 	 * @return string
 	 */
-	public static function get_taxonomy_column( int $term_id, string $fields ): string;
+	public static function get_taxonomy_column( int $term_id, array $fields ): string;
 
 	/**
 	 * Return values of a field with this attribute-type.
 	 *
-	 * @param int    $term_id The term id.
-	 * @param string $term_name The term name.
+	 * @param int          $term_id The term id.
+	 * @param string|array $term The term settings.
 	 * @return array
 	 */
-	public static function get_values( int $term_id, string $term_name ): array;
+	public static function get_values( int $term_id, string|array $term ): array;
 }

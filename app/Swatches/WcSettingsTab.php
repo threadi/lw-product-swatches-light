@@ -5,7 +5,7 @@
  * @package product-swatches-light
  */
 
-namespace ProductSwatches\Plugin;
+namespace ProductSwatchesLight\Swatches;
 
 /**
  * Define Plugin-Options which will be available in WooCommerce-settings.
@@ -21,6 +21,7 @@ class WcSettingsTab {
 		add_filter( 'woocommerce_settings_tabs_array', __CLASS__ . '::add_settings_tab', 50 );
 		add_action( 'woocommerce_settings_tabs_' . LW_SWATCH_WC_SETTING_NAME, __CLASS__ . '::settings_tab' );
 		add_action( 'woocommerce_update_options_' . LW_SWATCH_WC_SETTING_NAME, __CLASS__ . '::update_settings' );
+		add_action( 'woocommerce_admin_field_generate_product_swatches', __CLASS__ . '::add_button', 0, 0 );
 	}
 
 	/**
@@ -31,7 +32,7 @@ class WcSettingsTab {
 	 * @noinspection PhpUnused
 	 */
 	public static function add_settings_tab( array $settings_tabs ): array {
-		$settings_tabs[ LW_SWATCH_WC_SETTING_NAME ] = __( 'Product Swatches', 'lw-product-swatches' );
+		$settings_tabs[ LW_SWATCH_WC_SETTING_NAME ] = __( 'Product Swatches', 'product-swatches-light' );
 		return $settings_tabs;
 	}
 
@@ -66,7 +67,7 @@ class WcSettingsTab {
 		$sections = array(
 			'general' => array(
 				'start'    => array(
-					'name' => __( 'Settings for Product Swatches', 'lw-product-swatches' ),
+					'name' => __( 'Settings for Product Swatches', 'product-swatches-light' ),
 					'type' => 'title',
 					'desc' => '',
 					'id'   => 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_section_title',
@@ -79,7 +80,7 @@ class WcSettingsTab {
 			),
 			'list'    => array(
 				'start'    => array(
-					'name' => __( 'List view', 'lw-product-swatches' ),
+					'name' => __( 'List view', 'product-swatches-light' ),
 					'type' => 'title',
 					'desc' => '',
 					'id'   => 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_section_list_title',
@@ -92,7 +93,7 @@ class WcSettingsTab {
 			),
 			'detail'  => array(
 				'start'    => array(
-					'name' => __( 'Detail view', 'lw-product-swatches' ),
+					'name' => __( 'Detail view', 'product-swatches-light' ),
 					'type' => 'title',
 					'desc' => '',
 					'id'   => 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_section_detail_title',
@@ -105,7 +106,7 @@ class WcSettingsTab {
 			),
 			'other'   => array(
 				'start'    => array(
-					'name' => __( 'Other settings', 'lw-product-swatches' ),
+					'name' => __( 'Other settings', 'product-swatches-light' ),
 					'type' => 'title',
 					'desc' => '',
 					'id'   => 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_section_other_title',
@@ -119,39 +120,39 @@ class WcSettingsTab {
 		);
 
 		// add our settings to the sections.
+		$sections['general']['settings']['regenerateSwatches']  = array(
+			'name' => __( 'Regenerate Product Swatches', 'product-swatches-light' ),
+			'type' => 'generate_product_swatches',
+			'desc' => '',
+			'id'   => 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_generate_product_swatches',
+		);
 		$sections['general']['settings']['deleteOnUninstall']   = array(
-			'name' => __( 'Delete all plugin-data on uninstall', 'lw-product-swatches' ),
+			'name' => __( 'Delete all plugin-data on uninstall', 'product-swatches-light' ),
 			'type' => 'checkbox',
 			'desc' => '',
 			'id'   => 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_delete_on_uninstall',
 		);
 		$sections['general']['settings']['disableCache']        = array(
-			'name' => __( 'Disable plugin-own caching of swatches', 'lw-product-swatches' ),
+			'name' => __( 'Disable plugin-own caching of swatches', 'product-swatches-light' ),
 			'type' => 'checkbox',
 			'id'   => 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_disable_cache',
-			'desc' => __( 'Without this cache, the page will have a significantly higher load time depending on the number of products and expressions. It is not recommended to disable this cache.', 'lw-product-swatches' ),
-		);
-		$sections['general']['settings']['regenerateSwatches']  = array(
-			'name' => __( 'Regenerate Product Swatches', 'lw-product-swatches' ),
-			'type' => 'generate_product_swatches',
-			'desc' => '',
-			'id'   => 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_generate_product_swatches',
+			'desc' => __( 'Without this cache, the page will have a significantly higher load time depending on the number of products and expressions. It is not recommended to disable this cache.', 'product-swatches-light' ),
 		);
 		$sections['list']['settings']['swatchesPositionInList'] = array(
-			'name'    => __( 'Position in list', 'lw-product-swatches' ),
+			'name'    => __( 'Position in list', 'product-swatches-light' ),
 			'type'    => 'select',
 			'options' => array(
-				'beforeprice' => __( 'before price', 'lw-product-swatches' ),
-				'afterprice'  => __( 'after price', 'lw-product-swatches' ),
-				'beforecart'  => __( 'before cart', 'lw-product-swatches' ),
-				'aftercart'   => __( 'after cart', 'lw-product-swatches' ),
+				'beforeprice' => __( 'before price', 'product-swatches-light' ),
+				'afterprice'  => __( 'after price', 'product-swatches-light' ),
+				'beforecart'  => __( 'before cart', 'product-swatches-light' ),
+				'aftercart'   => __( 'after cart', 'product-swatches-light' ),
 			),
 			'desc'    => '',
 			'id'      => 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_position_in_list',
 		);
 
-		// add additional or remove settings by filter.
-		$sections = apply_filters( 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_settings', $sections );
+		// filter the settings.
+		$sections = apply_filters( 'wc_lw_product_swatches_settings', $sections );
 
 		// generate settings-array for wc.
 		$settings = array();
@@ -167,5 +168,44 @@ class WcSettingsTab {
 
 		// return settings.
 		return $settings;
+	}
+
+	/**
+	 * Add "generate_product_swatches"-button in WooCommerce settings.
+	 *
+	 * @return void
+	 * @noinspection PhpUnused
+	 */
+	public static function add_button(): void {
+		// create url.
+		$url = add_query_arg(
+			array(
+				'action' => 'product_swatches_regenerate',
+				'nonce'  => wp_create_nonce( 'product-swatches-regenerate-swatches' ),
+			),
+			get_admin_url() . 'admin.php'
+		);
+
+		// create dialog.
+		$dialog = array(
+			'title'   => __( 'Do you really want to regenerate swatches on all products?', 'product-swatches-light' ),
+			'texts'   => array(
+				'<p>' . __( '<strong>All swatches will be updated.</strong> This may take a while.', 'product-swatches-light' ) . '</p>',
+			),
+			'buttons' => array(
+				array(
+					'action'  => 'product_swatches_regenerate();',
+					'variant' => 'primary',
+					'text'    => __( 'Yes, I want', 'product-swatches-light' ),
+				),
+				array(
+					'action'  => 'closeDialog();',
+					'variant' => 'secondary',
+					'text'    => __( 'No', 'product-swatches-light' ),
+				),
+			),
+		);
+		?><tr><td colspan="2"><a href="<?php echo esc_url( wp_nonce_url( $url, 'lws-generate' ) ); ?>" class="button button-large wp-easy-dialog" data-dialog="<?php echo esc_attr( wp_json_encode( $dialog ) ); ?>"><?php echo esc_html__( 'Regenerate all swatches', 'product-swatches-light' ); ?></a></td></tr>
+		<?php
 	}
 }

@@ -1,5 +1,5 @@
 .lw-swatches {
-    border: 1px solid #f2f2f2;
+    border: 2px solid #f2f2f2;
     border-radius: 100%;
     height: 32px;
     width: 32px;
@@ -17,3 +17,5 @@ body .lw_product_swatches {
 .woocommerce_attribute_data .lw_product_swatches li[data-selected="selected"] span, .woocommerce_variation .lw_product_swatches li[data-selected="selected"] span {
     border-color: #000;
 }
+
+.product-swatches-transient .logo { width: 120px }

@@ -5,31 +5,33 @@
  * @package product-swatches-light
  */
 
-namespace ProductSwatches\Plugin;
+namespace ProductSwatchesLight\Plugin;
 
 // prevent direct access.
-use ProductSwatches\Swatches\Attribute;
-
 defined( 'ABSPATH' ) || exit;
+
+use ProductSwatchesLight\Swatches\Attribute;
+use ProductSwatchesLight\Swatches\Products;
 
 /**
  * Helper for CLI-handling with data of this plugin.
  */
 class Cli {
-
 	/**
 	 * Updates the Swatches on all products or on given attributes.
 	 *
 	 * @param array $args Arguments for the update.
+	 *
 	 * @since  1.0.0
 	 * @author Thomas Zwirner
-	 */
-	public function update( array $args = array() ): void {
+	 * @noinspection PhpUnused
+	 **/
+	public function update_swatches( array $args = array() ): void {
 		if ( empty( $args ) ) {
-			Helper::update_swatches_on_products();
+			Products::get_instance()->update_swatches_on_products();
 		}
 		if ( ! empty( $args ) && isset( $args[0] ) && isset( $args[1] ) ) {
-			Helper::update_swatches_on_products_by_type( $args[0], $args[1] );
+			Products::get_instance()->update_swatches_on_products_by_type( $args[0], $args[1] );
 		}
 	}
 
@@ -39,8 +41,8 @@ class Cli {
 	 * @since  1.0.0
 	 * @author Thomas Zwirner
 	 */
-	public function delete(): void {
-		Helper::delete_all_swatches_on_products();
+	public function delete_swatches(): void {
+		Products::get_instance()->delete_all_swatches_on_products();
 	}
 
 	/**
@@ -70,13 +72,12 @@ class Cli {
 			);
 			$meta_added_for  = apply_filters( 'rtwpvs_product_taxonomy_meta_for', array_keys( $fields ) );
 
-			$attribute_types = helper::get_attribute_types();
+			$attribute_types = Helper::get_attribute_types();
 
 			// get all attribute-taxonomies.
 			$attribute_taxonomies = wc_get_attribute_taxonomies();
-			if ( $attribute_taxonomies ) {
+			if ( ! empty( $attribute_taxonomies ) ) {
 				foreach ( $attribute_taxonomies as $tax ) {
-					$product_attr      = wc_attribute_taxonomy_name( $tax->attribute_name );
 					$product_attr_type = $tax->attribute_type;
 					if ( in_array( $product_attr_type, $meta_added_for, true ) ) {
 						// secure taxonomy.
@@ -113,7 +114,8 @@ class Cli {
 	 * @noinspection PhpUnused
 	 */
 	public function reset_plugin( array $delete_data = array() ): void {
-		( new Installer() )->remove_all_data( $delete_data );
-		Installer::initialize_plugin();
+		$installer_obj = Installer::get_instance();
+		$installer_obj->remove_all_data( $delete_data );
+		$installer_obj->initialize_plugin();
 	}
 }

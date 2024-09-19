@@ -89,8 +89,11 @@ With [Product Swatches for WooCommerce Pro](https://laolaweb.com/plugins/woocomm
 = 1.0.4 =
 * Fixed missing translation files
 
-= 1.1.0 =
-* Rewritten plugin
+= 2.0.0 =
+* Complete rewritten plugin
 * Using composer
 * Compatible with WordPress Coding Standards
 * Compatible with modern WooCommerce 9.x
+* New text domain according the WordPress rules for plugin: product-swatches-light (old: lw-product-swatches)
+* Added generating of hook documentation
+* Now also available in every german language

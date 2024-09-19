@@ -5,13 +5,12 @@
  * @package product-swatches-light
  */
 
-namespace ProductSwatches\Plugin;
+namespace ProductSwatchesLight\Plugin;
 
-// Exit if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+// prevent direct access.
+defined( 'ABSPATH' ) || exit;
 
+use ProductSwatchesLight\Swatches\Products;
 use WC_Cache_Helper;
 
 /**
@@ -20,16 +19,46 @@ use WC_Cache_Helper;
 class Installer {
 
 	/**
+	 * Instance of actual object.
+	 *
+	 * @var Installer|null
+	 */
+	private static ?Installer $instance = null;
+
+	/**
+	 * Constructor, not used as this a Singleton object.
+	 */
+	private function __construct() {}
+
+	/**
+	 * Prevent cloning of this object.
+	 *
+	 * @return void
+	 */
+	private function __clone() {}
+
+	/**
+	 * Return instance of this object as singleton.
+	 *
+	 * @return Installer
+	 */
+	public static function get_instance(): Installer {
+		if ( is_null( self::$instance ) ) {
+			self::$instance = new self();
+		}
+
+		return self::$instance;
+	}
+
+	/**
 	 * Initialize the plugin.
 	 *
 	 * @return void
 	 */
-	public static function initialize_plugin(): void {
-		$error = false;
-
+	public function initialize_plugin(): void {
 		// check if WooCommerce is installed.
-		if ( ! Helper::lw_swatches_is_woocommerce_activated() ) {
-			$url = add_query_arg(
+		if ( ! Helper::is_woocommerce_activated() ) {
+			$url           = add_query_arg(
 				array(
 					's'    => 'woocommerce',
 					'tab'  => 'search',
@@ -37,45 +66,28 @@ class Installer {
 				),
 				'plugin-install.php'
 			);
-			set_transient(
-				'lwSwatchesMessage',
-				array(
-					/* translators: %1$s is replaced with "string" */
-					'message'        => sprintf( __( '<strong>Product Swatches Light could not be activated!</strong> Please <a href="%1$s">install and activate WooCommerce</a> first.', 'lw-product-swatches' ), $url ),
-					'state'          => 'error',
-					'disable_plugin' => true,
-				)
-			);
-			$error = true;
+			$transient_obj = Transients::get_instance()->add();
+			$transient_obj->set_name( 'lwps_woocommerce_missing' );
+			/* translators: %1$s is replaced with the search for woocommerce in plugin repository. */
+			$transient_obj->set_message( sprintf( __( '<strong>Product Swatches Light could not be activated!</strong> Please <a href="%1$s">install and activate WooCommerce</a> first.', 'product-swatches-light' ), esc_url( $url ) ) );
+			$transient_obj->save();
+
+			// run no further tasks.
+			return;
 		}
 
-		if ( false === $error ) {
-			// add scheduler for automatic swatches generation, if it does not exist already.
-			if ( ! wp_next_scheduled( 'lw_swatches_run_tasks' ) ) {
-				wp_schedule_event( time(), 'hourly', 'lw_swatches_run_tasks' );
-			}
-
-			// set empty task list if not set.
-			if ( ! get_option( 'lw_swatches_tasks', false ) ) {
-				update_option( 'lw_swatches_tasks', array() );
-			}
-
-			// enable delete all data on uninstall.
-			if ( ! get_option( 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_delete_on_uninstall', false ) ) {
-				update_option( 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_delete_on_uninstall', 'yes' );
-			}
-
-			// enable delete all data on uninstall.
-			if ( ! get_option( 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_disable_cache', false ) ) {
-				update_option( 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_disable_cache', 'no' );
-			}
-
-			// add task to generate initial swatches-cache.
-			Helper::add_task_for_scheduler( array( '\ProductSwatches\Plugin\Helper::update_swatches_on_products' ) );
-
-			// run all updates.
-			Updates::run_all_updates();
+		// enable delete all data on uninstall.
+		if ( ! get_option( 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_delete_on_uninstall', false ) ) {
+			update_option( 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_delete_on_uninstall', 'yes' );
 		}
+
+		// enable delete all data on uninstall.
+		if ( ! get_option( 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_disable_cache', false ) ) {
+			update_option( 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_disable_cache', 'no' );
+		}
+
+		// run all updates.
+		Updates::run_all_updates();
 	}
 
 	/**
@@ -84,15 +96,15 @@ class Installer {
 	 * @param array $delete_data Configuration.
 	 * @return void
 	 */
-	public static function remove_all_data( array $delete_data = array() ): void {
-		// delete transitions of this plugin.
-		foreach ( LW_SWATCHES_TRANSIENTS as $transient ) {
-			delete_transient( $transient );
+	public function remove_all_data( array $delete_data = array() ): void {
+		// delete transients.
+		foreach ( Transients::get_instance()->get_transients() as $transient_obj ) {
+			$transient_obj->delete();
 		}
 
 		// delete all data the plugin has collected on uninstall
 		// -> only if this is enabled.
-		if ( ( Helper::lw_swatches_is_woocommerce_activated() && 'yes' === get_option( 'wc_lw_product_swatches_delete_on_uninstall', 'no' ) ) || ( ! empty( $delete_data[0] ) && 1 === absint( $delete_data[0] ) ) ) {
+		if ( ( Helper::is_woocommerce_activated() && 'yes' === get_option( 'wc_lw_product_swatches_delete_on_uninstall', 'no' ) ) || ( ! empty( $delete_data[0] ) && 1 === absint( $delete_data[0] ) ) ) {
 			global $wpdb, $table_prefix;
 
 			// delete the attribute-metas.
@@ -108,7 +120,7 @@ class Installer {
 			}
 
 			// delete the swatches.
-			Helper::delete_all_swatches_on_products();
+			Products::get_instance()->delete_all_swatches_on_products();
 
 			// remove configured attribute-types on the attributes
 			// -> replace our own types with the WooCommerce-default "select".
@@ -122,7 +134,7 @@ class Installer {
 				);
 			}
 
-			// Clear cache and flush rewrite rules.
+			// clear cache and flush rewrite rules.
 			wp_schedule_single_event( time(), 'woocommerce_flush_rewrite_rules' );
 			delete_transient( 'wc_attribute_taxonomies' );
 			WC_Cache_Helper::invalidate_cache_group( 'woocommerce-attributes' );
@@ -133,7 +145,8 @@ class Installer {
 			LW_SWATCHES_OPTION_MAX,
 			LW_SWATCHES_OPTION_COUNT,
 			LW_SWATCHES_UPDATE_RUNNING,
-			'lw_swatches_tasks',
+			LW_SWATCHES_UPDATE_STATUS,
+			LW_SWATCHES_TRANSIENTS_LIST,
 			// WooCommerce-settings.
 			'wc_' . LW_SWATCH_WC_SETTING_NAME . '_delete_on_uninstall',
 			'wc_' . LW_SWATCH_WC_SETTING_NAME . '_disable_cache',

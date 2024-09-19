@@ -5,13 +5,14 @@
  * @package product-swatches-light
  */
 
-namespace ProductSwatches\AttributeType;
+namespace ProductSwatchesLight\Swatches\AttributeType;
 
 // prevent direct access.
 defined( 'ABSPATH' ) || exit;
 
-use ProductSwatches\AttributeType;
-use ProductSwatches\Plugin\Helper;
+use ProductSwatchesLight\Plugin\Helper;
+use ProductSwatchesLight\Plugin\Templates;
+use ProductSwatchesLight\Swatches\AttributeType;
 
 /**
  * Object to handle attribute-type color.
@@ -63,11 +64,28 @@ class Color implements AttributeType {
 				$srcset = $thumb_image['srcset'];
 			}
 
-			// set class.
-			$class = apply_filters( 'lw_swatches_set_class', 'lw_swatches_' . self::_TYPE_NAME . '_' . $color->slug, $taxonomy_id );
+			$li_class = '';
+			$class    = 'lw_swatches_' . self::_TYPE_NAME . '_' . $color->slug;
+			/**
+			 * Filter for class.
+			 *
+			 * @since 1.0.0 Available since 1.0.0.
+			 * @param string $class The class name.
+			 * @param int $taxonomy_id The used taxonomy ID.
+			 */
+			$class = apply_filters( 'product_swatches_set_class', $class, $taxonomy_id );
 
-			// set link.
-			$link = apply_filters( 'lw_swatches_set_link', '', $taxonomy_id, $color, $product_link );
+			/**
+			 * Filter the link.
+			 *
+			 * @since 1.0.0 Available since 1.0.0.
+			 *
+			 * @param string $link The link to use.
+			 * @param int $taxonomy_id The taxonomy ID.
+			 * @param string $color The used color.
+			 * @param string $product_link The product URL.
+			 */
+			$link = apply_filters( 'product_swatches_light_set_link', '', $taxonomy_id, $color, $product_link );
 
 			// set slug.
 			$slug = $color->slug;
@@ -84,30 +102,33 @@ class Color implements AttributeType {
 			// set sale.
 			$sale = $on_sales[ $color->slug ];
 
+			// set onclick.
+			$onclick_link = '';
+
 			// add output.
 			if ( ! empty( $color1 ) ) {
 				ob_start();
 				if ( ! empty( $link ) ) {
-					include helper::get_template( 'parts/list-item-linked.php' );
+					include Templates::get_instance()->get_template( 'parts/list-item-linked.php' );
 				} else {
-					include helper::get_template( 'parts/list-item.php' );
+					include Templates::get_instance()->get_template( 'parts/list-item.php' );
 				}
 				$html .= ob_get_clean();
 			}
 		}
-		return Helper::get_html_list( $html, self::_TYPE_NAMES, self::_TYPE_NAME, $taxonomy, false );
+		return Templates::get_instance()->get_html_list( $html, self::_TYPE_NAMES, self::_TYPE_NAME, $taxonomy, false );
 	}
 
 	/**
 	 * Output of color-attribute-type in taxonomy-column in backend under Products > Attributes.
 	 *
-	 * @param int    $term_id The term id.
-	 * @param string $fields The fields.
+	 * @param int   $term_id The term id.
+	 * @param array $fields The fields.
 	 * @return string
 	 */
-	public static function get_taxonomy_column( int $term_id, string $fields ): string {
+	public static function get_taxonomy_column( int $term_id, array $fields ): string {
 		// get the values.
-		list( $color1 ) = self::get_values( $term_id, $fields );
+		list( $color1 ) = self::get_values( $term_id, self::_TYPE_NAME );
 
 		// set CSS.
 		$css = 'background-color: ' . $color1;
@@ -124,14 +145,16 @@ class Color implements AttributeType {
 	/**
 	 * Return values of a field with this attribute-type.
 	 *
-	 * @param int    $term_id The term id.
-	 * @param string $term_name The term name.
+	 * @param int          $term_id The term id.
+	 * @param string|array $term The term name.
 	 * @return array
 	 */
-	public static function get_values( int $term_id, string $term_name ): array {
-		$term_name = helper::get_attribute_types()[ $term_name ]['fields'];
+	public static function get_values( int $term_id, string|array $term ): array {
+		if ( ! is_array( $term ) ) {
+			$term = Helper::get_attribute_types()[ $term ]['fields'];
+		}
 
-		$color = get_term_meta( $term_id, $term_name['color']['name'], true );
+		$color = get_term_meta( $term_id, $term['color']['name'], true );
 
 		// check if value is an allowed value
 		// --> if not set $color to nothing to prevent output.

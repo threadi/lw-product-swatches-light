@@ -5,7 +5,7 @@
  * @package product-swatches-light
  */
 
-namespace ProductSwatches;
+namespace ProductSwatchesLight\Swatches;
 
 /**
  * Interface for each field-type this plugin supports.

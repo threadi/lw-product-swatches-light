@@ -5,12 +5,14 @@
  * @package product-swatches-light
  */
 
-namespace ProductSwatches\Swatches;
+namespace ProductSwatchesLight\Swatches;
 
 // prevent direct access.
 defined( 'ABSPATH' ) || exit;
 
-use ProductSwatches\Plugin\Helper;
+use ProductSwatchesLight\Plugin\Schedules;
+use ProductSwatchesLight\Plugin\Schedules\RegenerateSwatches;
+use ProductSwatchesLight\Plugin\Transients;
 use WP_Term;
 
 /**
@@ -54,10 +56,15 @@ class Attribute {
 	 * @return void
 	 */
 	private function add_actions(): void {
+		// use WP hooks.
 		add_action( $this->get_taxonomy_name() . '_add_form_fields', array( $this, 'add' ) );
 		add_action( $this->get_taxonomy_name() . '_edit_form_fields', array( $this, 'edit' ) );
 		add_action( 'created_term', array( $this, 'save' ), 10, 3 );
 		add_action( 'edit_term', array( $this, 'save' ), 10, 3 );
+
+		// use our own hooks.
+		add_filter( 'product_swatches_light_get_term_edit_field', array( $this, 'get_edit_field' ), 10, 6 );
+		add_filter( 'product_swatches_light_secure_term_value', array( $this, 'secure_edit_field' ), 10, 2 );
 	}
 
 	/**
@@ -102,11 +109,9 @@ class Attribute {
 	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function add_taxonomy_column( string $output, string $column, int $term_id ): void {
-		$attribute_type = apply_filters( 'lw_swatches_change_attribute_type_name', $this->taxonomy->attribute_type );
-		$class_name     = '\ProductSwatches\AttributeType\\' . $attribute_type . '::get_taxonomy_column';
-		// TODO prüfen wieso "color" hier klein geschrieben ist.
-		var_dump($class_name, class_exists( '\ProductSwatches\AttributeType\\' . $attribute_type ) );
-		if ( class_exists( '\ProductSwatches\AttributeType\\' . $attribute_type )
+		$attribute_type = apply_filters( 'product_swatches_light_change_attribute_type_name', $this->taxonomy->attribute_type );
+		$class_name     = '\ProductSwatchesLight\Swatches\AttributeType\\' . $attribute_type . '::get_taxonomy_column';
+		if ( class_exists( '\ProductSwatchesLight\Swatches\AttributeType\\' . $attribute_type )
 			&& is_callable( $class_name ) ) {
 			echo wp_kses_post( call_user_func( $class_name, $term_id, $this->fields ) );
 		}
@@ -146,60 +151,64 @@ class Attribute {
 			return;
 		}
 
-		if ( $this->get_taxonomy_name() === $taxonomy ) {
-			// loop through the fields of this attribute,
-			// check if it is required
-			// and save the value of each if all necessary values are available.
-			$error       = false;
-			$keys        = array_keys( $this->fields );
-			$field_count = count( $this->fields );
-			for ( $f = 0;$f < $field_count;$f++ ) {
-				$field = $this->fields[ $keys[ $f ] ];
-				if ( 1 === absint( $field['required'] ) ) {
-					$field_name = $this->get_field_name( $field['id'] );
-					if ( array_key_exists( $field_name, $_POST ) && empty( $_POST[ $field_name ] ) ) {
-						$error = true;
-					}
-					if ( ! array_key_exists( $field_name, $_POST ) ) {
-						$error = true;
-					}
+		// bail if this is not our taxonomy.
+		if ( $this->get_taxonomy_name() !== $taxonomy ) {
+			return;
+		}
+
+		// loop through the fields of this attribute,
+		// check if it is required
+		// and save the value of each if all necessary values are available.
+		$error       = false;
+		$keys        = array_keys( $this->fields );
+		$field_count = count( $this->fields );
+		for ( $f = 0;$f < $field_count;$f++ ) {
+			$field = $this->fields[ $keys[ $f ] ];
+			if ( 1 === absint( $field['required'] ) ) {
+				$field_name = $this->get_field_name( $field['id'] );
+				if ( array_key_exists( $field_name, $_POST ) && empty( $_POST[ $field_name ] ) ) {
+					$error = true;
 				}
-			}
-
-			// go further if no error was detected.
-			if ( false === $error ) {
-				for ( $f = 0;$f < $field_count;$f++ ) {
-					$field      = $this->fields[ $keys[ $f ] ];
-					$field_name = $this->get_field_name( $field['id'] );
-					if ( array_key_exists( $field_name, $_POST ) ) {
-						// secure the value depending on its type.
-						$class_name = '\ProductSwatches\FieldType\\' . $field['type'] . '::get_secured_value';
-						if ( class_exists( '\ProductSwatches\FieldType\\' . $field['type'] )
-							&& is_callable( $class_name ) ) {
-							$post_value = call_user_func( $class_name, sanitize_text_field( wp_unslash( $_POST[ $field_name ] ) ) );
-
-							// save the value of this field.
-							update_term_meta( $term_id, $field['name'], $post_value );
-						}
-					} else {
-						// remove the value if it does not exist in request.
-						delete_term_meta( $term_id, $field['name'] );
-					}
+				if ( ! array_key_exists( $field_name, $_POST ) ) {
+					$error = true;
 				}
-
-				// add task to update all swatch-caches on products using this attribute.
-				Helper::add_task_for_scheduler( array( '\ProductSwatches\Plugin\Helper::update_swatches_on_products_by_type', 'attribute', $taxonomy ) );
-			} else {
-				// show an error message.
-				set_transient(
-					'lwSwatchesMessage',
-					array(
-						'message' => __( '<strong>At least one required field was not filled!</strong> Please fill out the form completely.', 'lw-product-swatches' ),
-						'state'   => 'error',
-					)
-				);
 			}
 		}
+
+		// bail if error occurred.
+		if ( $error ) {
+			// add error as info for user.
+			$transient_obj = Transients::get_instance()->add();
+			$transient_obj->set_name( 'lwps_error_term_fields' );
+			$transient_obj->set_message( __( '<strong>At least one required field was not filled!</strong> Please fill out the form completely.', 'product-swatches-light' ) );
+			$transient_obj->set_type( 'error' );
+			$transient_obj->save();
+			return;
+		}
+
+		// go further if no error was detected.
+		for ( $f = 0;$f < $field_count;$f++ ) {
+			// get the field.
+			$field = $this->fields[ $keys[ $f ] ];
+
+			// format the type.
+			$field['type'] = apply_filters( 'product_swatches_light_change_attribute_type_name', $field['type'] );
+
+			// get its name.
+			$field_name = $this->get_field_name( $field['id'] );
+
+			// save term depending on request data.
+			if ( array_key_exists( $field_name, $_POST ) ) {
+				// save the value of this field.
+				update_term_meta( $term_id, $field['name'], apply_filters( 'product_swatches_light_secure_term_value', sanitize_text_field( wp_unslash( $_POST[ $field_name ] ) ), $field ) );
+			} else {
+				// remove the value if it does not exist in request.
+				delete_term_meta( $term_id, $field['name'] );
+			}
+		}
+
+		// add task to update all swatch-caches on products.
+		Schedules::get_instance()->add_single_event( 'product_swatches_schedule_regeneration' );
 	}
 
 	/**
@@ -209,9 +218,12 @@ class Attribute {
 	 * @return void
 	 */
 	private function get_fields( WP_Term|false $term = false ): void {
+		// bail if no fields are defined for this attribute.
 		if ( empty( $this->fields ) ) {
 			return;
 		}
+
+		// loop through the fields.
 		$keys        = array_keys( $this->fields );
 		$field_count = count( $this->fields );
 		for ( $f = 0;$f < $field_count;$f++ ) {
@@ -230,15 +242,23 @@ class Attribute {
 				}
 			}
 
+			// format the type.
+			$field['type'] = apply_filters( 'product_swatches_light_change_attribute_type_name', $field['type'] );
+
 			// get the html-output for this field depending on its type.
-			$class_name = '\ProductSwatches\FieldType\\' . $field['type'] . '::get_field';
-			$html       = '';
-			if ( class_exists( '\ProductSwatches\FieldType\\' . $field['type'] )
-				&& is_callable( $class_name ) ) {
-				$html = call_user_func( $class_name, $this->get_field_name( $field_id ), $value, $field['size'], $required, $placeholder, $field['name'] );
+			$html = apply_filters( 'product_swatches_light_get_term_edit_field', '', $field, $field_id, $value, $required, $placeholder );
+
+			// bail if no html is collected.
+			if ( empty( $html ) ) {
+				return;
 			}
 
-			// set allowed html for field-output.
+			/**
+			 * Filter allowed HTML.
+			 *
+			 * @since 1.0.0 Available since 1.0.0
+			 * @param array $html List of allowed HTML-elements.
+			 */
 			$allowed_html = apply_filters(
 				'lw_swatches_allowed_html',
 				array(
@@ -253,12 +273,27 @@ class Attribute {
 					),
 				)
 			);
-
-			if ( ! empty( $html ) ) {
-				if ( ! $term ) {
+			if ( ! $term ) {
+				?>
+				<div class="form-field term-<?php echo esc_attr( $field_id ); ?>-wrap" data-lsw-dependency="<?php echo esc_attr( $depends ); ?>">
+					<label for="tag-<?php echo esc_attr( $field_id ); ?>"><?php echo esc_html( $field['label'] ); ?></label>
+					<?php
+					echo wp_kses( $html, $allowed_html );
+					if ( ! empty( $field['desc'] ) ) {
+						?>
+						<p class="description"><?php echo wp_kses_post( $field['desc'] ); ?></p>
+						<?php
+					}
 					?>
-					<div class="form-field term-<?php echo esc_attr( $field_id ); ?>-wrap" data-lsw-dependency="<?php echo esc_attr( $depends ); ?>">
-						<label for="tag-<?php echo esc_attr( $field_id ); ?>"><?php echo esc_html( $field['label'] ); ?></label>
+				</div>
+				<?php
+			} else {
+				// prepare output.
+				?>
+				<tr data-lsw-dependency="<?php echo esc_attr( $depends ); ?>" class="form-field <?php echo esc_attr( $field_id ); ?> <?php echo empty( $field['required'] ) ? '' : 'form-required'; ?>">
+					<th scope="row"><label
+							for="<?php echo esc_attr( $field_id ); ?>"><?php echo esc_html( $field['label'] ); ?></label></th>
+					<td>
 						<?php
 						echo wp_kses( $html, $allowed_html );
 						if ( ! empty( $field['desc'] ) ) {
@@ -267,27 +302,9 @@ class Attribute {
 							<?php
 						}
 						?>
-					</div>
-					<?php
-				} else {
-					// prepare output.
-					?>
-					<tr data-lsw-dependency="<?php echo esc_attr( $depends ); ?>" class="form-field <?php echo esc_attr( $field_id ); ?> <?php echo empty( $field['required'] ) ? '' : 'form-required'; ?>">
-						<th scope="row"><label
-								for="<?php echo esc_attr( $field_id ); ?>"><?php echo esc_html( $field['label'] ); ?></label></th>
-						<td>
-							<?php
-							echo wp_kses( $html, $allowed_html );
-							if ( ! empty( $field['desc'] ) ) {
-								?>
-								<p class="description"><?php echo wp_kses_post( $field['desc'] ); ?></p>
-								<?php
-							}
-							?>
-						</td>
-					</tr>
-					<?php
-				}
+					</td>
+				</tr>
+				<?php
 			}
 		}
 	}
@@ -305,9 +322,61 @@ class Attribute {
 	 * Generate the name of a field in backend from given field-Id.
 	 *
 	 * @param int $field_id The field id.
+	 *
 	 * @return string
 	 */
-	private function get_field_name( int $field_id ): string {
-		return 'lws' . $field_id;
+	protected function get_field_name( int $field_id ): string {
+		return 'lwps' . $field_id;
+	}
+
+	/**
+	 * Get output of field from type the light plugin is using.
+	 *
+	 * @param string $html The html to output.
+	 * @param array  $field The field.
+	 * @param int    $field_id The field id.
+	 * @param string $value The value.
+	 * @param bool   $required If field is required.
+	 * @param string $placeholder The placeholder.
+	 *
+	 * @return string
+	 */
+	public function get_edit_field( string $html, array $field, int $field_id, string $value, bool $required, string $placeholder ): string {
+		// bail if we already have output.
+		if ( ! empty( $html ) ) {
+			return $html;
+		}
+
+		// get the class name.
+		$class_name = '\ProductSwatchesLight\Swatches\FieldType\\' . $field['type'] . '::get_field';
+
+		// output only if class is usable.
+		if ( class_exists( '\ProductSwatchesLight\Swatches\FieldType\\' . $field['type'] )
+			&& is_callable( $class_name ) ) {
+			return call_user_func( $class_name, $this->get_field_name( $field_id ), $value, $field['size'], $required, $placeholder, $field['name'] );
+		}
+
+		// return nothing.
+		return '';
+	}
+
+	/**
+	 * Secure term values.
+	 *
+	 * @param string $value_to_secure The value to secure.
+	 * @param array  $field The field.
+	 *
+	 * @return string
+	 */
+	public function secure_edit_field( string $value_to_secure, array $field ): string {
+		// secure the value depending on its type.
+		$class_name = '\ProductSwatchesLight\Swatches\FieldType\\' . $field['type'] . '::get_secured_value';
+		if ( class_exists( '\ProductSwatchesLight\Swatches\FieldType\\' . $field['type'] )
+			&& is_callable( $class_name ) ) {
+			return call_user_func( $class_name, $value_to_secure );
+		}
+
+		// return nothing.
+		return '';
 	}
 }

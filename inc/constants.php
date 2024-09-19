@@ -25,7 +25,7 @@ const LW_ATTRIBUTE_TYPES = array(
 		'fields' => array(
 			'color' => array(
 				'id'          => '1', // unique ID.
-				'name'        => 'Color', // internal name.
+				'name'        => 'color', // internal name.
 				'value'       => '', // preset - should be empty.
 				'size'        => '7', // optional size of the inputfield.
 				'required'    => 1, // set field as required (1) or not (0).
@@ -43,6 +43,7 @@ const LW_ATTRIBUTE_TYPES = array(
 const LW_SWATCHES_OPTION_COUNT   = 'lsImportCount';
 const LW_SWATCHES_OPTION_MAX     = 'lsImportMax';
 const LW_SWATCHES_UPDATE_RUNNING = 'lsRunning';
+const LW_SWATCHES_UPDATE_STATUS  = 'lsStatus';
 
 /**
  * Define our transients
@@ -50,3 +51,8 @@ const LW_SWATCHES_UPDATE_RUNNING = 'lsRunning';
 const LW_SWATCHES_TRANSIENTS = array(
 	'lwSwatchesMessage',
 );
+
+/**
+ * Define option name for transient list.
+ */
+const LW_SWATCHES_TRANSIENTS_LIST = 'lwSwatchesTransients';

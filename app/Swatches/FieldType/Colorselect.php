@@ -5,26 +5,25 @@
  * @package product-swatches-light
  */
 
-namespace ProductSwatches\FieldType;
+namespace ProductSwatchesLight\Swatches\FieldType;
 
 // prevent direct access.
 defined( 'ABSPATH' ) || exit;
 
-use ProductSwatches\FieldType;
-use ProductSwatches\Plugin\Helper;
+use ProductSwatchesLight\Plugin\Helper;
+use ProductSwatchesLight\Swatches\FieldType;
 
 /**
  * Handling of field-type colorselect.
  */
 class Colorselect implements FieldType {
-
 	/**
 	 * Return the secured value for this field-type.
 	 *
 	 * @param string $param The string to secure.
 	 * @return string
 	 */
-	public static function get_secured_value( $param ): string {
+	public static function get_secured_value( string $param ): string {
 		return sanitize_text_field( $param );
 	}
 
