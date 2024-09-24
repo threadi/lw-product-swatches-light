@@ -102,4 +102,5 @@ With [Product Swatches for WooCommerce Pro](https://laolaweb.com/plugins/woocomm
 * Fixed files in SVN
 
 = 2.0.2 =
+* Optimized settings style
 * Fixed plugin version number
