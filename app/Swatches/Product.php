@@ -174,11 +174,7 @@ class Product extends WC_Product_Variable {
 				}
 
 				// generate output depending on the attribute-type.
-				$class_name = '\ProductSwatchesLight\Swatches\AttributeType\\' . $attribute_type . '::get_list';
-				if ( class_exists( '\ProductSwatchesLight\Swatches\AttributeType\\' . $attribute_type )
-					&& is_callable( $class_name ) ) {
-					$html .= call_user_func( $class_name, $resulting_list, $images, $images_sets, $values, $on_sales, $this->get_permalink(), $this->get_title() );
-				}
+				$html .= apply_filters( 'product_swatches_light_get_list', '', $attribute_type, $resulting_list, $images, $images_sets, $values, $on_sales, $this->get_permalink(), $this->get_title() );
 			}
 			return $html;
 		}

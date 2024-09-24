@@ -88,6 +88,7 @@ class WooCommerce {
 		// use our own hooks.
 		add_action( 'product_swatches_light_option_list', array( $this, 'show_in_list' ), 10, 3 );
 		add_filter( 'product_swatches_light_get_attribute_values', array( $this, 'get_attribute_values' ), 10, 4 );
+		add_filter( 'product_swatches_light_get_list', array( $this, 'get_list' ), 10, 9 );
 	}
 
 	/**
@@ -452,5 +453,28 @@ class WooCommerce {
 		}
 
 		return $value_list;
+	}
+
+	/**
+	 * Get list.
+	 *
+	 * @param string $html The output.
+	 * @param string $attribute_type The attribute type name.
+	 * @param array  $resulting_list The item list.
+	 * @param array  $images The images.
+	 * @param array  $images_sets The list if imagesets.
+	 * @param array  $values The values.
+	 * @param array  $on_sales The sales-marker.
+	 * @param string $permalink The permalink for the product.
+	 * @param string $title The title of the product.
+	 * @return string
+	 */
+	public function get_list( string $html, string $attribute_type, array $resulting_list, array $images, array $images_sets, array $values, array $on_sales, string $permalink, string $title ): string {
+		$class_name = '\ProductSwatchesLight\Swatches\AttributeType\\' . $attribute_type . '::get_list';
+		if ( class_exists( '\ProductSwatchesLight\Swatches\AttributeType\\' . $attribute_type )
+			&& is_callable( $class_name ) ) {
+			$html .= call_user_func( $class_name, $resulting_list, $images, $images_sets, $values, $on_sales, $permalink, $title );
+		}
+		return $html;
 	}
 }
