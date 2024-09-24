@@ -2,11 +2,13 @@
 Contributors: laolaweb, threadi
 Tags: woocommerce, product swatches, variant swatches, variation swatches
 Requires at least: 6.0
-Tested up to: 6.4
-Requires PHP: 7.4
+Tested up to: 6.6
+Requires PHP: 8.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
-Stable tag: 1.0.3
+Stable tag: 2.0.0
+
+Capture your customers by displaying your product variations beautifully.
 
 == Description ==
 
@@ -20,7 +22,7 @@ Capture your customers by displaying your product variations beautifully. Perfor
 - mouseover-event to change product-images and sales-badge on archive-listing to the touched color
 - update the swatches-cache manual on product or every hour automatically if something on a product has been changed
 - automatically updates the swatches-cache of single products if their stock changes
-- product-thumbs could be change on hover
+- product-thumbs could be changed on hover
 - provides some WP CLI commands to delete or update swatch-caches
 - migration of color-swatches from plugin "Variation Swatches for WooCommerce" from RadiusTheme
 
@@ -86,3 +88,12 @@ With [Product Swatches for WooCommerce Pro](https://laolaweb.com/plugins/woocomm
 
 = 1.0.4 =
 * Fixed missing translation files
+
+= 2.0.0 =
+* Complete rewritten plugin
+* Using composer
+* Compatible with WordPress Coding Standards
+* Compatible with modern WooCommerce 9.x
+* New text domain according the WordPress rules for plugin: product-swatches-light (old: lw-product-swatches)
+* Added generating of hook documentation
+* Now also available in every german language

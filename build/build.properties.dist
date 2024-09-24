@@ -3,3 +3,6 @@ plugin.slug=product-swatches-light
 
 # version number to use
 plugin.version=
+
+# set path to composer-binary
+composer.path=

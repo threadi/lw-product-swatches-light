@@ -27,7 +27,7 @@ I recommend to use [PoEdit](https://poedit.net/) to translate texts for this plu
 
 Run in main directory:
 
-`wp i18n make-pot . languages/product-swatches-light.pot --exclude=svn/`
+`wp i18n make-pot . languages/product-swatches-light.pot --exclude=svn/,vendor/`
 
 ### update translation-file
 
@@ -40,3 +40,29 @@ Run in main directory:
 1. Open .po-file of the language in PoEdit.
 2. Go to File > Save.
 3. Upload the generated .mo-file and the .po-file to the plugin-folder languages/
+
+## Check for WordPress Coding Standards
+
+### Initialize
+
+`composer install`
+
+### Run
+
+`vendor/bin/phpcs --extensions=php --ignore=*/vendor/*,*/svn/* --standard=ruleset.xml .`
+
+### Repair
+
+`vendor/bin/phpcbf --extensions=php --ignore=*/vendor/*,*/svn/* --standard=ruleset.xml .`
+
+## Check for WordPress VIP Coding Standards
+
+Hint: this check runs against the VIP-GO-platform which is not our target for this plugin. Many warnings can be ignored.
+
+### Run
+
+`vendor/bin/phpcs --extensions=php --ignore=*/vendor/*,*/build/*,*/node_modules/*,*/blocks/*,*/svn/*,*/example/*,*/deprecated/* --standard=WordPress-VIP-Go .`
+
+## Generate documentation
+
+`vendor/bin/wp-documentor parse app --format=markdown --output=doc/hooks.md --prefix=product_swatches`
