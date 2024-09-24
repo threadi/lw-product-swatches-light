@@ -6,7 +6,7 @@ Tested up to: 6.6
 Requires PHP: 8.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
-Stable tag: 2.0.0
+Stable tag: 2.0.2
 
 Capture your customers by displaying your product variations beautifully.
 
@@ -97,3 +97,9 @@ With [Product Swatches for WooCommerce Pro](https://laolaweb.com/plugins/woocomm
 * New text domain according the WordPress rules for plugin: product-swatches-light (old: lw-product-swatches)
 * Added generating of hook documentation
 * Now also available in every german language
+
+= 2.0.1 =
+* Fixed files in SVN
+
+= 2.0.2 =
+* Fixed plugin version number
