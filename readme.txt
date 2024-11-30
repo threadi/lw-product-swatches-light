@@ -6,7 +6,7 @@ Tested up to: 6.6
 Requires PHP: 8.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
-Stable tag: 2.0.2
+Stable tag: 2.0.3
 
 Capture your customers by displaying your product variations beautifully.
 
@@ -103,3 +103,6 @@ With [Product Swatches for WooCommerce Pro](https://laolaweb.com/plugins/woocomm
 
 = 2.0.2 =
 * Fixed plugin version number
+
+= 2.0.3 =
+* Fixed some typos

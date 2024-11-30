@@ -232,7 +232,7 @@ class WooCommerce {
 	 */
 	public function add_bulk_actions( array $actions ): array {
 		// add our action.
-		$actions['lws-generate-swatches'] = __( 'Swatches generieren', 'product-swatches-light' );
+		$actions['lws-generate-swatches'] = __( 'Generate Swatches', 'product-swatches-light' );
 
 		// return all actions.
 		return $actions;
