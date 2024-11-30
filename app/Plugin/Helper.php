@@ -73,13 +73,13 @@ class Helper {
 	 */
 	public static function get_colors(): array {
 		return array(
-			'black'  => __( 'black', 'product-swatches-light' ),
-			'blue'   => __( 'blue', 'product-swatches-light' ),
-			'brown'  => __( 'brown', 'product-swatches-light' ),
-			'green'  => __( 'green', 'product-swatches-light' ),
-			'red'    => __( 'red', 'product-swatches-light' ),
-			'white'  => __( 'white', 'product-swatches-light' ),
-			'yellow' => __( 'yellow', 'product-swatches-light' ),
+			'black'  => __( 'Black', 'product-swatches-light' ),
+			'blue'   => __( 'Blue', 'product-swatches-light' ),
+			'brown'  => __( 'Brown', 'product-swatches-light' ),
+			'green'  => __( 'Green', 'product-swatches-light' ),
+			'red'    => __( 'Red', 'product-swatches-light' ),
+			'white'  => __( 'White', 'product-swatches-light' ),
+			'yellow' => __( 'Yellow', 'product-swatches-light' ),
 		);
 	}
 

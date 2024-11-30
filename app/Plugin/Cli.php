@@ -61,8 +61,8 @@ class Cli {
 					'rtwpvs_get_taxonomy_meta_color',
 					array(
 						array(
-							'label' => esc_html__( 'Color', 'woo-product-variation-swatches' ),
-							'desc'  => esc_html__( 'Choose a color', 'woo-product-variation-swatches' ),
+							'label' => esc_html__( 'Color', 'product-swatches-light' ),
+							'desc'  => esc_html__( 'Choose a color.', 'product-swatches-light' ),
 							'id'    => 'product_attribute_color',
 							'type'  => 'color',
 						),
