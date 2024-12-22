@@ -9,6 +9,7 @@
 ### Changed
 
 - Moved this changelog to GitHub
+- Changed dialog script to "easy-dialog-for-wordpress"
 
 ## [2.0.3] - 30.11.2024
 
