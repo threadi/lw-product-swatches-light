@@ -6,7 +6,7 @@ Tested up to: 6.6
 Requires PHP: 8.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
-Stable tag: 2.0.3
+Stable tag: @@VersionNumber@@
 
 Capture your customers by displaying your product variations beautifully.
 
@@ -70,39 +70,9 @@ With [Product Swatches for WooCommerce Pro](https://laolaweb.com/plugins/woocomm
 
 == Changelog ==
 
-= 1.0.0 =
-* Initial release
+= 2.0.5 =
 
-= 1.0.1 =
-* Add filter for HTML-codes used in backend
-* Updated styling for TwentyTwentyThree theme
-* Compatibility with WordPress 6.3
+* Added GitHub action to build releases
+* Moved this changelog to GitHub
 
-= 1.0.2 =
-* Fixed SVN issue
-
-= 1.0.3 =
-* Changed text domain to match WordPress requirements
-* Compatibility with WordPress 6.4
-* Fixed uninstaller
-
-= 1.0.4 =
-* Fixed missing translation files
-
-= 2.0.0 =
-* Complete rewritten plugin
-* Using composer
-* Compatible with WordPress Coding Standards
-* Compatible with modern WooCommerce 9.x
-* New text domain according the WordPress rules for plugin: product-swatches-light (old: lw-product-swatches)
-* Added generating of hook documentation
-* Now also available in every german language
-
-= 2.0.1 =
-* Fixed files in SVN
-
-= 2.0.2 =
-* Fixed plugin version number
-
-= 2.0.3 =
-* Fixed some typos
+[older changes](https://github.com/threadi/lw-product-swatches-light/blob/master/changelog.md)
