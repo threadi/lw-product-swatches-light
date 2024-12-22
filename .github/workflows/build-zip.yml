@@ -59,11 +59,13 @@ jobs:
                   rm readme.md
                   rm ruleset.xml
                   cd ..
-                  zip -r -q ${{ github.event.repository.name }}_${{ github.ref_name }}.zip ${{ github.event.repository.name }}/* -x "*/.git/*" "*/.github/*" "*/blocks/*/src/*" "*/docs/*" "*/phpcs.xml" "*/composer.json" "*/composer.lock" "*/package.json" "*/package-lock.json" "*/.gitignore" "*/vendor/*" "*/node_modules/*" "/.editorconfig"
-                  zip -ur ${{ github.event.repository.name }}_${{ github.ref_name }}.zip ${{ github.event.repository.name }}/vendor/autoload.php
-                  zip -ur ${{ github.event.repository.name }}_${{ github.ref_name }}.zip ${{ github.event.repository.name }}/vendor/composer/*
-                  zip -ur ${{ github.event.repository.name }}_${{ github.ref_name }}.zip ${{ github.event.repository.name }}/vendor/threadi/*/build/*
-                  cp ${{ github.event.repository.name }}_${{ github.ref_name }}.zip ${{ github.event.repository.name }}/
+                  mv ${{ github.event.repository.name }} product-swatches-light
+                  zip -r -q product-swatches-light_${{ github.ref_name }}.zip product-swatches-light/* -x "*/.git/*" "*/.github/*" "*/blocks/*/src/*" "*/docs/*" "*/phpcs.xml" "*/composer.json" "*/composer.lock" "*/package.json" "*/package-lock.json" "*/.gitignore" "*/vendor/*" "*/node_modules/*" "/.editorconfig"
+                  zip -ur product-swatches-light_${{ github.ref_name }}.zip product-swatches-light/vendor/autoload.php
+                  zip -ur product-swatches-light_${{ github.ref_name }}.zip product-swatches-light/vendor/composer/*
+                  zip -ur product-swatches-light_${{ github.ref_name }}.zip product-swatches-light/vendor/threadi/*/build/*
+                  mv product-swatches-light ${{ github.event.repository.name }}/
+                  cp product-swatches-light_${{ github.ref_name }}.zip ${{ github.event.repository.name }}/
 
             - name: Create Release
               uses: softprops/action-gh-release@v2
