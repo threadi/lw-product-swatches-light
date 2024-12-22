@@ -205,7 +205,7 @@ class WcSettingsTab {
 				),
 			),
 		);
-		?><tr><td colspan="2"><a href="<?php echo esc_url( wp_nonce_url( $url, 'lws-generate' ) ); ?>" class="button button-large wp-easy-dialog" data-dialog="<?php echo esc_attr( wp_json_encode( $dialog ) ); ?>"><?php echo esc_html__( 'Regenerate all swatches', 'product-swatches-light' ); ?></a></td></tr>
+		?><tr><td colspan="2"><a href="<?php echo esc_url( wp_nonce_url( $url, 'lws-generate' ) ); ?>" class="button button-large easy-dialog-for-wordpress" data-dialog="<?php echo esc_attr( wp_json_encode( $dialog ) ); ?>"><?php echo esc_html__( 'Regenerate all swatches', 'product-swatches-light' ); ?></a></td></tr>
 		<?php
 	}
 }

@@ -94,5 +94,5 @@ function product_swatches_get_update_info() {
  * @param config
  */
 function product_swatches_create_dialog( config ) {
-	document.body.dispatchEvent(new CustomEvent("wp-easy-dialog", config));
+	document.body.dispatchEvent(new CustomEvent("easy-dialog-for-wordpress", config));
 }

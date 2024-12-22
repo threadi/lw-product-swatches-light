@@ -89,7 +89,7 @@ class Admin {
 		wp_enqueue_script(
 			'lw-swatches-admin-js',
 			plugins_url( '/admin/js.js', LW_SWATCHES_PLUGIN ),
-			array( 'jquery', 'wp-easy-dialog' ),
+			array( 'jquery', 'easy-dialog-for-wordpress' ),
 			filemtime( plugin_dir_path( LW_SWATCHES_PLUGIN ) . '/admin/js.js' ),
 			true
 		);
@@ -188,8 +188,8 @@ class Admin {
 	 */
 	public function add_dialog(): void {
 		// embed necessary scripts for dialog.
-		$path = Helper::get_plugin_path() . 'vendor/threadi/wp-easy-dialog/';
-		$url  = Helper::get_plugin_url() . 'vendor/threadi/wp-easy-dialog/';
+		$path = Helper::get_plugin_path() . 'vendor/threadi/easy-dialog-for-wordpress/';
+		$url  = Helper::get_plugin_url() . 'vendor/threadi/easy-dialog-for-wordpress/';
 
 		// bail if path does not exist.
 		if ( ! file_exists( $path ) ) {
@@ -207,7 +207,7 @@ class Admin {
 		// embed script.
 		$script_asset = require $script_asset_path;
 		wp_enqueue_script(
-			'wp-easy-dialog',
+			'easy-dialog-for-wordpress',
 			$url . 'build/index.js',
 			$script_asset['dependencies'],
 			$script_asset['version'],
@@ -218,7 +218,7 @@ class Admin {
 		$admin_css      = $url . 'build/style-index.css';
 		$admin_css_path = $path . 'build/style-index.css';
 		wp_enqueue_style(
-			'wp-easy-dialog',
+			'easy-dialog-for-wordpress',
 			$admin_css,
 			array( 'wp-components' ),
 			Helper::get_file_version( $admin_css_path )
