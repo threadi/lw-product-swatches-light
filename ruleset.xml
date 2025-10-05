@@ -3,6 +3,22 @@
 
 	<description>Product Swatches Light Coding Standards</description>
 
+	<!--
+	   Only scan files with .php extension.
+   -->
+	<arg name="extensions" value="php" />
+
+	<!--
+		Directories to exclude.
+	-->
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/build/*</exclude-pattern>
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+	<exclude-pattern>*/blocks/*</exclude-pattern>
+	<exclude-pattern>*/svn/*</exclude-pattern>
+	<exclude-pattern>*/example/*</exclude-pattern>
+	<exclude-pattern>*/deprecated/*</exclude-pattern>
+
 	<rule ref="WordPress-Docs"/>
 	<rule ref="WordPress-Extra"/>
 	<rule ref="WordPress">
