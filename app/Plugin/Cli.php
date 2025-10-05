@@ -20,10 +20,9 @@ class Cli {
 	/**
 	 * Updates the Swatches on all products or on given attributes.
 	 *
-	 * @param array $args Arguments for the update.
+	 * @param array<int,string> $args Arguments for the update.
 	 *
 	 * @since  1.0.0
-	 * @author Thomas Zwirner
 	 * @noinspection PhpUnused
 	 **/
 	public function update_swatches( array $args = array() ): void {
@@ -93,12 +92,19 @@ class Cli {
 								'hide_empty' => false,
 							)
 						);
+
+						// bail on error.
+						if ( ! is_array( $terms ) ) {
+							continue;
+						}
+
+						// loop through the terms.
 						foreach ( $terms as $term ) {
 							$_POST['lws1'] = get_term_meta( $term->term_id, $fields[ $product_attr_type ][0]['id'], true );
 							$_POST['lws2'] = 'yes' === get_term_meta( $term->term_id, $fields[ $product_attr_type ][1]['id'], true ) ? 1 : 0;
 							$_POST['lws3'] = get_term_meta( $term->term_id, $fields[ $product_attr_type ][2]['id'], true );
 							$obj           = new Attribute( $tax, $our_fields );
-							$obj->save( $term->term_id, '', $taxonomy );
+							$obj->save( $term->term_id, 0, $taxonomy );
 						}
 					}
 				}
@@ -109,7 +115,7 @@ class Cli {
 	/**
 	 * Resets all settings of this plugin.
 	 *
-	 * @param array $delete_data Marker to delete data.
+	 * @param array<int,string> $delete_data Marker to delete data.
 	 * @return void
 	 * @noinspection PhpUnused
 	 */

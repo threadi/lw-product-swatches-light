@@ -29,10 +29,13 @@ jobs:
               run: composer dump-autoload -oa --no-dev
 
             - name: Run WordPress Coding Standard fixes
-              run: vendor/bin/phpcbf --extensions=php --ignore=*/vendor/*,*/build/*,*/node_modules/*,*/blocks/*,*/svn/*,*/example/*,*/deprecated/* --standard=ruleset.xml .
+              run: vendor/bin/phpcbf --standard=ruleset.xml .
 
             - name: Run WordPress Coding Standard checks
-              run: vendor/bin/phpcs --extensions=php --ignore=*/vendor/*,*/build/*,*/node_modules/*,*/blocks/*,*/svn/*,*/example/*,*/deprecated/* --standard=ruleset.xml .
+              run: vendor/bin/phpcs --standard=ruleset.xml .
+
+            - name: Run PHPStan check
+              run: vendor/bin/phpstan analyse
 
             - name: Set version number 1
               uses: richardrigutins/replace-in-files@v2
@@ -64,6 +67,7 @@ jobs:
                   zip -ur product-swatches-light_${{ github.ref_name }}.zip product-swatches-light/vendor/autoload.php
                   zip -ur product-swatches-light_${{ github.ref_name }}.zip product-swatches-light/vendor/composer/*
                   zip -ur product-swatches-light_${{ github.ref_name }}.zip product-swatches-light/vendor/threadi/*/build/*
+                  zip -ur product-swatches-light_${{ github.ref_name }}.zip product-swatches-light/vendor/threadi/*/src/*
                   mv product-swatches-light ${{ github.event.repository.name }}/
                   cp product-swatches-light_${{ github.ref_name }}.zip ${{ github.event.repository.name }}/
 

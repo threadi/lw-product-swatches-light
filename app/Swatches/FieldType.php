@@ -7,6 +7,9 @@
 
 namespace ProductSwatchesLight\Swatches;
 
+// prevent direct access.
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Interface for each field-type this plugin supports.
  * E.g. color, image, text etc.

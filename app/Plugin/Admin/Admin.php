@@ -10,6 +10,7 @@ namespace ProductSwatchesLight\Plugin\Admin;
 // prevent direct access.
 defined( 'ABSPATH' ) || exit;
 
+use easyTransientsForWordPress\Transients;
 use ProductSwatchesLight\Plugin\Helper;
 use ProductSwatchesLight\Plugin\Templates;
 use ProductSwatchesLight\Swatches\Attribute;
@@ -61,10 +62,11 @@ class Admin {
 		add_action( 'admin_init', array( $this, 'add_handling' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'add_styles_and_js_admin' ), PHP_INT_MAX );
 		add_action( 'admin_enqueue_scripts', array( $this, 'add_dialog' ), PHP_INT_MAX );
+		add_action( 'init', array( $this, 'configure_transients' ), 5 );
 
 		// add ajax endpoints.
-		add_action( 'wp_ajax_lw_swatches_import_run', array( $this, 'import_run' ) );
-		add_action( 'wp_ajax_lw_swatches_import_info', array( $this, 'import_info' ) );
+		add_action( 'wp_ajax_lw_swatches_import_run', array( $this, 'import_run_via_ajax' ) );
+		add_action( 'wp_ajax_lw_swatches_import_info', array( $this, 'import_info_via_ajax' ) );
 	}
 
 	/**
@@ -79,7 +81,7 @@ class Admin {
 			'lw-swatches-admin-css',
 			plugin_dir_url( LW_SWATCHES_PLUGIN ) . '/admin/styles.css',
 			array(),
-			filemtime( plugin_dir_path( LW_SWATCHES_PLUGIN ) . '/admin/styles.css' ),
+			Helper::get_file_version( plugin_dir_path( LW_SWATCHES_PLUGIN ) . '/admin/styles.css' ),
 		);
 
 		// add frontend js and styles also in backend.
@@ -90,7 +92,7 @@ class Admin {
 			'lw-swatches-admin-js',
 			plugins_url( '/admin/js.js', LW_SWATCHES_PLUGIN ),
 			array( 'jquery', 'easy-dialog-for-wordpress' ),
-			filemtime( plugin_dir_path( LW_SWATCHES_PLUGIN ) . '/admin/js.js' ),
+			Helper::get_file_version( plugin_dir_path( LW_SWATCHES_PLUGIN ) . '/admin/js.js' ),
 			true
 		);
 
@@ -150,17 +152,16 @@ class Admin {
 	 *
 	 * @return void
 	 * @noinspection PhpUnused
-	 * @noinspection PhpNoReturnAttributeCanBeAddedInspection
 	 */
-	public function import_run(): void {
+	public function import_run_via_ajax(): void {
 		// check nonce.
 		check_ajax_referer( 'product-swatches-update-run', 'nonce' );
 
 		// run import.
 		Products::get_instance()->update_swatches_on_products();
 
-		// return nothing.
-		wp_die();
+		// return ok back.
+		wp_send_json_success();
 	}
 
 	/**
@@ -168,17 +169,16 @@ class Admin {
 	 *
 	 * @return void
 	 * @noinspection PhpUnused
-	 * @noinspection PhpNoReturnAttributeCanBeAddedInspection
 	 */
-	public function import_info(): void {
+	public function import_info_via_ajax(): void {
 		// check nonce.
 		check_ajax_referer( 'product-swatches-update-info', 'nonce' );
 
 		// return actual and max count of import steps.
 		echo absint( get_option( LW_SWATCHES_OPTION_COUNT, 0 ) ) . ';' . absint( get_option( LW_SWATCHES_OPTION_MAX ) ) . ';' . absint( get_option( LW_SWATCHES_UPDATE_RUNNING, 0 ) );
 
-		// return nothing else.
-		wp_die();
+		// return ok back.
+		wp_send_json_success();
 	}
 
 	/**
@@ -223,5 +223,27 @@ class Admin {
 			array( 'wp-components' ),
 			Helper::get_file_version( $admin_css_path )
 		);
+	}
+
+	/**
+	 * Set base configuration for each transient.
+	 *
+	 * @return void
+	 */
+	public function configure_transients(): void {
+		$transients_obj = Transients::get_instance();
+		$transients_obj->set_slug( 'lwps' );
+		$transients_obj->set_capability( 'manage_options' );
+		$transients_obj->set_template( 'grouped.php' );
+		$transients_obj->set_display_method( 'grouped' );
+		$transients_obj->set_vendor_path( Helper::get_plugin_path() . 'vendor/' );
+		$transients_obj->set_translations(
+			array(
+				/* translators: %1$d will be replaced by the days this message will be hidden. */
+				'hide_message' => __( 'Hide this message for %1$d days.', 'product-swatches-light' ),
+				'dismiss'      => __( 'Dismiss', 'product-swatches-light' ),
+			)
+		);
+		$transients_obj->init();
 	}
 }

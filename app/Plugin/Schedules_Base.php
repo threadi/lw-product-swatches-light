@@ -45,7 +45,7 @@ class Schedules_Base {
 	/**
 	 * Arguments for the schedule-event.
 	 *
-	 * @var array
+	 * @var list<mixed>
 	 */
 	private array $args = array();
 
@@ -65,14 +65,15 @@ class Schedules_Base {
 	 */
 	public function get_interval(): string {
 		$interval = $this->interval;
+		$instance = $this;
 		/**
 		 * Filter the interval for a single schedule.
 		 *
 		 * @since 2.0.0 Available since 2.0.0.
 		 * @param string $interval The interval.
-		 * @param Schedules_Base $this The schedule-object.
+		 * @param Schedules_Base $instance The schedule-object.
 		 */
-		return apply_filters( 'product_swatches_light_schedule_interval', $interval, $this );
+		return apply_filters( 'product_swatches_light_schedule_interval', $interval, $instance );
 	}
 
 	/**
@@ -135,7 +136,7 @@ class Schedules_Base {
 	/**
 	 * Return the arguments for the schedule-event.
 	 *
-	 * @return array
+	 * @return list<mixed>
 	 */
 	public function get_args(): array {
 		return $this->args;
@@ -144,7 +145,7 @@ class Schedules_Base {
 	/**
 	 * Set the arguments for the schedule-event.
 	 *
-	 * @param array $args The args to set for the hook-event of this schedule.
+	 * @param list<mixed> $args The args to set for the hook-event of this schedule.
 	 *
 	 * @return void
 	 */
@@ -176,18 +177,19 @@ class Schedules_Base {
 	 * @return bool
 	 */
 	public function is_enabled(): bool {
-		$false = false;
+		$false    = false;
+		$instance = $this;
 		/**
 		 * Filter whether to activate this schedule.
 		 *
 		 * @since 2.0.0 Available since 2.0.0.
 		 *
 		 * @param bool $false True if this schedule should NOT be enabled.
-		 * @param Schedules_Base $this Actual object.
+		 * @param Schedules_Base $instance Actual object.
 		 *
 		 * @noinspection PhpConditionAlreadyCheckedInspection
 		 */
-		if ( apply_filters( 'product_swatches_light_schedule_enabling', $false, $this ) ) {
+		if ( apply_filters( 'product_swatches_light_schedule_enabling', $false, $instance ) ) {
 			return false;
 		}
 

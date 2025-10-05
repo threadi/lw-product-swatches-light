@@ -56,9 +56,6 @@ class Init {
 	 * @return void
 	 */
 	public function init(): void {
-		// init transients.
-		Transients::get_instance()->init();
-
 		// init templates.
 		Templates::get_instance()->init();
 
@@ -116,8 +113,8 @@ class Init {
 	/**
 	 * Add link to plugin-settings in plugin-list.
 	 *
-	 * @param array $links List of links.
-	 * @return array
+	 * @param array<int,string> $links List of links.
+	 * @return array<int,string>
 	 * @noinspection PhpUnused
 	 */
 	public function add_setting_link( array $links ): array {

@@ -10,8 +10,8 @@ namespace ProductSwatchesLight\Swatches;
 // prevent direct access.
 defined( 'ABSPATH' ) || exit;
 
+use easyTransientsForWordPress\Transients;
 use ProductSwatchesLight\Plugin\Helper;
-use ProductSwatchesLight\Plugin\Transients;
 use stdClass;
 use WC_Product;
 use WC_Product_Variation;
@@ -76,7 +76,7 @@ class WooCommerce {
 		add_filter( 'handle_bulk_actions-edit-product', array( $this, 'run_bulk_actions' ), 10, 3 );
 
 		// add single actions.
-		add_filter( 'post_submitbox_misc_actions', array( $this, 'add_product_action' ) );
+		add_action( 'post_submitbox_misc_actions', array( $this, 'add_product_action' ) );
 		add_action( 'admin_action_product_swatches_regenerate', array( $this, 'regenerate_swatches_by_request' ) );
 
 		// use hooks to update swatches on single products.
@@ -102,7 +102,7 @@ class WooCommerce {
 			switch ( get_option( 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_position_in_list', 'afterprice' ) ) {
 				case 'beforecart':
 				case 'aftercart':
-					add_action( 'woocommerce_loop_add_to_cart_link', array( $this, 'add_product_swatches_in_loop' ), PHP_INT_MAX, 2 );
+					add_filter( 'woocommerce_loop_add_to_cart_link', array( $this, 'add_product_swatches_in_loop' ), PHP_INT_MAX, 2 );
 					break;
 				case 'beforeprice':
 					add_action( 'woocommerce_after_shop_loop_item_title', array( $this, 'add_product_swatches_in_loop_end' ), 5, 0 );
@@ -111,7 +111,7 @@ class WooCommerce {
 					add_action( 'woocommerce_after_shop_loop_item_title', array( $this, 'add_product_swatches_in_loop_after_prices' ), 20, 0 );
 					break;
 				default:
-					add_action( 'woocommerce_loop_add_to_cart_link', array( $this, 'lw_swatches_add_product_swatches_in_loop' ), 10, 2 );
+					add_filter( 'woocommerce_loop_add_to_cart_link', array( $this, 'add_product_swatches_in_loop' ), 10, 2 );
 					break;
 			}
 		}
@@ -198,8 +198,11 @@ class WooCommerce {
 
 		// get swatches depending on cache setting.
 		if ( 'yes' === get_option( 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_disable_cache', 'no' ) ) {
-			$product          = Products::get_instance()->get_product( $product->get_id() );
-			$product_swatches = $product->get_swatches();
+			$get_the_product = Products::get_instance()->get_product( $product->get_id() );
+			if ( $get_the_product instanceof Product ) {
+				$product          = $get_the_product;
+				$product_swatches = $product->get_swatches();
+			}
 		} else {
 			$product_swatches = get_post_meta( $product->get_id(), LW_SWATCH_CACHEKEY, true );
 		}
@@ -226,8 +229,8 @@ class WooCommerce {
 	/**
 	 * Add bulk action to regenerate multiple swatches via product-table in backend.
 	 *
-	 * @param array $actions List of actions.
-	 * @return array
+	 * @param array<string,string> $actions List of actions.
+	 * @return array<string,string>
 	 * @noinspection PhpUnused
 	 */
 	public function add_bulk_actions( array $actions ): array {
@@ -241,16 +244,25 @@ class WooCommerce {
 	/**
 	 * Run bulk aktion to regenerate multiple swatches via product-table in backend.
 	 *
-	 * @param string $redirect_to The URL to redirect to.
-	 * @param string $do_action The action-settings.
-	 * @param array  $items The IDs chosen.
+	 * @param string         $redirect_to The URL to redirect to.
+	 * @param string         $do_action The action-settings.
+	 * @param array<int,int> $items The IDs chosen.
 	 *
 	 * @return string
 	 * @noinspection PhpUnused
-	 * @noinspection PhpUnusedParameterInspection*/
+	 * @noinspection PhpUnusedParameterInspection
+	 **/
 	public function run_bulk_actions( string $redirect_to, string $do_action, array $items ): string {
 		foreach ( $items as $post_id ) {
+			// get the product.
 			$product = Products::get_instance()->get_product( $post_id );
+
+			// bail if product could not be loaded.
+			if ( ! $product instanceof Product ) {
+				continue;
+			}
+
+			// update its swatches.
 			$product->update_swatches();
 		}
 
@@ -310,8 +322,8 @@ class WooCommerce {
 	 * Add additional attribute types which are used by this plugin.
 	 * Only if they do not already exist.
 	 *
-	 * @param array $attribute_type The setting for the attribute.
-	 * @return array
+	 * @param array<string,mixed> $attribute_type The setting for the attribute.
+	 * @return array<string,mixed>
 	 * @noinspection PhpUnused
 	 */
 	public function add_attribute_types( array $attribute_type ): array {
@@ -363,26 +375,39 @@ class WooCommerce {
 		// get all terms and loop through them.
 		$all_terms = get_terms( $args );
 
+		// bail if terms results in error.
+		if ( ! is_array( $all_terms ) ) {
+			return;
+		}
+
 		// generate output depending on the attribute-type.
+		/**
+		 * Generate output depending on the attribute-type.
+		 *
+		 * @since 1.0.0 Available since 1.0.0.
+		 * @param stdClass $attribute_taxonomy The taxonomy.
+		 * @param array<int, WP_Term> $all_terms The terms.
+		 * @param int $product_id The product ID.
+		 */
 		do_action( 'product_swatches_light_option_list', $attribute_taxonomy, $all_terms, $product_id );
 
 		?>
 		<select multiple="multiple"
-				data-placeholder="<?php esc_attr_e( 'Select term(s)', 'lw-swatches' ); ?>"
+				data-placeholder="<?php esc_attr_e( 'Select term(s)', 'product-swatches-light' ); ?>"
 				class="multiselect attribute_values wc-taxonomy-term-search lw-product-swatches"
 				data-type="<?php echo esc_attr( $attribute_taxonomy->attribute_type ); ?>"
-				name="attribute_values[<?php echo esc_attr( $i ); ?>][]">
+				name="attribute_values[<?php echo absint( $i ); ?>][]">
 			<?php
 			// get all terms and loop through them.
 			if ( ! empty( $all_terms ) ) {
 				foreach ( $all_terms as $term ) {
-					echo '<option value="' . esc_attr( $term->term_id ) . '" ' . selected( has_term( absint( $term->term_id ), $taxonomy, $product_id ), true, false ) . '>' . esc_attr( apply_filters( 'woocommerce_product_attribute_term_name', $term->name, $term ) ) . '</option>';
+					echo '<option value="' . absint( $term->term_id ) . '" ' . selected( has_term( absint( $term->term_id ), $taxonomy, $product_id ), true, false ) . '>' . esc_attr( apply_filters( 'woocommerce_product_attribute_term_name', $term->name, $term ) ) . '</option>';
 				}
 			}
 			?>
 		</select>
-		<button class="button plus select_all_attributes"><?php esc_html_e( 'Select all', 'woocommerce' ); ?></button>
-		<button class="button minus select_no_attributes"><?php esc_html_e( 'Select none', 'woocommerce' ); ?></button>
+		<button class="button plus select_all_attributes"><?php esc_html_e( 'Select all', 'product-swatches-light' ); ?></button>
+		<button class="button minus select_no_attributes"><?php esc_html_e( 'Select none', 'product-swatches-light' ); ?></button>
 		<?php
 	}
 
@@ -401,7 +426,9 @@ class WooCommerce {
 		// if single ID is given only regenerate this product.
 		if ( $post_id > 0 ) {
 			$product = Products::get_instance()->get_product( $post_id );
-			$product->update_swatches();
+			if ( $product instanceof Product ) {
+				$product->update_swatches();
+			}
 		} else {
 			// otherwise regenerate all swatches.
 			Products::get_instance()->update_swatches_on_products();
@@ -415,9 +442,9 @@ class WooCommerce {
 	/**
 	 * Show swatch content in listings.
 	 *
-	 * @param stdClass $attribute_taxonomy The attribute taxonomy.
-	 * @param array    $all_terms The terms.
-	 * @param int      $product_id The product id.
+	 * @param stdClass           $attribute_taxonomy The attribute taxonomy.
+	 * @param array<int,WP_Term> $all_terms The terms.
+	 * @param int                $product_id The product id.
 	 *
 	 * @return void
 	 */
@@ -438,12 +465,12 @@ class WooCommerce {
 	/**
 	 * Get values of given term by its attribute-type.
 	 *
-	 * @param array   $value_list List of values.
-	 * @param string  $attribute_type The attribute-type.
-	 * @param WP_Term $term The term.
-	 * @param string  $term_name The term name.
+	 * @param array<string,mixed> $value_list List of values.
+	 * @param string              $attribute_type The attribute-type.
+	 * @param WP_Term             $term The term.
+	 * @param string              $term_name The term name.
 	 *
-	 * @return array
+	 * @return array<string,mixed>
 	 */
 	public function get_attribute_values( array $value_list, string $attribute_type, WP_Term $term, string $term_name ): array {
 		$class_name = '\ProductSwatchesLight\Swatches\AttributeType\\' . $attribute_type . '::get_values';
@@ -456,17 +483,17 @@ class WooCommerce {
 	}
 
 	/**
-	 * Get list.
+	 * Return the list.
 	 *
-	 * @param string $html The output.
-	 * @param string $attribute_type The attribute type name.
-	 * @param array  $resulting_list The item list.
-	 * @param array  $images The images.
-	 * @param array  $images_sets The list if imagesets.
-	 * @param array  $values The values.
-	 * @param array  $on_sales The sales-marker.
-	 * @param string $permalink The permalink for the product.
-	 * @param string $title The title of the product.
+	 * @param string              $html The output.
+	 * @param string              $attribute_type The attribute type name.
+	 * @param array<string,mixed> $resulting_list The item list.
+	 * @param array<string,mixed> $images The images.
+	 * @param array<string,mixed> $images_sets The list if imagesets.
+	 * @param array<string,mixed> $values The values.
+	 * @param array<string,mixed> $on_sales The sales-marker.
+	 * @param string              $permalink The permalink for the product.
+	 * @param string              $title The title of the product.
 	 * @return string
 	 */
 	public function get_list( string $html, string $attribute_type, array $resulting_list, array $images, array $images_sets, array $values, array $on_sales, string $permalink, string $title ): string {

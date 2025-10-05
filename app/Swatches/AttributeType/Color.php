@@ -13,6 +13,8 @@ defined( 'ABSPATH' ) || exit;
 use ProductSwatchesLight\Plugin\Helper;
 use ProductSwatchesLight\Plugin\Templates;
 use ProductSwatchesLight\Swatches\AttributeType;
+use WP_Taxonomy;
+use WP_Term;
 
 /**
  * Object to handle attribute-type color.
@@ -32,13 +34,13 @@ class Color implements AttributeType {
 	/**
 	 * Output of color-attribute-type in any list-view.
 	 *
-	 * @param array  $item_list The list.
-	 * @param array  $images The images.
-	 * @param array  $images_sets The image sets.
-	 * @param array  $values The values.
-	 * @param array  $on_sales The sales markers.
-	 * @param string $product_link The product URL.
-	 * @param string $product_title The product title.
+	 * @param array<int,WP_Term>   $item_list The list.
+	 * @param array<string,string> $images The images.
+	 * @param array<string,string> $images_sets The image sets.
+	 * @param array<string,mixed>  $values The values.
+	 * @param array<string,mixed>  $on_sales The sales markers.
+	 * @param string               $product_link The product URL.
+	 * @param string               $product_title The product title.
 	 * @return string
 	 */
 	public static function get_list( array $item_list, array $images, array $images_sets, array $values, array $on_sales, string $product_link, string $product_title ): string {
@@ -52,8 +54,20 @@ class Color implements AttributeType {
 
 			// get taxonomy-id.
 			$taxonomy_id = wc_attribute_taxonomy_id_by_name( $color->taxonomy );
-			$taxonomy    = $color->taxonomy;
-			$label       = get_taxonomy_labels( get_taxonomy( $taxonomy ) )->singular_name;
+
+			// get the taxonomy name.
+			$taxonomy = $color->taxonomy;
+
+			// get the taxonomy object.
+			$taxonomy_obj = get_taxonomy( $taxonomy );
+
+			// bail if taxonomy could not be loaded.
+			if ( ! $taxonomy_obj instanceof WP_Taxonomy ) {
+				continue;
+			}
+
+			// get the label.
+			$label = get_taxonomy_labels( $taxonomy_obj )->singular_name;
 
 			// get variant thumb image.
 			$thumb_image = Helper::get_variant_thumb_as_data( $images, $images_sets, $color->slug );
@@ -82,7 +96,7 @@ class Color implements AttributeType {
 			 *
 			 * @param string $link The link to use.
 			 * @param int $taxonomy_id The taxonomy ID.
-			 * @param string $color The used color.
+			 * @param WP_Term $color The used color.
 			 * @param string $product_link The product URL.
 			 */
 			$link = apply_filters( 'product_swatches_light_set_link', '', $taxonomy_id, $color, $product_link );
@@ -122,8 +136,8 @@ class Color implements AttributeType {
 	/**
 	 * Output of color-attribute-type in taxonomy-column in backend under Products > Attributes.
 	 *
-	 * @param int   $term_id The term id.
-	 * @param array $fields The fields.
+	 * @param int                 $term_id The term id.
+	 * @param array<string,mixed> $fields The fields.
 	 * @return string
 	 */
 	public static function get_taxonomy_column( int $term_id, array $fields ): string {
@@ -139,15 +153,16 @@ class Color implements AttributeType {
 			$html = '<div class="lw-swatches lw-swatches-' . esc_attr( self::_TYPE_NAME ) . '" style="' . esc_attr( $css ) . '"></div>';
 		}
 
+		// return resulting HTML-code.
 		return $html;
 	}
 
 	/**
 	 * Return values of a field with this attribute-type.
 	 *
-	 * @param int          $term_id The term id.
-	 * @param string|array $term The term name.
-	 * @return array
+	 * @param int                        $term_id The term id.
+	 * @param string|array<string,mixed> $term The term name.
+	 * @return array<int,mixed>
 	 */
 	public static function get_values( int $term_id, string|array $term ): array {
 		if ( ! is_array( $term ) ) {

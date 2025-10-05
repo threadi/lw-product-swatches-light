@@ -10,9 +10,8 @@ namespace ProductSwatchesLight\Swatches;
 // prevent direct access.
 defined( 'ABSPATH' ) || exit;
 
+use easyTransientsForWordPress\Transients;
 use ProductSwatchesLight\Plugin\Schedules;
-use ProductSwatchesLight\Plugin\Schedules\RegenerateSwatches;
-use ProductSwatchesLight\Plugin\Transients;
 use WP_Term;
 
 /**
@@ -30,24 +29,24 @@ class Attribute {
 	/**
 	 * The used fields.
 	 *
-	 * @var array
+	 * @var array<string,mixed>
 	 */
 	protected array $fields = array();
 
 	/**
 	 * Constructor for this object.
 	 *
-	 * @param object $taxonomy The used taxonomy.
-	 * @param array  $fields The used fields.
+	 * @param object              $taxonomy The used taxonomy.
+	 * @param array<string,mixed> $fields The used fields.
 	 */
 	public function __construct( object $taxonomy, array $fields ) {
+		// save it.
 		$this->taxonomy = $taxonomy;
 		$this->fields   = $fields;
 
-		if ( ! empty( $taxonomy ) ) {
-			$this->add_actions();
-			$this->add_filter();
-		}
+		// set hooks.
+		$this->add_actions();
+		$this->add_filter();
 	}
 
 	/**
@@ -74,14 +73,14 @@ class Attribute {
 	 */
 	private function add_filter(): void {
 		add_filter( 'manage_edit-' . $this->get_taxonomy_name() . '_columns', array( $this, 'add_taxonomy_columns' ) );
-		add_filter( 'manage_' . $this->get_taxonomy_name() . '_custom_column', array( $this, 'add_taxonomy_column' ), 10, 3 );
+		add_action( 'manage_' . $this->get_taxonomy_name() . '_custom_column', array( $this, 'add_taxonomy_column' ), 10, 3 );
 	}
 
 	/**
 	 * Add the Column for this Attribute in the backend-tables.
 	 *
-	 * @param array $columns List of columns.
-	 * @return array
+	 * @param array<string,string> $columns List of columns.
+	 * @return array<string,string>
 	 */
 	public function add_taxonomy_columns( array $columns ): array {
 		$new_columns = array();
@@ -109,7 +108,7 @@ class Attribute {
 	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function add_taxonomy_column( string $output, string $column, int $term_id ): void {
-		$attribute_type = apply_filters( 'product_swatches_light_change_attribute_type_name', $this->taxonomy->attribute_type );
+		$attribute_type = apply_filters( 'product_swatches_light_change_attribute_type_name', $this->taxonomy->attribute_type ); // @phpstan-ignore property.notFound
 		$class_name     = '\ProductSwatchesLight\Swatches\AttributeType\\' . $attribute_type . '::get_taxonomy_column';
 		if ( class_exists( '\ProductSwatchesLight\Swatches\AttributeType\\' . $attribute_type )
 			&& is_callable( $class_name ) ) {
@@ -230,9 +229,9 @@ class Attribute {
 			$field = $this->fields[ $keys[ $f ] ];
 
 			// prepare each value.
-			$field_id    = empty( $field['id'] ) ? 0 : $field['id'];
-			$depends     = empty( $field['dependency'] ) ? '' : wp_json_encode( $field['dependency'] );
-			$placeholder = empty( $field['placeholder'] ) ? '' : $field['placeholder'];
+			$field_id    = empty( $field['id'] ) ? '0' : (string) $field['id'];
+			$depends     = empty( $field['dependency'] ) ? '' : (string) wp_json_encode( $field['dependency'] );
+			$placeholder = empty( $field['placeholder'] ) ? '' : (string) $field['placeholder'];
 			$required    = ! empty( $field['required'] );
 			$value       = $field['value'];
 			if ( $term ) {
@@ -315,7 +314,7 @@ class Attribute {
 	 * @return string
 	 */
 	public function get_taxonomy_name(): string {
-		return wc_attribute_taxonomy_name( $this->taxonomy->attribute_name );
+		return wc_attribute_taxonomy_name( $this->taxonomy->attribute_name ); // @phpstan-ignore property.notFound
 	}
 
 	/**
@@ -332,12 +331,12 @@ class Attribute {
 	/**
 	 * Get output of field from type the light plugin is using.
 	 *
-	 * @param string $html The html to output.
-	 * @param array  $field The field.
-	 * @param int    $field_id The field id.
-	 * @param string $value The value.
-	 * @param bool   $required If field is required.
-	 * @param string $placeholder The placeholder.
+	 * @param string              $html The html to output.
+	 * @param array<string,mixed> $field The field.
+	 * @param int                 $field_id The field id.
+	 * @param string              $value The value.
+	 * @param bool                $required If field is required.
+	 * @param string              $placeholder The placeholder.
 	 *
 	 * @return string
 	 */
@@ -363,8 +362,8 @@ class Attribute {
 	/**
 	 * Secure term values.
 	 *
-	 * @param string $value_to_secure The value to secure.
-	 * @param array  $field The field.
+	 * @param string              $value_to_secure The value to secure.
+	 * @param array<string,mixed> $field The field.
 	 *
 	 * @return string
 	 */
