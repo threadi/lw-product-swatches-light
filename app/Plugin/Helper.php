@@ -20,10 +20,10 @@ class Helper {
 	/**
 	 * Get variant-image as data-attribute
 	 *
-	 * @param array  $images List of images.
-	 * @param array  $images_sets List of image sets.
-	 * @param string $slug The slug.
-	 * @return array
+	 * @param array<string,string> $images List of images.
+	 * @param array<string,string> $images_sets List of image sets.
+	 * @param string               $slug The slug.
+	 * @return array<string,string>
 	 */
 	public static function get_variant_thumb_as_data( array $images, array $images_sets, string $slug ): array {
 		if ( empty( $images[ $slug ] ) ) {
@@ -38,7 +38,7 @@ class Helper {
 	/**
 	 * Return available attribute types incl. their language-specific labels.
 	 *
-	 * @return array[]
+	 * @return array<string,mixed>
 	 */
 	public static function get_attribute_types(): array {
 		$attribute_types       = apply_filters( 'lw_swatches_types', LW_ATTRIBUTE_TYPES );
@@ -69,7 +69,7 @@ class Helper {
 	/**
 	 * Return colors.
 	 *
-	 * @return array
+	 * @return array<string,string>
 	 */
 	public static function get_colors(): array {
 		return array(
@@ -126,7 +126,7 @@ class Helper {
 	 */
 	public static function get_plugin_name(): string {
 		$plugin_data = get_plugin_data( LW_SWATCHES_PLUGIN );
-		if ( ! empty( $plugin_data ) && ! empty( $plugin_data['Name'] ) ) {
+		if ( ! empty( $plugin_data ) && ! empty( $plugin_data['Name'] ) ) { // @phpstan-ignore empty.variable
 			return $plugin_data['Name'];
 		}
 		return '';
@@ -155,7 +155,7 @@ class Helper {
 		}
 
 		// return result.
-		return $page_url;
+		return (string) $page_url;
 	}
 
 	/**
@@ -171,7 +171,7 @@ class Helper {
 	public static function get_file_version( string $filepath ): string {
 		// check for WP_DEBUG.
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			return filemtime( $filepath );
+			return (string) filemtime( $filepath );
 		}
 
 		$plugin_version = LW_SWATCHES_PLUGIN;
@@ -190,7 +190,7 @@ class Helper {
 	/**
 	 * Get list of blogs in a multisite-installation.
 	 *
-	 * @return array
+	 * @return array<string,mixed>
 	 */
 	public static function get_blogs(): array {
 		if ( false === is_multisite() ) {

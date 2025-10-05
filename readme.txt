@@ -72,7 +72,11 @@ With [Product Swatches for WooCommerce Pro](https://laolaweb.com/plugins/woocomm
 
 = @@VersionNumber@@ =
 
-* Added GitHub action to build releases
-* Moved this changelog to GitHub
+- Added GitHub action to build releases
+- Added transients object handler for each message in backend
+- Moved this changelog to GitHub
+- Changed dialog script to "easy-dialog-for-wordpress"
+- Now compatible with PHPStan
+- Default position for swatches resulted in error
 
 [older changes](https://github.com/threadi/lw-product-swatches-light/blob/master/changelog.md)

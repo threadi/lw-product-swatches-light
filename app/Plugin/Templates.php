@@ -66,13 +66,13 @@ class Templates {
 			'lw-swatches-styles',
 			plugin_dir_url( LW_SWATCHES_PLUGIN ) . '/css/styles.css',
 			array(),
-			filemtime( plugin_dir_path( LW_SWATCHES_PLUGIN ) . '/css/styles.css' )
+			Helper::get_file_version( plugin_dir_path( LW_SWATCHES_PLUGIN ) . '/css/styles.css' )
 		);
 		wp_enqueue_script(
 			'lw-swatches-script',
 			plugins_url( '/js/frontend.js', LW_SWATCHES_PLUGIN ),
 			array( 'jquery' ),
-			filemtime( plugin_dir_path( LW_SWATCHES_PLUGIN ) . '/js/frontend.js' ),
+			Helper::get_file_version( plugin_dir_path( LW_SWATCHES_PLUGIN ) . '/js/frontend.js' ),
 			true
 		);
 	}
@@ -108,20 +108,27 @@ class Templates {
 	 * @noinspection SpellCheckingInspection
 	 */
 	public function get_html_list( string $html, string $typenames, string $typename, string $taxonomy, bool $changed_by_gallery ): string {
+		// return if empty html is given.
 		if ( empty( $html ) ) {
 			return '';
 		}
 
+		// just do use this var.
 		if ( empty( $typenames ) ) {
-			$typenames = array();
+			$typenames = '';
 		}
 
+		// just do use this var.
 		if ( empty( $typename ) ) {
-			$typename = array();
+			$typename = '';
 		}
+
+		// just do use this var.
 		if ( empty( $taxonomy ) ) {
 			$taxonomy = '';
 		}
+
+		// set marker to false if not set.
 		if ( empty( $changed_by_gallery ) ) {
 			$changed_by_gallery = false;
 		}
@@ -139,6 +146,10 @@ class Templates {
 		include $this->get_template( 'parts/list-start.php' );
 		echo wp_kses_post( $html );
 		include $this->get_template( 'parts/list-end.php' );
-		return ob_get_clean();
+		$content = ob_get_clean();
+		if ( ! $content ) {
+			return '';
+		}
+		return $content;
 	}
 }

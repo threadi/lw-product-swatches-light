@@ -10,6 +10,7 @@ namespace ProductSwatchesLight\Plugin;
 // prevent direct access.
 defined( 'ABSPATH' ) || exit;
 
+use easyTransientsForWordPress\Transients;
 use ProductSwatchesLight\Swatches\Products;
 use WC_Cache_Helper;
 
@@ -93,7 +94,7 @@ class Installer {
 	/**
 	 * Remove all data of this plugin.
 	 *
-	 * @param array $delete_data Configuration.
+	 * @param array<int,string> $delete_data Configuration.
 	 * @return void
 	 */
 	public function remove_all_data( array $delete_data = array() ): void {

@@ -7,6 +7,9 @@
 
 namespace ProductSwatchesLight\Swatches;
 
+// prevent direct access.
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Define Plugin-Options which will be available in WooCommerce-settings.
  */
@@ -27,8 +30,8 @@ class WcSettingsTab {
 	/**
 	 * Add the tab
 	 *
-	 * @param array $settings_tabs List of tabs.
-	 * @return array
+	 * @param array<string,string> $settings_tabs List of tabs.
+	 * @return array<string,string>
 	 * @noinspection PhpUnused
 	 */
 	public static function add_settings_tab( array $settings_tabs ): array {
@@ -60,7 +63,7 @@ class WcSettingsTab {
 	/**
 	 * Get all the settings for this plugin for @see woocommerce_admin_fields() function.
 	 *
-	 * @return array Array of settings for @see woocommerce_admin_fields() function.
+	 * @return array<int|string,mixed> Array of settings for @see woocommerce_admin_fields() function.
 	 */
 	public static function get_settings(): array {
 		// array with sections.
@@ -151,7 +154,12 @@ class WcSettingsTab {
 			'id'      => 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_position_in_list',
 		);
 
-		// filter the settings.
+		/**
+		 * Filter the settings.
+		 *
+		 * @since 1.0.0 Available since 1.0.0.
+		 * @param array<string,mixed> $sections The settings.
+		 */
 		$sections = apply_filters( 'wc_lw_product_swatches_settings', $sections );
 
 		// generate settings-array for wc.
@@ -205,7 +213,7 @@ class WcSettingsTab {
 				),
 			),
 		);
-		?><tr><th class="titledesc"><a href="<?php echo esc_url( wp_nonce_url( $url, 'lws-generate' ) ); ?>" class="button button-large easy-dialog-for-wordpress" data-dialog="<?php echo esc_attr( wp_json_encode( $dialog ) ); ?>"><?php echo esc_html__( 'Regenerate all swatches', 'product-swatches-light' ); ?></a></th><td>&nbsp;</td></tr>
+		?><tr><th class="titledesc"><a href="<?php echo esc_url( wp_nonce_url( $url, 'lws-generate' ) ); ?>" class="button button-large easy-dialog-for-wordpress" data-dialog="<?php echo esc_attr( (string) wp_json_encode( $dialog ) ); ?>"><?php echo esc_html__( 'Regenerate all swatches', 'product-swatches-light' ); ?></a></th><td>&nbsp;</td></tr>
 		<?php
 	}
 }

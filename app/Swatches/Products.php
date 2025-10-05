@@ -67,7 +67,7 @@ class Products {
 		}
 
 		// return our own product object.
-		return new Product( $product );
+		return new Product( $product ); // @phpstan-ignore new.noConstructor
 	}
 
 	/**
@@ -108,7 +108,7 @@ class Products {
 		// loop through the products.
 		for ( $p = 0;$p < $count_products;$p++ ) {
 			// initiate the product.
-			$product_obj = self::get_instance()->get_product( $results->posts[ $p ] );
+			$product_obj = self::get_instance()->get_product( absint( $results->posts[ $p ] ) );
 
 			// bail if product could not be loaded.
 			if ( ! ( $product_obj instanceof Product ) ) {
@@ -122,14 +122,14 @@ class Products {
 			update_option( LW_SWATCHES_OPTION_COUNT, ++$count );
 
 			// show progress on CLI.
-			$progress ? $progress->tick() : false;
+			$progress ? $progress->tick() : '';
 		}
 
 		// show finished progress.
-		$progress ? $progress->finish() : false;
+		$progress ? $progress->finish() : '';
 
 		// output success-message.
-		$progress ? \WP_CLI::success( $count_products . ' products were updated.' ) : false;
+		$progress ? \WP_CLI::success( $count_products . ' products were updated.' ) : '';
 
 		// update the status.
 		update_option( LW_SWATCHES_UPDATE_STATUS, __( 'Product swatches update has been run.', 'product-swatches-light' ) );
@@ -190,7 +190,12 @@ class Products {
 			$progress = Helper::is_cli() ? \WP_CLI\Utils\make_progress_bar( 'Updating products', $count_products ) : false;
 			for ( $p = 0;$p < $count_products;$p++ ) {
 				// get product.
-				$product = self::get_instance()->get_product( $results->posts[ $p ] );
+				$product = self::get_instance()->get_product( absint( $results->posts[ $p ] ) );
+
+				// bail if object could not be loaded.
+				if ( ! $product instanceof Product ) {
+					continue;
+				}
 
 				// update product.
 				$product->update_swatches();
@@ -229,8 +234,17 @@ class Products {
 
 		// loop through the products.
 		for ( $p = 0;$p < $count_products;$p++ ) {
-			$product = self::get_instance()->get_product( $results->posts[ $p ] );
+			// get the product.
+			$product = self::get_instance()->get_product( absint( $results->posts[ $p ] ) );
+
+			// bail if object could not be loaded.
+			if ( ! $product instanceof Product ) {
+				continue;
+			}
+
+			// delete its swatches.
 			$product->delete_swatches();
+
 			// show progress.
 			$progress ? $progress->tick() : false;
 		}
@@ -249,7 +263,7 @@ class Products {
 	 * @return void
 	 */
 	public function update_product( mixed $product ): void {
-		// if parameter is an object, get its ID.
+		// if parameter is an WC_Product object, get its ID.
 		if ( $product instanceof \WC_Product ) {
 			$product = $product->get_id();
 		}
