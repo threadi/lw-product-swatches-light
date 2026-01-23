@@ -30,7 +30,7 @@ class Updates {
 		// delete options from 1.x.
 		delete_option( 'lw_swatches_tasks' );
 
-		// remove old schedule.
+		// remove the old schedule.
 		if ( ! wp_next_scheduled( 'lw_swatches_run_tasks' ) ) {
 			wp_clear_scheduled_hook( 'lw_swatches_run_tasks' );
 		}

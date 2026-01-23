@@ -126,23 +126,26 @@ class WooCommerce {
 	 * @noinspection PhpUnused
 	 */
 	public function add_product_swatches_in_loop( string $add_to_cart_html, WC_Product $product ): string {
-		// if this is a variation get its parent for swatches.
+		// if this is a variation, get its parent for swatches.
 		if ( $product instanceof WC_Product_Variation ) {
-			$product = wc_get_product( $product->get_parent_id() );
+			$product_obj = wc_get_product( $product->get_parent_id() );
+			if( $product_obj instanceof WC_Product ) {
+				$product = $product_obj;
+			}
 		}
 
 		// get the code depending on cache-setting.
 		$code = '';
 		if ( 'yes' === get_option( 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_disable_cache', 'no' ) ) {
-			$product = Products::get_instance()->get_product( $product->get_id() );
-			if ( $product instanceof Product ) {
+			$product_obj = Products::get_instance()->get_product( $product->get_id() );
+			if ( $product_obj instanceof Product ) {
 				$code = $product->get_swatches();
 			}
 		} else {
 			$code = get_post_meta( $product->get_id(), LW_SWATCH_CACHEKEY, true );
 		}
 
-		// set code on configured position in relation to the card-button.
+		// set code on the configured position in relation to the card-button.
 		$after  = '';
 		$before = '';
 		if ( 'beforecart' === get_option( 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_position_in_list', 'afterprice' ) ) {
@@ -182,11 +185,11 @@ class WooCommerce {
 	}
 
 	/**
-	 * Add Swatches in Gutenberg-Block for single product.
+	 * Add Swatches in Gutenberg-Block for a single product.
 	 *
 	 * @param string     $html The returning HTML-code.
 	 * @param stdClass   $data The object with data.
-	 * @param WC_Product $product The product as object.
+	 * @param WC_Product $product The product as an object.
 	 * @return string
 	 * @noinspection PhpUnused
 	 */
@@ -212,7 +215,7 @@ class WooCommerce {
 			return $html;
 		}
 
-		// return html code for block.
+		// return HTML code for the block.
 		return '<li class="wc-block-grid__product">
 			<a href="' . $data->permalink . '" class="wc-block-grid__product-link">
 				' . $data->image . '
@@ -242,7 +245,7 @@ class WooCommerce {
 	}
 
 	/**
-	 * Run bulk aktion to regenerate multiple swatches via product-table in backend.
+	 * Run bulk aktion to regenerate multiple swatches via product-table in the backend.
 	 *
 	 * @param string         $redirect_to The URL to redirect to.
 	 * @param string         $do_action The action-settings.
@@ -278,9 +281,9 @@ class WooCommerce {
 	}
 
 	/**
-	 * Add link to reset the swatches of a single product in product-edit-page.
+	 * Add the link to reset the swatches of a single product in the edit-page for products.
 	 *
-	 * @param WP_Post $post The post object.
+	 * @param WP_Post $post The post-object.
 	 *
 	 * @return void
 	 * @noinspection PhpUnused
@@ -336,7 +339,7 @@ class WooCommerce {
 	}
 
 	/**
-	 * Extend output of attributes in product-detail-edit-page with the additional types which are used by this plugin.
+	 * Extend the output of attributes in product-detail-edit-page with the additional types which are used by this plugin.
 	 *
 	 * @param stdClass $attribute_taxonomy The taxonomy object.
 	 * @param int      $i The counter.

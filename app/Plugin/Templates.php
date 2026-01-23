@@ -79,7 +79,7 @@ class Templates {
 
 	/**
 	 * Load a template if it exists.
-	 * Also load the requested file if is located in the /wp-content/themes/xy/product-swatches-light/ directory.
+	 * Also load the requested file if it is located in the /wp-content/themes/xy/product-swatches-light/ directory.
 	 *
 	 * @param string $template The path to the template.
 	 * @return string
@@ -97,7 +97,7 @@ class Templates {
 	}
 
 	/**
-	 * Get the resulting HTML-list.
+	 * Return the resulting list as HTML code.
 	 *
 	 * @param string $html The HTML-code for the output.
 	 * @param string $typenames The type names.
@@ -108,7 +108,7 @@ class Templates {
 	 * @noinspection SpellCheckingInspection
 	 */
 	public function get_html_list( string $html, string $typenames, string $typename, string $taxonomy, bool $changed_by_gallery ): string {
-		// return if empty html is given.
+		// return if empty HTML is given.
 		if ( empty( $html ) ) {
 			return '';
 		}
@@ -135,7 +135,7 @@ class Templates {
 
 		ob_start();
 		/**
-		 * Close surrounding link if it has been run.
+		 * Close the surrounding link if it has been run.
 		 */
 		woocommerce_template_loop_product_link_close();
 		remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_product_link_close', 5 );

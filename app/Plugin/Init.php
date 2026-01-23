@@ -19,7 +19,7 @@ use ProductSwatchesLight\Swatches\WooCommerce;
  */
 class Init {
 	/**
-	 * Instance of actual object.
+	 * Instance of the actual object.
 	 *
 	 * @var Init|null
 	 */
@@ -38,7 +38,7 @@ class Init {
 	private function __clone() {}
 
 	/**
-	 * Return instance of this object as singleton.
+	 * Return the instance of this object as a singleton.
 	 *
 	 * @return Init
 	 */
@@ -111,7 +111,7 @@ class Init {
 	}
 
 	/**
-	 * Add link to plugin-settings in plugin-list.
+	 * Add the link to plugin-settings in the plugin-list.
 	 *
 	 * @param array<int,string> $links List of links.
 	 * @return array<int,string>
@@ -133,7 +133,7 @@ class Init {
 		// adds the link to the end of the array.
 		$links[] = $settings_link;
 
-		// return resulting list of links.
+		// return the resulting list of links.
 		return $links;
 	}
 }

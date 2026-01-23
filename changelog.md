@@ -8,6 +8,7 @@
 - Added an object handler for transients for each message in the backend
 - Added generation of SBOM
 - Added PHP Compatibility check
+- Added PHP Unit tests
 
 ### Changed
 
