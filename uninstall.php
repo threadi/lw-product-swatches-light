@@ -7,7 +7,7 @@
 
 use ProductSwatchesLight\Plugin\Installer;
 
-// if uninstall.php is not called by WordPress, die.
+// if WordPress does not call uninstall.php, die.
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
@@ -15,8 +15,8 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 // prevent direct access.
 defined( 'ABSPATH' ) || exit;
 
-// do nothing if PHP-version is not 8.0 or newer.
-if ( PHP_VERSION_ID < 80000 ) { // @phpstan-ignore smaller.alwaysFalse
+// do nothing if the PHP version is not 8.2 or newer.
+if ( PHP_VERSION_ID < 80200 ) { // @phpstan-ignore smaller.alwaysFalse
 	return;
 }
 

@@ -10,6 +10,7 @@
 
 ### Changed
 
+- Now requires PHP 8.2 or newer
 - Moved this changelog to GitHub
 - Changed the dialog script to "easy-dialog-for-wordpress"
 - Now compatible with PHPStan
