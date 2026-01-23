@@ -6,9 +6,12 @@
 
 - Added GitHub action to build releases
 - Added an object handler for transients for each message in the backend
+- Added generation of SBOM
+- Added PHP Compatibility check
 
 ### Changed
 
+- Now requires PHP 8.2 or newer
 - Moved this changelog to GitHub
 - Changed the dialog script to "easy-dialog-for-wordpress"
 - Now compatible with PHPStan
