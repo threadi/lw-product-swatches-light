@@ -40,6 +40,9 @@ jobs:
             - name: Run PHPStan check
               run: vendor/bin/phpstan analyse
 
+            - name: PHP Compatibility check
+              run: vendor/bin/phpcs -p app --standard=PHPCompatibilityWP
+
             - name: Set version number 1
               uses: richardrigutins/replace-in-files@v2
               with:
