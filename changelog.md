@@ -5,24 +5,23 @@
 ### Added
 
 - Added GitHub action to build releases
-- Added transients object handler for each message in backend
+- Added an object handler for transients for each message in the backend
 
 ### Changed
 
 - Moved this changelog to GitHub
-- Changed dialog script to "easy-dialog-for-wordpress"
+- Changed the dialog script to "easy-dialog-for-wordpress"
 - Now compatible with PHPStan
 
 ### Fixed
 
-- Default position for swatches resulted in error
+- Setting the default position for swatches resulted in an error
 
 ## [2.0.3] - 30.11.2024
 
 ### Fixed
 
 - Fixed some typos
--
 
 ## [2.0.2] - 24.09.2024
 
