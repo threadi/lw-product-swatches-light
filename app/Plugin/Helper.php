@@ -12,6 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 use WP_Post;
 use WP_Post_Type;
+use WP_Rewrite;
 
 /**
  * The helper object.
@@ -188,7 +189,7 @@ class Helper {
 	}
 
 	/**
-	 * Get list of blogs in a multisite-installation.
+	 * Return the list of blogs in a multisite-installation.
 	 *
 	 * @return array<string,mixed>
 	 */
@@ -211,5 +212,64 @@ class Helper {
             AND archived = '0'
         "
 		);
+	}
+
+	/**
+	 * Return the plugin support url: the forum on WordPress.org.
+	 *
+	 * @return string
+	 */
+	public static function get_plugin_support_url(): string {
+		return 'https://wordpress.org/support/plugin/product-swatches-light/';
+	}
+
+	/**
+	 * Return the settings-URL.
+	 *
+	 * @return string
+	 */
+	public static function get_settings_url(): string {
+		return add_query_arg(
+			array(
+				'page' => 'wc-settings',
+				'tab'  => 'lw_product_swatches',
+			),
+			get_admin_url() . 'admin.php'
+		);
+	}
+
+	/**
+	 * Checks if the current request is a WP REST API request.
+	 *
+	 * Case #1: After WP_REST_Request initialization
+	 * Case #2: Support "plain" permalink settings and check if `rest_route` starts with `/`
+	 * Case #3: It can happen that WP_Rewrite is not yet initialized,
+	 *          so do this (wp-settings.php)
+	 * Case #4: URL Path begins with wp-json/ (your REST prefix)
+	 *          Also supports WP installations in the subfolders
+	 *
+	 * @returns boolean
+	 * @author matzeeable
+	 */
+	public static function is_rest_request(): bool {
+		if ( ( defined( 'REST_REQUEST' ) && REST_REQUEST ) // Case #1.
+			|| ( isset( $GLOBALS['wp']->query_vars['rest_route'] ) // (#2)
+					&& str_starts_with( $GLOBALS['wp']->query_vars['rest_route'], '/' ) ) ) {
+			return true;
+		}
+
+		// Case #3.
+		global $wp_rewrite;
+		if ( is_null( $wp_rewrite ) ) {
+			$wp_rewrite = new WP_Rewrite();
+		}
+
+		// Case #4.
+		$rest_url    = wp_parse_url( trailingslashit( rest_url() ) );
+		$current_url = wp_parse_url( add_query_arg( array() ) );
+		if ( is_array( $current_url ) && is_array( $rest_url ) && isset( $current_url['path'], $rest_url['path'] ) ) {
+			return str_starts_with( $current_url['path'], $rest_url['path'] );
+		}
+		return false;
 	}
 }

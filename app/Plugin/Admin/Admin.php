@@ -12,6 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 use easyTransientsForWordPress\Transients;
 use ProductSwatchesLight\Plugin\Helper;
+use ProductSwatchesLight\Plugin\Setup;
 use ProductSwatchesLight\Plugin\Templates;
 use ProductSwatchesLight\Swatches\Attribute;
 use ProductSwatchesLight\Swatches\Products;
@@ -58,6 +59,9 @@ class Admin {
 	 * @return void
 	 */
 	public function init(): void {
+		// initialize the setup.
+		Setup::get_instance()->init();
+
 		// misc.
 		add_action( 'admin_init', array( $this, 'add_handling' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'add_styles_and_js_admin' ), PHP_INT_MAX );

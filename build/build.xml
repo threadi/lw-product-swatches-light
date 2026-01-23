@@ -49,7 +49,7 @@
 		</exec>
 	</target>
 
-    <!-- set version number in plugin-file for the release -->
+    <!-- set version number in the plugin-file for the release -->
     <target name="setVersionNumber">
         <delete file="${build.dir}/${plugin.slug}-release.php"/>
         <copy file="${src.dir}/${plugin.slug}.php" tofile="${src.dir}/${plugin.slug}-release.php"/>
@@ -90,7 +90,11 @@
 	<!-- install npm -->
 	<target name="npm-install">
 		<delete file="${log.dir}/npm-install1.txt"/>
+		<delete file="${log.dir}/npm-install2.txt"/>
 		<exec dir="${src.dir}/vendor/threadi/easy-dialog-for-wordpress/" failonerror="true" executable="${npm.path}" output="${log.dir}/npm-install1.txt">
+			<arg line="install"/>
+		</exec>
+		<exec dir="${src.dir}/vendor/threadi/easy-setup-for-wordpress/" failonerror="true" executable="${npm.path}" output="${log.dir}/npm-install2.txt">
 			<arg line="install"/>
 		</exec>
 	</target>
@@ -98,7 +102,11 @@
 	<!-- build the Blocks via npm -->
 	<target name="npm-build" depends="npm-install">
 		<delete file="${log.dir}/npm-build1.txt"/>
+		<delete file="${log.dir}/npm-build2.txt"/>
 		<exec dir="${src.dir}/vendor/threadi/easy-dialog-for-wordpress/" failonerror="true" executable="${npm.path}" output="${log.dir}/npm-build1.txt">
+			<arg line="run build"/>
+		</exec>
+		<exec dir="${src.dir}/vendor/threadi/easy-setup-for-wordpress/" failonerror="true" executable="${npm.path}" output="${log.dir}/npm-install2.txt">
 			<arg line="run build"/>
 		</exec>
 	</target>
@@ -120,6 +128,8 @@
 			<zipfileset dir="${src.dir}/vendor" includes="autoload.php" fullpath="${plugin.slug}/vendor/autoload.php" />
 			<zipfileset dir="${src.dir}/vendor/composer" prefix="${plugin.slug}/vendor/composer" />
 			<zipfileset dir="${src.dir}/vendor/threadi/easy-dialog-for-wordpress/build/" prefix="${plugin.slug}/vendor/threadi/easy-dialog-for-wordpress/build/" />
+			<zipfileset dir="${src.dir}/vendor/threadi/easy-setup-for-wordpress/build/" prefix="${plugin.slug}/vendor/threadi/easy-setup-for-wordpress/build/" />
+			<zipfileset dir="${src.dir}/vendor/threadi/easy-setup-for-wordpress/lib/" prefix="${plugin.slug}/vendor/threadi/easy-setup-for-wordpress/lib/" />
 			<zipfileset dir="${src.dir}/vendor/threadi/easy-transients-for-wordpress/src/" prefix="${plugin.slug}/vendor/threadi/easy-transients-for-wordpress/src/" />
             <zipfileset dir="${src.dir}" includes="composer.json,uninstall.php" prefix="${plugin.slug}" />
 			<zipfileset dir="${src.dir}" includes="readme-release.txt" fullpath="${plugin.slug}/readme.txt" />

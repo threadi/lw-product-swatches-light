@@ -66,9 +66,7 @@ class Init {
 		Schedules::get_instance()->init();
 
 		// init admin tasks in admin only.
-		if ( is_admin() ) {
-			Admin::get_instance()->init();
-		}
+		Admin::get_instance()->init();
 
 		// initiate REST endpoints.
 		Rest::get_instance()->init();
@@ -118,17 +116,8 @@ class Init {
 	 * @noinspection PhpUnused
 	 */
 	public function add_setting_link( array $links ): array {
-		// build and escape the URL.
-		$url = add_query_arg(
-			array(
-				'page' => 'wc-settings',
-				'tab'  => 'lw_product_swatches',
-			),
-			get_admin_url() . 'admin.php'
-		);
-
 		// create the link.
-		$settings_link = "<a href='" . esc_url( $url ) . "'>" . __( 'Settings', 'product-swatches-light' ) . '</a>';
+		$settings_link = "<a href='" . esc_url( Helper::get_settings_url() ) . "'>" . __( 'Settings', 'product-swatches-light' ) . '</a>';
 
 		// adds the link to the end of the array.
 		$links[] = $settings_link;

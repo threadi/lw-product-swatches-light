@@ -25,6 +25,10 @@ jobs:
                   npm i
                   npm run build
                   cd ../../../
+                  cd vendor/threadi/easy-setup-for-wordpress/
+                  npm i
+                  npm run build
+                  cd ../../../
 
             - uses: anchore/sbom-action@v0
 
@@ -73,6 +77,7 @@ jobs:
                   zip -ur product-swatches-light_${{ github.ref_name }}.zip product-swatches-light/vendor/autoload.php
                   zip -ur product-swatches-light_${{ github.ref_name }}.zip product-swatches-light/vendor/composer/*
                   zip -ur product-swatches-light_${{ github.ref_name }}.zip product-swatches-light/vendor/threadi/*/build/*
+                  zip -ur product-swatches-light_${{ github.ref_name }}.zip product-swatches-light/vendor/threadi/*/lib/*
                   zip -ur product-swatches-light_${{ github.ref_name }}.zip product-swatches-light/vendor/threadi/*/src/*
                   mv product-swatches-light ${{ github.event.repository.name }}/
                   cp product-swatches-light_${{ github.ref_name }}.zip ${{ github.event.repository.name }}/

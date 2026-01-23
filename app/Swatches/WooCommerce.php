@@ -129,7 +129,7 @@ class WooCommerce {
 		// if this is a variation, get its parent for swatches.
 		if ( $product instanceof WC_Product_Variation ) {
 			$product_obj = wc_get_product( $product->get_parent_id() );
-			if( $product_obj instanceof WC_Product ) {
+			if ( $product_obj instanceof WC_Product ) {
 				$product = $product_obj;
 			}
 		}
