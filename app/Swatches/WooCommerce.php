@@ -10,7 +10,7 @@ namespace ProductSwatchesLight\Swatches;
 // prevent direct access.
 defined( 'ABSPATH' ) || exit;
 
-use easyTransientsForWordPress\Transients;
+use ProductSwatchesLight\Dependencies\easyTransientsForWordPress\Transients;
 use ProductSwatchesLight\Plugin\Helper;
 use stdClass;
 use WC_Product;
@@ -23,7 +23,7 @@ use WP_Term;
  */
 class WooCommerce {
 	/**
-	 * Instance of actual object.
+	 * Instance of the actual object.
 	 *
 	 * @var WooCommerce|null
 	 */

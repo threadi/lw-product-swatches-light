@@ -10,7 +10,7 @@ namespace ProductSwatchesLight\Plugin\Admin;
 // prevent direct access.
 defined( 'ABSPATH' ) || exit;
 
-use easyTransientsForWordPress\Transients;
+use ProductSwatchesLight\Dependencies\easyTransientsForWordPress\Transients;
 use ProductSwatchesLight\Plugin\Helper;
 use ProductSwatchesLight\Plugin\Setup;
 use ProductSwatchesLight\Plugin\Templates;
@@ -230,7 +230,7 @@ class Admin {
 	}
 
 	/**
-	 * Set base configuration for each transient.
+	 * Set the base configuration for each transient.
 	 *
 	 * @return void
 	 */

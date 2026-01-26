@@ -10,8 +10,8 @@ namespace ProductSwatchesLight\Plugin;
 // prevent direct access.
 defined( 'ABSPATH' ) || exit;
 
-use easyTransientsForWordPress\Transient;
-use easyTransientsForWordPress\Transients;
+use ProductSwatchesLight\Dependencies\easyTransientsForWordPress\Transient;
+use ProductSwatchesLight\Dependencies\easyTransientsForWordPress\Transients;
 
 /**
  * Initialize the setup object.
@@ -217,14 +217,11 @@ class Setup {
 	 * @return array<string,array<int,mixed>|string>
 	 */
 	private function get_config(): array {
-		// get setup.
-		$setup = $this->get_setup();
-
 		// collect configuration for the setup.
 		$config = array(
 			'name'                  => $this->get_setup_name(),
 			'title'                 => __( 'Product Swatches Light', 'product-swatches-light' ) . ' ' . __( 'Setup', 'product-swatches-light' ),
-			'steps'                 => $setup,
+			'steps'                 => $this->get_setup(),
 			'back_button_label'     => __( 'Back', 'product-swatches-light' ) . '<span class="dashicons dashicons-undo"></span>',
 			'continue_button_label' => __( 'Continue', 'product-swatches-light' ) . '<span class="dashicons dashicons-controls-play"></span>',
 			'finish_button_label'   => __( 'Completed', 'product-swatches-light' ) . '<span class="dashicons dashicons-saved"></span>',
@@ -290,7 +287,15 @@ class Setup {
 					'type' => 'Text',
 					'text' => '<p>' . __( '<strong>Now select the desired color for each term of the chosen attribute.</strong>', 'product-swatches-light' ) . '</p>',
 				),
-				// TODO terms zum gewählten attribut per AJAX laden und anzeigen.
+				'psl_product_attribute_terms' => array(
+					'type'                => 'Table',
+					'label' => 'tabelle',
+					'load_callback' => array( $this, 'load_product_attribute_terms_table' ),
+					'labels' => array(
+						__( 'Term', 'product-swatches-light' ),
+						__( 'Color', 'product-swatches-light' ),
+					)
+				)
 			),
 			3 => array(
 				'runSetup' => array(
@@ -299,6 +304,55 @@ class Setup {
 				),
 			),
 		);
+	}
+
+	/**
+	 * Return the list of terms.
+	 *
+	 * @return array
+	 */
+	public function load_product_attribute_terms_table(): array {
+		// get the chosen attribute.
+		$attribute_name = get_option( 'psl_product_attribute' );
+
+		// bail if no attribute is chosen.
+		if( empty( $attribute_name ) ) {
+			return array();
+		}
+
+		// get all terms of the chosen attribute.
+		$terms = get_terms( array( 'taxonomy' => 'pa_' . $attribute_name, 'hide_empty' => false ) );
+
+		// bail if the result is not an array.
+		if( ! is_array( $terms ) ) {
+			return array();
+		}
+
+		// get the possible colors and convert it to a React compatible array.
+		$colors = array(
+			array(
+				'label' => __( 'None', 'product-swatches-light' ),
+				'value' => ''
+			)
+		);
+		foreach( Helper::get_colors() as $key => $label ) {
+			$colors[] = array(
+				'label' => $label,
+				'value' => $key
+			);
+		}
+
+		// create the return list.
+		$list = array();
+		foreach( $terms as $term ) {
+			$list[$term->term_id] = array(
+				'label' => $term->name,
+				'values' => $colors
+			);
+		}
+
+		// return the resulting list.
+		return $list;
 	}
 
 	/**

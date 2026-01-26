@@ -56,6 +56,9 @@ class Init {
 	 * @return void
 	 */
 	public function init(): void {
+		// init the settings.
+		Settings::get_instance()->init();
+
 		// init templates.
 		Templates::get_instance()->init();
 

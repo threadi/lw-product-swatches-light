@@ -10,7 +10,7 @@ namespace ProductSwatchesLight\Swatches;
 // prevent direct access.
 defined( 'ABSPATH' ) || exit;
 
-use easyTransientsForWordPress\Transients;
+use ProductSwatchesLight\Dependencies\easyTransientsForWordPress\Transients;
 use ProductSwatchesLight\Plugin\Schedules;
 use WP_Term;
 
