@@ -61,6 +61,20 @@ jobs:
                   search-text: '@@VersionNumber@@'
                   replacement-text: ${{ github.ref_name }}
 
+            - name: Prepare directory
+              run: |
+                  rm -fr assets
+                  rm -fr bin
+                  rm -fr build
+                  rm -fr releases
+                  rm -fr languages
+                  rm -fr svn
+                  rm -fr tests
+                  rm changelog.md
+                  rm readme.md
+                  rm .gitignore
+                  rm .editorconfig
+                  rm phpunit.xml.dist
             - name: Run PCP check
               uses: wordpress/plugin-check-action@v1
               with:
@@ -77,13 +91,6 @@ jobs:
 
             - name: Create ZIP release
               run: |
-                  rm -fr assets
-                  rm -fr build
-                  rm -fr releases
-                  rm -fr languages
-                  rm -fr svn
-                  rm changelog.md
-                  rm readme.md
                   rm ruleset.xml
                   cd ..
                   mv ${{ github.event.repository.name }} product-swatches-light
