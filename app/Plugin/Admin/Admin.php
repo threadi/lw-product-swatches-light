@@ -119,7 +119,7 @@ class Admin {
 
 	/**
 	 * Get all WooCommerce attributes and add actions to handle them.
-	 * Also add the processing of requests for attributes in the backend.
+	 * Also, add the processing of requests for attributes in the backend.
 	 *
 	 * This is the main function to start the plugin-magic in admin.
 	 *
@@ -248,6 +248,8 @@ class Admin {
 				'dismiss'      => __( 'Dismiss', 'product-swatches-light' ),
 			)
 		);
+		$transients_obj->set_url( Helper::get_plugin_url() . '/app/Dependencies/easyTransientsForWordPress/' );
+		$transients_obj->set_path( Helper::get_plugin_path() . '/app/Dependencies/easyTransientsForWordPress/' );
 		$transients_obj->init();
 	}
 }

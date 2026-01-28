@@ -92,33 +92,37 @@ class WooCommerce {
 	}
 
 	/**
-	 * Set position where our swatches on the listing will be visible.
+	 * Set the position where our swatches on the listing will be visible.
 	 *
 	 * @return void
 	 * @noinspection PhpUnused
 	 */
 	public function set_position(): void {
-		if ( ! is_single() ) {
-			switch ( get_option( 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_position_in_list', 'afterprice' ) ) {
-				case 'beforecart':
-				case 'aftercart':
-					add_filter( 'woocommerce_loop_add_to_cart_link', array( $this, 'add_product_swatches_in_loop' ), PHP_INT_MAX, 2 );
-					break;
-				case 'beforeprice':
-					add_action( 'woocommerce_after_shop_loop_item_title', array( $this, 'add_product_swatches_in_loop_end' ), 5, 0 );
-					break;
-				case 'afterprice':
-					add_action( 'woocommerce_after_shop_loop_item_title', array( $this, 'add_product_swatches_in_loop_after_prices' ), 20, 0 );
-					break;
-				default:
-					add_filter( 'woocommerce_loop_add_to_cart_link', array( $this, 'add_product_swatches_in_loop' ), 10, 2 );
-					break;
-			}
+		// bail if this is a single view.
+		if ( is_single() ) {
+			return;
+		}
+
+		// show swatches depending on position-setting.
+		switch ( get_option( 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_position_in_list', 'afterprice' ) ) {
+			case 'beforecart':
+			case 'aftercart':
+				add_filter( 'woocommerce_loop_add_to_cart_link', array( $this, 'add_product_swatches_in_loop' ), PHP_INT_MAX, 2 );
+				break;
+			case 'beforeprice':
+				add_action( 'woocommerce_after_shop_loop_item_title', array( $this, 'add_product_swatches_in_loop_end' ), 5, 0 );
+				break;
+			case 'afterprice':
+				add_action( 'woocommerce_after_shop_loop_item_title', array( $this, 'add_product_swatches_in_loop_after_prices' ), 20, 0 );
+				break;
+			default:
+				add_filter( 'woocommerce_loop_add_to_cart_link', array( $this, 'add_product_swatches_in_loop' ), 10, 2 );
+				break;
 		}
 	}
 
 	/**
-	 * Show product swatches on the product in listings.
+	 * Show product swatches on single products in listings.
 	 *
 	 * @param string     $add_to_cart_html The HTML to output.
 	 * @param WC_Product $product The product object.
@@ -139,7 +143,7 @@ class WooCommerce {
 		if ( 'yes' === get_option( 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_disable_cache', 'no' ) ) {
 			$product_obj = Products::get_instance()->get_product( $product->get_id() );
 			if ( $product_obj instanceof Product ) {
-				$code = $product->get_swatches();
+				$code = $product_obj->get_swatches();
 			}
 		} else {
 			$code = get_post_meta( $product->get_id(), LW_SWATCH_CACHEKEY, true );

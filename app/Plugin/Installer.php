@@ -20,7 +20,7 @@ use WC_Cache_Helper;
 class Installer {
 
 	/**
-	 * Instance of actual object.
+	 * Instance of the actual object.
 	 *
 	 * @var Installer|null
 	 */
@@ -39,7 +39,7 @@ class Installer {
 	private function __clone() {}
 
 	/**
-	 * Return instance of this object as singleton.
+	 * Return the instance of this object as a singleton.
 	 *
 	 * @return Installer
 	 */
@@ -69,7 +69,7 @@ class Installer {
 			);
 			$transient_obj = Transients::get_instance()->add();
 			$transient_obj->set_name( 'lwps_woocommerce_missing' );
-			/* translators: %1$s is replaced with the search for woocommerce in plugin repository. */
+			/* translators: %1$s is replaced with the search for woocommerce in the plugin repository. */
 			$transient_obj->set_message( sprintf( __( '<strong>Product Swatches Light could not be activated!</strong> Please <a href="%1$s">install and activate WooCommerce</a> first.', 'product-swatches-light' ), esc_url( $url ) ) );
 			$transient_obj->save();
 
@@ -103,7 +103,7 @@ class Installer {
 			$transient_obj->delete();
 		}
 
-		// delete all data the plugin has collected on uninstall
+		// delete all data the plugin has collected on uninstallation
 		// -> only if this is enabled.
 		if ( ( Helper::is_woocommerce_activated() && 'yes' === get_option( 'wc_lw_product_swatches_delete_on_uninstall', 'no' ) ) || ( ! empty( $delete_data[0] ) && 1 === absint( $delete_data[0] ) ) ) {
 			global $wpdb, $table_prefix;

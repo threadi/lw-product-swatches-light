@@ -19,7 +19,7 @@ use WP_Query;
  */
 class Products {
 	/**
-	 * Instance of actual object.
+	 * Instance of the actual object.
 	 *
 	 * @var Products|null
 	 */
@@ -38,7 +38,7 @@ class Products {
 	private function __clone() {}
 
 	/**
-	 * Return instance of this object as singleton.
+	 * Return the instance of this object as a singleton.
 	 *
 	 * @return Products
 	 */
@@ -51,7 +51,7 @@ class Products {
 	}
 
 	/**
-	 * Get our own product object for specific variable product.
+	 * Return our own product object for a specific variable product.
 	 *
 	 * @param int $product_id The ID of the product.
 	 *
@@ -61,7 +61,7 @@ class Products {
 		// get the WooCommerce-own product object to check the type.
 		$product = wc_get_product( $product_id );
 
-		// bail if product is not variable.
+		// bail if the product is not variable.
 		if ( ! $product->is_type( 'variable' ) ) {
 			return false;
 		}
@@ -110,8 +110,8 @@ class Products {
 			// initiate the product.
 			$product_obj = self::get_instance()->get_product( absint( $results->posts[ $p ] ) );
 
-			// bail if product could not be loaded.
-			if ( ! ( $product_obj instanceof Product ) ) {
+			// bail if the product could not be loaded.
+			if ( ! $product_obj instanceof Product ) {
 				continue;
 			}
 
@@ -139,7 +139,7 @@ class Products {
 	}
 
 	/**
-	 * Return info about state of the swatches update on products.
+	 * Return info about the state of the swatches update on products.
 	 *
 	 * @return void
 	 */
@@ -156,7 +156,7 @@ class Products {
 	}
 
 	/**
-	 * Update swatches on selected attribute.
+	 * Update swatches on the selected attribute.
 	 *
 	 * @param string $type - the type to search for, e.g. "attribute".
 	 * @param string $name - the name of the type.
@@ -186,13 +186,13 @@ class Products {
 			$results        = new WP_Query( $query );
 			$count_products = $results->post_count;
 
-			// create progress bar on cli.
+			// create a progress bar on cli.
 			$progress = Helper::is_cli() ? \WP_CLI\Utils\make_progress_bar( 'Updating products', $count_products ) : false;
 			for ( $p = 0;$p < $count_products;$p++ ) {
 				// get product.
 				$product = self::get_instance()->get_product( absint( $results->posts[ $p ] ) );
 
-				// bail if object could not be loaded.
+				// bail if the object could not be loaded.
 				if ( ! $product instanceof Product ) {
 					continue;
 				}
@@ -237,7 +237,7 @@ class Products {
 			// get the product.
 			$product = self::get_instance()->get_product( absint( $results->posts[ $p ] ) );
 
-			// bail if object could not be loaded.
+			// bail if the object could not be loaded.
 			if ( ! $product instanceof Product ) {
 				continue;
 			}
@@ -256,7 +256,7 @@ class Products {
 	}
 
 	/**
-	 * Update single swatches on product by given ID.
+	 * Update single swatches on the product by given ID.
 	 *
 	 * @param mixed $product The product ID or object.
 	 *
@@ -275,7 +275,7 @@ class Products {
 				$product->update_swatches();
 			}
 
-			// add task to update all swatch-caches on products.
+			// add a task to update all swatch-caches on products.
 			Schedules::get_instance()->add_single_event( 'product_swatches_schedule_regeneration' );
 		}
 	}

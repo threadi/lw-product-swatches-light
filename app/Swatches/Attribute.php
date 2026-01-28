@@ -136,7 +136,7 @@ class Attribute {
 	}
 
 	/**
-	 * Save individual settings for a term in backend.
+	 * Save individual settings for a term in the backend.
 	 *
 	 * @param int    $term_id The term id.
 	 * @param int    $tt_id The taxonomy id.
@@ -176,7 +176,7 @@ class Attribute {
 
 		// bail if error occurred.
 		if ( $error ) {
-			// add error as info for user.
+			// add error as info for the user.
 			$transient_obj = Transients::get_instance()->add();
 			$transient_obj->set_name( 'lwps_error_term_fields' );
 			$transient_obj->set_message( __( '<strong>At least one required field was not filled!</strong> Please fill out the form completely.', 'product-swatches-light' ) );
@@ -201,12 +201,12 @@ class Attribute {
 				// save the value of this field.
 				update_term_meta( $term_id, $field['name'], apply_filters( 'product_swatches_light_secure_term_value', sanitize_text_field( wp_unslash( $_POST[ $field_name ] ) ), $field ) );
 			} else {
-				// remove the value if it does not exist in request.
+				// remove the value if it does not exist in the request.
 				delete_term_meta( $term_id, $field['name'] );
 			}
 		}
 
-		// add task to update all swatch-caches on products.
+		// add a task to update all swatch-caches on products.
 		Schedules::get_instance()->add_single_event( 'product_swatches_schedule_regeneration' );
 	}
 
