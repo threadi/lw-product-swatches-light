@@ -16,7 +16,14 @@
 - Now requires PHP 8.2 or newer
 - Moved this changelog to GitHub
 - Changed the dialog script to "easy-dialog-for-wordpress"
-- Now compatible with PHPStan
+- Renamed hook "lw_swatches_types" to "product_swatches_light_swatches_types"
+- Renamed hook "wc_lw_product_swatches_settings" to "product_swatches_light_product_swatches_settings"
+- Renamed hook "lw_swatches_product_stockstatus" to "product_swatches_light_product_stockstatus"
+- Renamed hook "lw_swatches_hide_attribute" to "product_swatches_light_hide_attribute"
+- Renamed hook "lw_swatches_allowed_html" to "product_swatches_light_allowed_html"
+- Renamed hook "lw_swatches_admin_init" to "product_swatches_light_admin_init"
+- Optimized all templates to prevent direct access
+- Now also compatible with PHPStan, PHP 8.2 to 8.5 and PCP
 
 ### Fixed
 

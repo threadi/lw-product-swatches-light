@@ -160,7 +160,7 @@ class WcSettingsTab {
 		 * @since 1.0.0 Available since 1.0.0.
 		 * @param array<string,mixed> $sections The settings.
 		 */
-		$sections = apply_filters( 'wc_lw_product_swatches_settings', $sections );
+		$sections = apply_filters( 'product_swatches_light_product_swatches_settings', $sections );
 
 		// generate settings-array for wc.
 		$settings = array();

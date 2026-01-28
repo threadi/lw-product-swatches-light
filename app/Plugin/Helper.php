@@ -42,7 +42,7 @@ class Helper {
 	 * @return array<string,mixed>
 	 */
 	public static function get_attribute_types(): array {
-		$attribute_types       = apply_filters( 'lw_swatches_types', LW_ATTRIBUTE_TYPES );
+		$attribute_types       = apply_filters( 'product_swatches_light_swatches_types', LW_ATTRIBUTE_TYPES );
 		$attribute_types_label = array(
 			'color' => array(
 				'label'  => __( 'Color', 'product-swatches-light' ),
@@ -54,7 +54,7 @@ class Helper {
 				),
 			),
 		);
-		return array_merge_recursive( $attribute_types, apply_filters( 'lw_swatches_types_label', $attribute_types_label ) );
+		return array_merge_recursive( $attribute_types, apply_filters( 'product_swatches_light_swatches_types_label', $attribute_types_label ) );
 	}
 
 	/**

@@ -77,7 +77,7 @@ class Product extends WC_Product_Variable {
 			 * @param string $stock_status The actual stock status.
 			 * @param WC_Product_Variable $child The child product.
 			 */
-			if ( $child->is_purchasable() && 'instock' === apply_filters( 'lw_swatches_product_stockstatus', $stock_status, $child ) ) {
+			if ( $child->is_purchasable() && 'instock' === apply_filters( 'product_swatches_light_product_stockstatus', $stock_status, $child ) ) {
 				// get its attributes.
 				$attributes = $child->get_attributes();
 
@@ -94,7 +94,7 @@ class Product extends WC_Product_Variable {
 					 * @since 1.0.0 Available since 1.0.0
 					 * @param int $attribute_id The term id.
 					 */
-					if ( apply_filters( 'lw_swatches_hide_attribute', $attribute_id ) > 0 ) {
+					if ( apply_filters( 'product_swatches_light_hide_attribute', $attribute_id ) > 0 ) {
 						$attribute_object = wc_get_attribute( $attribute_id );
 						if ( ! empty( $attribute_types[ $attribute_object->type ] ) ) {
 							// get variant thumbnail and add it to list.
