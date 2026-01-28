@@ -23,19 +23,20 @@ abstract class SwatchesTestCase extends WP_UnitTestCase {
 		parent::set_up_before_class();
 
 		// prepare the loading just one time.
-		if ( ! did_action('product_swatches_light_test_preparation_loaded') ) {
+		if ( ! did_action( 'product_swatches_light_test_preparation_loaded' ) ) {
 			// enable WooCommerce.
 			activate_plugin( 'woocommerce/woocommerce.php' );
+
+			// run initialization.
+			WC()->init();
+			do_action( 'after_setup_theme' );
+			do_action( 'init' );
 
 			// Plugin initialisieren
 			\ProductSwatchesLight\Plugin\Installer::get_instance()->initialize_plugin();
 
-			// run initialization.
-			do_action( 'after_setup_theme' );
-			do_action( 'init' );
-
 			// mark as loaded.
-			do_action('product_swatches_light_test_preparation_loaded');
+			do_action( 'product_swatches_light_test_preparation_loaded' );
 		}
 	}
 }

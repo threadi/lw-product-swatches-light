@@ -13,14 +13,28 @@
 	"minimum-stability": "stable",
 	"scripts": {
 		"post-install-cmd": [
+			"\"vendor/bin/mozart\" compose",
 			"composer dump-autoload"
 		],
 		"post-update-cmd": [
+			"\"vendor/bin/mozart\" compose",
 			"composer dump-autoload"
 		],
 		"test": "phpunit",
 		"test-install": "bash bin/install-wp-tests.sh wordpress_test root 'debian' 127.0.0.1 latest",
 		"test-install-during-build": "bash bin/install-wp-tests.sh wordpress_test root 'debian' 127.0.0.1 latest false true"
+	},
+	"extra": {
+		"mozart": {
+			"dep_namespace": "ProductSwatchesLight\\Dependencies\\",
+			"dep_directory": "/app/Dependencies/",
+			"classmap_directory": "/libs/classes/dependencies/",
+			"classmap_prefix": "ProductSwatchesLight",
+			"packages": [
+				"threadi/easy-settings-for-wordpress",
+				"threadi/easy-transients-for-wordpress"
+			]
+		}
 	},
 	"config": {
 		"allow-plugins": {
@@ -30,7 +44,8 @@
 		"optimize-autoloader": true,
 		"classmap-authoritative": true,
 		"apcu-autoloader": true,
-		"prepend-autoloader": false
+		"prepend-autoloader": false,
+		"platform-check": false
 	},
 	"autoload": {
 		"psr-4": {
@@ -45,6 +60,8 @@
 	"require": {
 		"php": "^8.2",
 		"threadi/easy-dialog-for-wordpress": "^1.0.1",
+		"threadi/easy-setup-for-wordpress": "^1.2.3",
+		"threadi/easy-settings-for-wordpress": "^1.17.5",
 		"threadi/easy-transients-for-wordpress": "^1.2.1"
 	},
 	"require-dev": {
@@ -58,6 +75,7 @@
 		"phpcompatibility/phpcompatibility-wp": "^2.1",
 		"dealerdirect/phpcodesniffer-composer-installer": "^1.2",
 		"yoast/phpunit-polyfills": "^1.0",
+		"coenjacobs/mozart": "^0.7.1",
 		"wp-phpunit/wp-phpunit": "^6.3"
 	}
 }

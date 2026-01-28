@@ -4,3 +4,4 @@
 !/build/build.xml
 *.zip
 vendor/
+/app/Dependencies

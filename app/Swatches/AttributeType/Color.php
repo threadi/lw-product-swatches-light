@@ -22,12 +22,12 @@ use WP_Term;
 class Color implements AttributeType {
 
 	/**
-	 * Set single type name.
+	 * Set the single type name.
 	 */
 	const _TYPE_NAME = 'color';
 
 	/**
-	 * Set plural type name.
+	 * Set the plural type name.
 	 */
 	const _TYPE_NAMES = 'colors';
 

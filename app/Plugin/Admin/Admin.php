@@ -10,8 +10,9 @@ namespace ProductSwatchesLight\Plugin\Admin;
 // prevent direct access.
 defined( 'ABSPATH' ) || exit;
 
-use easyTransientsForWordPress\Transients;
+use ProductSwatchesLight\Dependencies\easyTransientsForWordPress\Transients;
 use ProductSwatchesLight\Plugin\Helper;
+use ProductSwatchesLight\Plugin\Setup;
 use ProductSwatchesLight\Plugin\Templates;
 use ProductSwatchesLight\Swatches\Attribute;
 use ProductSwatchesLight\Swatches\Products;
@@ -58,6 +59,9 @@ class Admin {
 	 * @return void
 	 */
 	public function init(): void {
+		// initialize the setup.
+		Setup::get_instance()->init();
+
 		// misc.
 		add_action( 'admin_init', array( $this, 'add_handling' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'add_styles_and_js_admin' ), PHP_INT_MAX );
@@ -115,7 +119,7 @@ class Admin {
 
 	/**
 	 * Get all WooCommerce attributes and add actions to handle them.
-	 * Also add the processing of requests for attributes in the backend.
+	 * Also, add the processing of requests for attributes in the backend.
 	 *
 	 * This is the main function to start the plugin-magic in admin.
 	 *
@@ -226,7 +230,7 @@ class Admin {
 	}
 
 	/**
-	 * Set base configuration for each transient.
+	 * Set the base configuration for each transient.
 	 *
 	 * @return void
 	 */
@@ -244,6 +248,8 @@ class Admin {
 				'dismiss'      => __( 'Dismiss', 'product-swatches-light' ),
 			)
 		);
+		$transients_obj->set_url( Helper::get_plugin_url() . '/app/Dependencies/easyTransientsForWordPress/' );
+		$transients_obj->set_path( Helper::get_plugin_path() . '/app/Dependencies/easyTransientsForWordPress/' );
 		$transients_obj->init();
 	}
 }

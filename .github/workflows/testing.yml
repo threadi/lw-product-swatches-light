@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-version: ['8.5', '8.4', '8.3', '8.2']
+        php-version: ['8.5','8.4','8.3','8.2']
     services:
       database:
         image: mysql:latest
@@ -29,6 +29,10 @@ jobs:
             composer install
             composer update
             cd vendor/threadi/easy-dialog-for-wordpress/
+            npm i
+            npm run build
+            cd ../../../
+            cd vendor/threadi/easy-setup-for-wordpress/
             npm i
             npm run build
             cd ../../../
