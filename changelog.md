@@ -9,6 +9,7 @@
 - Added generation of SBOM
 - Added PHP Compatibility check
 - Added PHP Unit tests
+- Added PCP Check in GitHub action for each release
 
 ### Changed
 
