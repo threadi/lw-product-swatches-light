@@ -63,6 +63,7 @@ jobs:
 
             - name: Prepare directory
               run: |
+                  rm -fr .github
                   rm -fr assets
                   rm -fr bin
                   rm -fr build
@@ -73,6 +74,7 @@ jobs:
                   rm changelog.md
                   rm readme.md
                   rm .gitignore
+                  rm .gitattributes
                   rm .editorconfig
                   rm phpunit.xml.dist
             - name: Run PCP check
