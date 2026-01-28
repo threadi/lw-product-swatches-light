@@ -14,6 +14,7 @@ use ProductSwatchesLight\Dependencies\easyTransientsForWordPress\Transient;
 use ProductSwatchesLight\Dependencies\easyTransientsForWordPress\Transients;
 use ProductSwatchesLight\Swatches\AttributeType\Color;
 use ProductSwatchesLight\Swatches\Products;
+use WP_Term;
 
 /**
  * Initialize the setup object.
@@ -164,9 +165,11 @@ class Setup {
 			$transient_obj->set_message( __( '<strong>You have installed Product Swatches Light - nice, and thank you!</strong> Now run the setup to expand your website with the possibilities of this plugin to promote your WooCommerce products with swatches.', 'product-swatches-light' ) . '<br><br>' . sprintf( '<a href="%1$s" class="button button-primary">' . __( 'Start setup', 'product-swatches-light' ) . '</a>', esc_url( $this->get_setup_link() ) ) );
 			$transient_obj->set_type( 'error' );
 			$transient_obj->set_dismissible_days( 365 );
-			$transient_obj->set_hide_on( array(
-				$this->get_setup_link(),
-			) );
+			$transient_obj->set_hide_on(
+				array(
+					$this->get_setup_link(),
+				)
+			);
 			$transient_obj->save();
 		} else {
 			$transients_obj->get_transient_by_name( 'product_swatches_light_start_setup_hint' )->delete();
@@ -272,31 +275,31 @@ class Setup {
 		// define setup.
 		$this->setup = array(
 			1 => array(
-				'help'                                     => array(
+				'help'                  => array(
 					'type' => 'Text',
 					'text' => '<p>' . __( '<strong>Nice that you want to use Product Swatches Light to optimize the visibility of your products.</strong> We will now guide you through the necessary steps.<br>You can also change the settings mentioned here yourself at any time when editing attributes.', 'product-swatches-light' ) . '</p>',
 				),
-				'psl_product_attribute'              => array(
-					'type'                => 'RadioControl',
-					'label'               => __( 'Select the attribute where you want to make a color swatch', 'product-swatches-light' ),
-					'help'                => __( 'This should be the attribute where your want to show swatches.', 'product-swatches-light' ),
-					'required'            => true,
-					'options'             => $this->get_product_attributes(),
+				'psl_product_attribute' => array(
+					'type'     => 'RadioControl',
+					'label'    => __( 'Select the attribute where you want to make a color swatch', 'product-swatches-light' ),
+					'help'     => __( 'This should be the attribute where your want to show swatches.', 'product-swatches-light' ),
+					'required' => true,
+					'options'  => $this->get_product_attributes(),
 				),
 			),
 			2 => array(
-				'help'                                     => array(
+				'help'                        => array(
 					'type' => 'Text',
-					'text' => '<p>' . __( '<strong>Now select the desired color for each term of the chosen attribute.</strong>', 'product-swatches-light' ) . '</p>',
+					'text' => '<p><strong>' . __( 'Now select the desired color for each term of the chosen attribute.', 'product-swatches-light' ) . '</strong></p>',
 				),
 				'psl_product_attribute_terms' => array(
-					'type'                => 'Table',
+					'type'          => 'Table',
 					'load_callback' => array( $this, 'load_product_attribute_terms_table' ),
-					'labels' => array(
+					'labels'        => array(
 						__( 'Term', 'product-swatches-light' ),
 						__( 'Color', 'product-swatches-light' ),
-					)
-				)
+					),
+				),
 			),
 			3 => array(
 				'runSetup' => array(
@@ -310,7 +313,7 @@ class Setup {
 	/**
 	 * Return the list of terms.
 	 *
-	 * @return array
+	 * @return array<int,array<string,mixed>>
 	 */
 	public function load_product_attribute_terms_table(): array {
 		// get the terms for the chosen attribute.
@@ -320,22 +323,22 @@ class Setup {
 		$colors = array(
 			array(
 				'label' => __( 'None', 'product-swatches-light' ),
-				'value' => ''
-			)
+				'value' => '',
+			),
 		);
-		foreach( Helper::get_colors() as $key => $label ) {
+		foreach ( Helper::get_colors() as $key => $label ) {
 			$colors[] = array(
 				'label' => $label,
-				'value' => $key
+				'value' => $key,
 			);
 		}
 
 		// create the return list.
 		$list = array();
-		foreach( $terms as $term ) {
-			$list[$term->term_id] = array(
-				'label' => $term->name,
-				'values' => $colors
+		foreach ( $terms as $term ) {
+			$list[ $term->term_id ] = array(
+				'label'  => $term->name,
+				'values' => $colors,
 			);
 		}
 
@@ -396,7 +399,7 @@ class Setup {
 		);
 
 		// update the attribute.
-		$args      = array(
+		$args = array(
 			'name'         => $attribute_to_edit->attribute_label,
 			'slug'         => $attribute_to_edit->attribute_name,
 			'type'         => Color::_TYPE_NAME,
@@ -415,19 +418,19 @@ class Setup {
 		$no_sleep = count( $terms ) > 100;
 
 		// loop through all terms and configure its settings.
-		foreach( $terms as $term ) {
+		foreach ( $terms as $term ) {
 			$this->update_process_step();
 
 			// sleep a bit to show progress if we do not have more than 100 terms.
-			if( ! $no_sleep ) {
+			if ( ! $no_sleep ) {
 				sleep( 1 );
 			}
 
 			// get the chosen color from setting.
 			$color = '';
-			foreach( $attribute_settings as $attribute_setting ) {
+			foreach ( $attribute_settings as $attribute_setting ) {
 				// bail if it does not match.
-				if( absint( $attribute_setting['entry']) !== absint( $term->term_id ) ) {
+				if ( absint( $attribute_setting['entry'] ) !== absint( $term->term_id ) ) {
 					continue;
 				}
 
@@ -436,7 +439,7 @@ class Setup {
 			}
 
 			// bail if no color could be found.
-			if( empty( $color ) ) {
+			if ( empty( $color ) ) {
 				continue;
 			}
 
@@ -452,7 +455,7 @@ class Setup {
 		sleep( 2 );
 
 		// enable to show the swatches, if not set.
-		if( empty( get_option( 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_position_in_list' ) ) ) {
+		if ( empty( get_option( 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_position_in_list' ) ) ) {
 			update_option( 'wc_' . LW_SWATCH_WC_SETTING_NAME . '_position_in_list', 'beforeprice' );
 		}
 	}
@@ -565,11 +568,11 @@ class Setup {
 	/**
 	 * Return the list of possible product attributes.
 	 *
-	 * @return array
+	 * @return array<int,array<string,mixed>>
 	 */
 	private function get_product_attributes(): array {
 		// bail if no WC is installed.
-		if( ! function_exists( 'wc_get_attribute_taxonomies') ) {
+		if ( ! function_exists( 'wc_get_attribute_taxonomies' ) ) {
 			return array();
 		}
 
@@ -578,7 +581,7 @@ class Setup {
 
 		// add them to the list for the setup.
 		$list = array();
-		foreach( $taxonomies as $taxonomy ) {
+		foreach ( $taxonomies as $taxonomy ) {
 			$list[] = array(
 				'label' => $taxonomy->attribute_label,
 				'value' => $taxonomy->attribute_name,
@@ -592,22 +595,27 @@ class Setup {
 	/**
 	 * Return the terms for the chosen attribute.
 	 *
-	 * @return array
+	 * @return array<int,WP_Term>
 	 */
 	private function get_terms_for_attribute(): array {
 		// get the chosen attribute.
 		$attribute_name = get_option( 'psl_product_attribute' );
 
 		// bail if no attribute is chosen.
-		if( empty( $attribute_name ) ) {
+		if ( empty( $attribute_name ) ) {
 			return array();
 		}
 
 		// get all terms of the chosen attribute.
-		$terms = get_terms( array( 'taxonomy' => 'pa_' . $attribute_name, 'hide_empty' => false ) );
+		$terms = get_terms(
+			array(
+				'taxonomy'   => 'pa_' . $attribute_name,
+				'hide_empty' => false,
+			)
+		);
 
 		// bail if no terms could be loaded.
-		if( ! is_array( $terms ) ) {
+		if ( ! is_array( $terms ) ) {
 			return array();
 		}
 

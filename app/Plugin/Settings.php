@@ -63,19 +63,14 @@ class Settings {
 		/**
 		 * Configure the basic settings object.
 		 */
-		$settings_obj  = \ProductSwatchesLight\Dependencies\easySettingsForWordPress\Settings::get_instance();
+		$settings_obj = \ProductSwatchesLight\Dependencies\easySettingsForWordPress\Settings::get_instance();
 		$settings_obj->set_slug( 'product-swatches-light' );
 		$settings_obj->set_plugin_slug( LW_SWATCHES_PLUGIN );
 		$settings_obj->set_menu_title( __( 'Settings', 'product-swatches-light' ) );
-		$settings_obj->set_title( __( '', '' ) );
+		$settings_obj->set_title( __( 'Product Swatches Light', 'product-swatches-light' ) );
 		$settings_obj->set_menu_slug( 'psl_settings' );
 		$settings_obj->set_url( Helper::get_plugin_url() . '/app/Dependencies/easySettingsForWordPress/' );
 		$settings_obj->set_path( Helper::get_plugin_path() . '/app/Dependencies/easySettingsForWordPress/' );
-
-		// initialize this setting object if setup has been completed or if this is a REST API request.
-		/*if ( Helper::is_rest_request() || Setup::get_instance()->is_completed() ) {
-			$settings_obj->init();
-		}*/
 
 		// create a hidden page for hidden settings.
 		$hidden_page = $settings_obj->add_page( 'hidden_page' );

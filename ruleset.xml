@@ -16,14 +16,13 @@
 	<exclude-pattern>*/node_modules/*</exclude-pattern>
 	<exclude-pattern>*/blocks/*</exclude-pattern>
 	<exclude-pattern>*/svn/*</exclude-pattern>
-	<exclude-pattern>*/example/*</exclude-pattern>
 	<exclude-pattern>*/tests/*</exclude-pattern>
-	<exclude-pattern>*/deprecated/*</exclude-pattern>
+	<exclude-pattern>*/app/Dependencies/*</exclude-pattern>
 
 	<rule ref="WordPress-Docs"/>
 	<rule ref="WordPress-Extra"/>
 	<rule ref="WordPress">
-		<!-- Excluded in favour to match PSR-4-namings of classes. -->
+		<!-- Excluded in favor to match PSR-4-namings of classes. -->
 		<exclude name="WordPress.Files.FileName"/>
 
 		<!-- Exclude direkt db query warnings -->
