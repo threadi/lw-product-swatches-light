@@ -568,6 +568,11 @@ class Setup {
 	 * @return array
 	 */
 	private function get_product_attributes(): array {
+		// bail if no WC is installed.
+		if( ! function_exists( 'wc_get_attribute_taxonomies') ) {
+			return array();
+		}
+
 		// get the list of product attributes.
 		$taxonomies = wc_get_attribute_taxonomies();
 

@@ -27,12 +27,13 @@ abstract class SwatchesTestCase extends WP_UnitTestCase {
 			// enable WooCommerce.
 			activate_plugin( 'woocommerce/woocommerce.php' );
 
-			// Plugin initialisieren
-			\ProductSwatchesLight\Plugin\Installer::get_instance()->initialize_plugin();
-
 			// run initialization.
+			WC()->init();
 			do_action( 'after_setup_theme' );
 			do_action( 'init' );
+
+			// Plugin initialisieren
+			\ProductSwatchesLight\Plugin\Installer::get_instance()->initialize_plugin();
 
 			// mark as loaded.
 			do_action('product_swatches_light_test_preparation_loaded');
