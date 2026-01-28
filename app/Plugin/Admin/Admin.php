@@ -136,7 +136,7 @@ class Admin {
 		 *
 		 * @noinspection PhpConditionAlreadyCheckedInspection
 		 */
-		if ( Helper::is_woocommerce_activated() && apply_filters( 'lw_swatches_admin_init', $true ) ) {
+		if ( Helper::is_woocommerce_activated() && apply_filters( 'product_swatches_light_admin_init', $true ) ) {
 			// get all attributes and add action on them.
 			$attributes      = wc_get_attribute_taxonomies();
 			$attribute_types = Helper::get_attribute_types();

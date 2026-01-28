@@ -259,7 +259,7 @@ class Attribute {
 			 * @param array $html List of allowed HTML-elements.
 			 */
 			$allowed_html = apply_filters(
-				'lw_swatches_allowed_html',
+				'product_swatches_light_allowed_html',
 				array(
 					'select' => array(
 						'id'       => array(),

@@ -5,6 +5,9 @@
  * @package product-swatches-light
  */
 
+// prevent direct access.
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Cache-Key for post-meta on products.
  */
