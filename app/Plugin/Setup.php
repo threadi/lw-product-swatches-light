@@ -117,7 +117,7 @@ class Setup {
 		/**
 		 * Filter the setup complete marker.
 		 *
-		 * @since 3.0.0 Available since 3.0.0.
+		 * @since 2.1.0 Available since 2.1.0.
 		 * @param bool $completed True if setup has been completed.
 		 */
 		return apply_filters( 'product_swatches_light_setup_is_completed', $completed );
@@ -191,7 +191,7 @@ class Setup {
 		/**
 		 * Filter the configured setup for this plugin.
 		 *
-		 * @since 3.0.0 Available since 3.0.0.
+		 * @since 2.1.0 Available since 2.1.0.
 		 *
 		 * @param array<int,array<string,mixed>> $setup The setup-configuration.
 		 */
@@ -238,7 +238,7 @@ class Setup {
 		/**
 		 * Filter the setup configuration.
 		 *
-		 * @since 3.0.0 Available since 3.0.0.
+		 * @since 2.1.0 Available since 2.1.0.
 		 * @param array<string,array<int,mixed>|string> $config List of configuration for the setup.
 		 */
 		return apply_filters( 'product_swatches_light_setup_config', $config );
@@ -477,7 +477,7 @@ class Setup {
 		/**
 		 * Filter the text for display if the setup has been run.
 		 *
-		 * @since 3.0.0 Available since 3.0.0
+		 * @since 2.1.0 Available since 2.1.0
 		 * @param string $completed_text The text to show.
 		 * @param string $config_name The name of the setup-configuration used.
 		 */
@@ -508,7 +508,7 @@ class Setup {
 		/**
 		 * Run additional tasks if the setup is marked as completed.
 		 *
-		 * @since 3.0.0 Available since 3.0.0.
+		 * @since 2.1.0 Available since 2.1.0.
 		 */
 		do_action( 'product_swatches_light_setup_completed' );
 
