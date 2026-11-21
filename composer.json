@@ -1,6 +1,6 @@
 {
 	"name": "threadi/product-swatches-light",
-	"version": "2.1.0",
+	"version": "2.1.1",
 	"description": "This plugin adds swatches for WooCommerce products.",
 	"authors": [
 		{
@@ -31,7 +31,6 @@
 			"classmap_directory": "/libs/classes/dependencies/",
 			"classmap_prefix": "ProductSwatchesLight",
 			"packages": [
-				"threadi/easy-settings-for-wordpress",
 				"threadi/easy-transients-for-wordpress"
 			]
 		}
@@ -59,10 +58,10 @@
 	},
 	"require": {
 		"php": "^8.2",
-		"threadi/easy-dialog-for-wordpress": "^1.0.1",
-		"threadi/easy-setup-for-wordpress": "^1.2.3",
-		"threadi/easy-settings-for-wordpress": "^1.17.5",
-		"threadi/easy-transients-for-wordpress": "^1.2.1"
+		"threadi/easy-dialog-for-wordpress": "^2.0.6",
+		"threadi/easy-setup-for-wordpress": "^1.6.1",
+		"threadi/easy-settings-for-wordpress": "^3.10.0",
+		"threadi/easy-transients-for-wordpress": "^1.4.9"
 	},
 	"require-dev": {
 		"wp-coding-standards/wpcs": "^3.1.0",
@@ -75,7 +74,7 @@
 		"phpcompatibility/phpcompatibility-wp": "^2.1",
 		"dealerdirect/phpcodesniffer-composer-installer": "^1.2",
 		"yoast/phpunit-polyfills": "^1.0",
-		"coenjacobs/mozart": "^0.7.1",
+		"coenjacobs/mozart": "^1.1.6",
 		"wp-phpunit/wp-phpunit": "^6.3"
 	}
 }

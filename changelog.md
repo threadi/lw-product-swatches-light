@@ -1,6 +1,13 @@
 # Changelog
 
-## [Unreleased]
+## [2.1.1] - 21.11.2026
+
+### Changed
+
+- Set compatibility for WordPress 7.2
+- Updated dependencies
+
+## [2.1.0] - 29.03.2026
 
 ### Added
 

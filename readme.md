@@ -65,7 +65,7 @@ Hint: this check runs against the VIP-GO-platform which is not our target for th
 
 ## Generate documentation
 
-`vendor/bin/wp-documentor parse app --format=markdown --output=doc/hooks.md --prefix=product_swatches`
+`vendor/bin/wp-documentor parse app --format=markdown --output=doc/hooks.md --prefix=product_swatches --exclude=Transients.php`
 
 ## Analyze with PHPStan
 

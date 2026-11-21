@@ -63,9 +63,8 @@ class Settings {
 		/**
 		 * Configure the basic settings object.
 		 */
-		$settings_obj = \ProductSwatchesLight\Dependencies\easySettingsForWordPress\Settings::get_instance();
+		$settings_obj = new \easySettingsForWordPress\Settings( LW_SWATCHES_PLUGIN );
 		$settings_obj->set_slug( 'product-swatches-light' );
-		$settings_obj->set_plugin_slug( LW_SWATCHES_PLUGIN );
 		$settings_obj->set_menu_title( __( 'Settings', 'product-swatches-light' ) );
 		$settings_obj->set_title( __( 'Product Swatches Light', 'product-swatches-light' ) );
 		$settings_obj->set_menu_slug( 'psl_settings' );
@@ -79,7 +78,7 @@ class Settings {
 		$hidden_tab = $hidden_page->add_tab( 'hidden_tab', 10 );
 
 		// the hidden section for any not visible settings.
-		$hidden = $hidden_tab->add_section( 'hidden_section', 20 );
+		$hidden = $hidden_tab->add_section( 'hidden_section', 10 );
 		$hidden->set_setting( $settings_obj );
 
 		// add setting.
@@ -94,6 +93,7 @@ class Settings {
 		$setting = $settings_obj->add_setting( 'psl_product_attribute_terms' );
 		$setting->set_section( $hidden );
 		$setting->set_type( 'array' );
+		$setting->set_show_in_rest( array( 'schema' => array( 'items' => array( 'type' => 'string' ) ) ) );
 		$setting->set_default( array() );
 		$setting->prevent_export( true );
 		$setting->set_show_in_rest( true );
